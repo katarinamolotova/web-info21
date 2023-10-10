@@ -25,14 +25,14 @@ public class ApiController {
 
     @GetMapping("/api/test")
     public String test() {
-        String url = "jdbc:postgresql://localhost:5432/info21java";
+        String url = "jdbc:postgresql://service-db/info21java";
         String username = "root";
         String password = "root";
 
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             return "Connection successful!";
         } catch (SQLException e) {
-            return  "Connection failed!";
+            return e.getMessage();
         }
     }
 
