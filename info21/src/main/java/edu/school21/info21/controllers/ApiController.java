@@ -38,7 +38,7 @@ public class ApiController {
 
     @GetMapping("/api/test/hibernate")
     public String hibernate() {
-        return peerRepository.loadByNickname("chastity").toString();
+        return peerRepository.findById("chastity").toString();
     }
 
 

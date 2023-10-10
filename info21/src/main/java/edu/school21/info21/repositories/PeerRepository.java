@@ -20,3 +20,13 @@ public class PeerRepository {
         return sessionFactory.getCurrentSession();
     }
 }
+
+// doesn't work
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.stereotype.Repository;
+//
+//@Repository
+////@AllArgsConstructor
+//public interface PeerRepository extends JpaRepository<PeerRepository, String> {
+//
+//}
