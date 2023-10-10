@@ -2,20 +2,18 @@ package edu.school21.info21.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan()
 @EnableTransactionManagement
 @PropertySource(value = "classpath:db.properties")
 public class HibernateConfig {
@@ -44,18 +42,12 @@ public class HibernateConfig {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        final LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(environment.getRequiredProperty("hibernate.packages.to.scan"));
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        return sessionFactory;
-    }
-
-    @Bean
-    public HibernateTransactionManager transactionManager() {
-        final HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-        return transactionManager;
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan(environment.getRequiredProperty("hibernate.packages.to.scan"));
+        em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        em.setJpaProperties(hibernateProperties());
+        return em;
     }
 }

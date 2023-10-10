@@ -1,26 +1,26 @@
 package edu.school21.info21.controllers;
 
+import edu.school21.info21.repositories.FunctionsRepository;
 import edu.school21.info21.repositories.PeerRepository;
 import lombok.AllArgsConstructor;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @AllArgsConstructor
 public class ApiController {
-    private final SessionFactory sessionFactory;
     private final PeerRepository peerRepository;
+    private final FunctionsRepository functionsRepository;
 
 
     @GetMapping("/api")
     public String api() {
-        return "Тут будет что-то связанное с Api"; // (3)
+        return "Тут будет что-то связанное с Api";
     }
 
     @GetMapping("/api/test")
@@ -38,7 +38,7 @@ public class ApiController {
 
     @GetMapping("/api/test/hibernate")
     public String hibernate() {
-        return peerRepository.findById("chastity").toString();
+        return String.valueOf(peerRepository.existsById("rfghfhgf"));
     }
 
 
