@@ -22,6 +22,5 @@
 docker-compose down;
 rm -rf database;
 rm -rf docker-entrypoint-initdb;
-#docker-compose up;
-
+docker-compose up;
 #docker-compose up -d;
