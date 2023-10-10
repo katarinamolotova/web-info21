@@ -1,4 +1,4 @@
-package edu.school21.info21.controllers;
+package edu.school21.info21.Controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

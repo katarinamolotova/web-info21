@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  service-db:
+    image: postgres
+    container_name: S21DataBase
+    env_file:
+      - "./config.env"
+    volumes:
+      - ./database:/var/lib/postgresql/data/pgdata/
+      - ./docker-entrypoint-initdb:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+
+  flyway:
+    image: flyway/flyway
+    container_name: S21FlyWay
+    command: -configFiles=/flyway/conf/flyway.config -locations=filesystem:/flyway/sql -connectRetries=60 migrate
+    volumes:
+      - ./helper/flyway_config:/flyway/conf/
+      - ./helper/flyway_migration:/flyway/sql
+    depends_on:
+      service-db:
+        condition: service_started
