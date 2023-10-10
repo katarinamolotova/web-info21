@@ -1,4 +1,4 @@
-package edu.school21.info21.entity;
+package edu.school21.info21.entities;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;

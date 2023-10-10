@@ -1,5 +1,7 @@
 package edu.school21.info21.controllers;
 
+import edu.school21.info21.repositories.PeerRepository;
+import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,13 +12,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @RestController
+@AllArgsConstructor
 public class ApiController {
     private final SessionFactory sessionFactory;
-
-    @Autowired
-    public ApiController(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private final PeerRepository peerRepository;
 
 
     @GetMapping("/api")
@@ -36,4 +35,11 @@ public class ApiController {
             return  "Connection failed!";
         }
     }
+
+    @GetMapping("/api/test/hibernate")
+    public String hibernate() {
+        return peerRepository.loadByNickname("chastity").toString();
+    }
+
+
 }

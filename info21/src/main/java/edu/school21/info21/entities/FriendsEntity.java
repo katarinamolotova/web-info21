@@ -1,4 +1,4 @@
-package edu.school21.info21.entity;
+package edu.school21.info21.entities;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -10,21 +10,23 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "peers", schema = "public", catalog = "info21java")
-public class PeersEntity {
+@Table(name = "friends", schema = "public", catalog = "info21java")
+public class FriendsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "nickname")
-    private String nickname;
+    @Column(name = "id")
+    private long id;
     @Basic
-    @Column(name = "birthday")
-    private Date birthday;
+    @Column(name = "peer1")
+    private String peer1;
+    @Basic
+    @Column(name = "peer2")
+    private String peer2;
 
     @Override
     public boolean equals(Object o) {
@@ -34,12 +36,12 @@ public class PeersEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        PeersEntity that = (PeersEntity) o;
-        return Objects.equals(nickname, that.nickname) && Objects.equals(birthday, that.birthday);
+        FriendsEntity that = (FriendsEntity) o;
+        return id == that.id && Objects.equals(peer1, that.peer1) && Objects.equals(peer2, that.peer2);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nickname, birthday);
+        return Objects.hash(id, peer1, peer2);
     }
 }

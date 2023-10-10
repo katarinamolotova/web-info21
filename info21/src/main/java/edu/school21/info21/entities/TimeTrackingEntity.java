@@ -1,4 +1,4 @@
-package edu.school21.info21.entity;
+package edu.school21.info21.entities;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -10,26 +10,31 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "transferred_points", schema = "public", catalog = "info21java")
-public class TransferredPointsEntity {
+@Table(name = "time_tracking", schema = "public", catalog = "info21java")
+public class TimeTrackingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
     @Basic
-    @Column(name = "checking_peer")
-    private String checkingPeer;
+    @Column(name = "peer")
+    private String peer;
     @Basic
-    @Column(name = "checked_peer")
-    private String checkedPeer;
+    @Column(name = "visit_date")
+    private Date visitDate;
     @Basic
-    @Column(name = "points_amount")
-    private int pointsAmount;
+    @Column(name = "visit_time")
+    private Time visitTime;
+    @Basic
+    @Column(name = "state")
+    private int state;
 
     @Override
     public boolean equals(Object o) {
@@ -39,15 +44,16 @@ public class TransferredPointsEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TransferredPointsEntity that = (TransferredPointsEntity) o;
+        TimeTrackingEntity that = (TimeTrackingEntity) o;
         return id == that.id &&
-               pointsAmount == that.pointsAmount &&
-               Objects.equals(checkingPeer, that.checkingPeer) &&
-               Objects.equals(checkedPeer, that.checkedPeer);
+               state == that.state &&
+               Objects.equals(peer, that.peer) &&
+               Objects.equals(visitDate, that.visitDate) &&
+               Objects.equals(visitTime, that.visitTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, checkingPeer, checkedPeer, pointsAmount);
+        return Objects.hash(id, peer, visitDate, visitTime, state);
     }
 }

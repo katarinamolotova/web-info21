@@ -1,4 +1,4 @@
-package edu.school21.info21.entity;
+package edu.school21.info21.entities;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -10,31 +10,27 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "time_tracking", schema = "public", catalog = "info21java")
-public class TimeTrackingEntity {
+@Table(name = "verter", schema = "public", catalog = "info21java")
+public class VerterEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
     @Basic
-    @Column(name = "peer")
-    private String peer;
-    @Basic
-    @Column(name = "visit_date")
-    private Date visitDate;
-    @Basic
-    @Column(name = "visit_time")
-    private Time visitTime;
+    @Column(name = "check_id")
+    private int checkId;
     @Basic
     @Column(name = "state")
-    private int state;
+    private Object state;
+    @Basic
+    @Column(name = "verter_time")
+    private Time verterTime;
 
     @Override
     public boolean equals(Object o) {
@@ -44,16 +40,15 @@ public class TimeTrackingEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TimeTrackingEntity that = (TimeTrackingEntity) o;
+        VerterEntity that = (VerterEntity) o;
         return id == that.id &&
-               state == that.state &&
-               Objects.equals(peer, that.peer) &&
-               Objects.equals(visitDate, that.visitDate) &&
-               Objects.equals(visitTime, that.visitTime);
+               checkId == that.checkId &&
+               Objects.equals(state, that.state) &&
+               Objects.equals(verterTime, that.verterTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, peer, visitDate, visitTime, state);
+        return Objects.hash(id, checkId, state, verterTime);
     }
 }
