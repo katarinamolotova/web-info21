@@ -20,7 +20,6 @@
 #cd ../dist
 
 docker-compose down;
-#rm -rf database;
-#rm -rf docker-entrypoint-initdb;
+rm -rf dist
 docker-compose up;
 #docker-compose up -d;

@@ -4,14 +4,12 @@ services:
     image: postgres
     container_name: S21DataBase
     env_file:
-      - "./config.env"
+      - "./config_db.env"
     volumes:
-      - ./database:/var/lib/postgresql/data/pgdata/
-      - ./docker-entrypoint-initdb:/docker-entrypoint-initdb.d/
-    ports:
-      - "5432:5432"
+      - ./dist/database:/var/lib/postgresql/data/pgdata/
+    restart: unless-stopped
 
-  flyway:
+  service-flyway:
     image: flyway/flyway
     container_name: S21FlyWay
     command: -configFiles=/flyway/conf/flyway.config -locations=filesystem:/flyway/sql -connectRetries=60 migrate
@@ -22,28 +20,37 @@ services:
       service-db:
         condition: service_started
 
-#  backend:
-#    image: backend
-#    container_name: S21BackEnd
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      flyway:
-#        condition: service_completed_successfully
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://service-db/info21java
+  service-backend:
+    image: backend_info
+    container_name: S21BackEnd
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      service-flyway:
+        condition: service_completed_successfully
+    env_file:
+      - "./config_backend.env"
 
-#  nginx:
-#    image: nginx
-#    container_name: S21Nginx
-#    restart: always
-#    depends_on:
-#      backend:
-#        condition: service_started
-#    ports:
-#      - "80:80"
-#    volumes:
-#      - ./helper/nginx:/etc/nginx/conf.d
+  service-nginx:
+    image: nginx
+    container_name: S21Nginx
+    restart: always
+    depends_on:
+      service-backend:
+        condition: service_started
+    ports:
+      - "80:80"
+    volumes:
+      - ./helper/nginx:/etc/nginx/conf.d
+
+  service-pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: S21PGadmin
+    env_file:
+      - "./config_pgadmin.env"
+    ports:
+      - "5050:80"
+    volumes:
+      - ./dist/pgadmin:/var/lib/pgadmin
+    restart: always
