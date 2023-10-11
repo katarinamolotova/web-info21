@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,8 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class VerterServices implements EduService<VerterEntity, Long> {
     private final VerterRepository repository;
-    private List<VerterEntity> dataCash;
-    private boolean isChanged;
+    private List<VerterEntity> dataCash = new ArrayList<>();
+    private boolean isChanged = true;
 
     @Autowired
     public VerterServices(final VerterRepository repository) {
