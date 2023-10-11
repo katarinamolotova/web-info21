@@ -5,6 +5,8 @@ services:
     container_name: S21DataBase
     env_file:
       - "./config_db.env"
+    ports:
+      - "5432:5432"
     volumes:
       - ./dist/database:/var/lib/postgresql/data/pgdata/
       - ./helper/data_for_import:/var/lib/postgresql/import
