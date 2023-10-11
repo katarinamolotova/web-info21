@@ -33,23 +33,23 @@ public class MainController {
     private final XpServices xpServices;
 
 
-    @GetMapping("/")
-    public String getMainPage(Model model) {
-        return "index";
-    }
-
-    @GetMapping("/data/peers")
-    public String getDataPage(Model model) {
-        final List<PeerEntity> peers = peerServices.findAll();
-        model.addAttribute("peers", peers);
-
-        final List<String> cols = peerServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-        return "data";
-    }
-
-    @GetMapping("/operations")
-    public String getOperationsPage(Model model) {
-        return "operations";
-    }
+//    @GetMapping("/")
+//    public String getMainPage(Model model) {
+//        return "index";
+//    }
+//
+//    @GetMapping("/data/peers")
+//    public String getDataPage(Model model) {
+//        final List<PeerEntity> peers = peerServices.findAll();
+//        model.addAttribute("peers", peers);
+//
+//        final List<String> cols = peerServices.getHeaderForTable();
+//        model.addAttribute("cols", cols);
+//        return "data";
+//    }
+//
+//    @GetMapping("/operations")
+//    public String getOperationsPage(Model model) {
+//        return "operations";
+//    }
 }

@@ -31,6 +31,10 @@ services:
         condition: service_completed_successfully
     env_file:
       - "./config_backend.env"
+    volumes:
+      - ./dist/logs:/app/logs
+#    ports:
+#      - "8080:8080"
 
   service-nginx:
     image: nginx
