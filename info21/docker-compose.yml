@@ -53,4 +53,6 @@ services:
       - "5050:80"
     volumes:
       - ./dist/pgadmin:/var/lib/pgadmin
+#      - ./pgadmin_config/servers.json:/pgadmin4/servers.json
+#      - ./pgadmin_config/pgpass:/pgpass
     restart: always
