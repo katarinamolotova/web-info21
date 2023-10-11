@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,8 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class P2pServices implements EduService<P2pEntity, Long> {
     private final P2pRepository repository;
-    private List<P2pEntity> dataCash;
-    private boolean isChanged;
+    private List<P2pEntity> dataCash = new ArrayList<>();
+    private boolean isChanged = true;
 
     @Autowired
     public P2pServices(P2pRepository repository) {

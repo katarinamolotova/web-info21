@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -15,8 +16,8 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServices implements EduService<TaskEntity, String> {
     private final TaskRepository repository;
-    private List<TaskEntity> dataCash;
-    private boolean isChanged;
+    private List<TaskEntity> dataCash = new ArrayList<>();
+    private boolean isChanged = true;
 
     @Autowired
     public TaskServices(final TaskRepository repository) {
