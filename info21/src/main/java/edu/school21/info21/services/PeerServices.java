@@ -9,36 +9,52 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class PeerServices implements EduService<PeerEntity, String> {
     private final PeerRepository repository;
+    private List<PeerEntity> dataCash;
+    private boolean isChanged;
 
     @Override
     public PeerEntity created(PeerEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public PeerEntity update(PeerEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public List<PeerEntity> findAll() {
-        return (List<PeerEntity>)repository.findAll();
-    }
+        if(isChanged || dataCash.isEmpty()) {
+            this.dataCash = (List<PeerEntity>) repository.findAll();
+            this.isChanged = false;
+        }
+        return dataCash;    }
 
     @Override
     public PeerEntity findById(String id) {
-        return repository.findById(id).orElseThrow(NotFoundEntity::new);
+        if(isChanged || dataCash.isEmpty()) {
+            return repository.findById(id)
+                             .orElseThrow(NotFoundEntity::new);
+        } else {
+            return dataCash.stream()
+                           .filter( i -> Objects.equals(i.getNickname(), id))
+                           .findFirst()
+                           .orElseThrow(NotFoundEntity::new);
+        }
     }
-
     @Override
     public void delete(String id) {
         repository.deleteById(id);
+        this.isChanged = true;
     }
 
     @Override

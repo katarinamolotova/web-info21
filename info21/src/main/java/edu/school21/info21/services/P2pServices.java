@@ -15,30 +15,47 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class P2pServices implements EduService<P2pEntity, Long> {
     private final P2pRepository repository;
+    private List<P2pEntity> dataCash;
+    private boolean isChanged;
 
     @Override
     public P2pEntity created(P2pEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public P2pEntity update(P2pEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public List<P2pEntity> findAll() {
-        return (List<P2pEntity>)repository.findAll();
+        if(isChanged || dataCash.isEmpty()) {
+            this.dataCash = (List<P2pEntity>) repository.findAll();
+            this.isChanged = false;
+        }
+        return dataCash;
     }
 
     @Override
     public P2pEntity findById(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundEntity::new);
+        if(isChanged || dataCash.isEmpty()) {
+            return repository.findById(id)
+                             .orElseThrow(NotFoundEntity::new);
+        } else {
+            return dataCash.stream()
+                           .filter( i -> i.getId() == id)
+                           .findFirst()
+                           .orElseThrow(NotFoundEntity::new);
+        }
     }
 
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+        this.isChanged = true;
     }
 
     @Override

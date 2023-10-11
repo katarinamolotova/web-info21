@@ -15,30 +15,47 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class FriendsServices implements EduService<FriendsEntity, Long> {
     private final FriendsRepository repository;
+    private List<FriendsEntity> dataCash;
+    private boolean isChanged;
 
     @Override
     public FriendsEntity created(FriendsEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public FriendsEntity update(FriendsEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public List<FriendsEntity> findAll() {
-        return (List<FriendsEntity>)repository.findAll();
+        if(isChanged || dataCash.isEmpty()) {
+            this.dataCash = (List<FriendsEntity>) repository.findAll();
+            this.isChanged = false;
+        }
+        return dataCash;
     }
 
     @Override
     public FriendsEntity findById(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundEntity::new);
+        if(isChanged || dataCash.isEmpty()) {
+            return repository.findById(id)
+                             .orElseThrow(NotFoundEntity::new);
+        } else {
+            return dataCash.stream()
+                           .filter( i -> i.getId() == id)
+                           .findFirst()
+                           .orElseThrow(NotFoundEntity::new);
+        }
     }
 
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+        this.isChanged = true;
     }
 
     @Override

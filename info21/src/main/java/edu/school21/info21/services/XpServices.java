@@ -15,30 +15,46 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class XpServices implements EduService<XpEntity, Long> {
     private final XpRepository repository;
+    private List<XpEntity> dataCash;
+    private boolean isChanged;
 
     @Override
     public XpEntity created(XpEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public XpEntity update(XpEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public List<XpEntity> findAll() {
-        return (List<XpEntity>)repository.findAll();
-    }
+        if(isChanged || dataCash.isEmpty()) {
+            this.dataCash = (List<XpEntity>) repository.findAll();
+            this.isChanged = false;
+        }
+        return dataCash;    }
 
     @Override
     public XpEntity findById(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundEntity::new);
+        if(isChanged || dataCash.isEmpty()) {
+            return repository.findById(id)
+                             .orElseThrow(NotFoundEntity::new);
+        } else {
+            return dataCash.stream()
+                           .filter( i -> i.getId() == id)
+                           .findFirst()
+                           .orElseThrow(NotFoundEntity::new);
+        }
     }
 
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+        this.isChanged = true;
     }
 
     @Override

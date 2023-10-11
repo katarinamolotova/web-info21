@@ -15,30 +15,48 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class TimeTrackingServices implements EduService<TimeTrackingEntity, Long> {
     private final TimeTrackingRepository repository;
+    private List<TimeTrackingEntity> dataCash;
+    private boolean isChanged;
+
 
     @Override
     public TimeTrackingEntity created(TimeTrackingEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public TimeTrackingEntity update(TimeTrackingEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public List<TimeTrackingEntity> findAll() {
-        return (List<TimeTrackingEntity>)repository.findAll();
+        if(isChanged || dataCash.isEmpty()) {
+            this.dataCash = (List<TimeTrackingEntity>) repository.findAll();
+            this.isChanged = false;
+        }
+        return dataCash;
     }
 
     @Override
     public TimeTrackingEntity findById(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundEntity::new);
+        if(isChanged || dataCash.isEmpty()) {
+            return repository.findById(id)
+                             .orElseThrow(NotFoundEntity::new);
+        } else {
+            return dataCash.stream()
+                           .filter( i -> i.getId() == id)
+                           .findFirst()
+                           .orElseThrow(NotFoundEntity::new);
+        }
     }
 
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+        this.isChanged = true;
     }
 
     @Override

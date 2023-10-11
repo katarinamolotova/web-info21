@@ -15,30 +15,47 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class VerterServices implements EduService<VerterEntity, Long> {
     private final VerterRepository repository;
+    private List<VerterEntity> dataCash;
+    private boolean isChanged;
 
     @Override
     public VerterEntity created(VerterEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public VerterEntity update(VerterEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public List<VerterEntity> findAll() {
-        return (List<VerterEntity>)repository.findAll();
+        if(isChanged || dataCash.isEmpty()) {
+            this.dataCash = (List<VerterEntity>) repository.findAll();
+            this.isChanged = false;
+        }
+        return dataCash;
     }
 
     @Override
     public VerterEntity findById(Long id) {
-        return repository.findById(id).orElseThrow(NotFoundEntity::new);
+        if(isChanged || dataCash.isEmpty()) {
+            return repository.findById(id)
+                             .orElseThrow(NotFoundEntity::new);
+        } else {
+            return dataCash.stream()
+                           .filter( i -> i.getId() == id)
+                           .findFirst()
+                           .orElseThrow(NotFoundEntity::new);
+        }
     }
 
     @Override
     public void delete(Long id) {
         repository.deleteById(id);
+        this.isChanged = true;
     }
 
     @Override

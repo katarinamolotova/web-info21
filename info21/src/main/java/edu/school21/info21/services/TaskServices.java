@@ -9,36 +9,54 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class TaskServices implements EduService<TaskEntity, String> {
     private final TaskRepository repository;
+    private List<TaskEntity> dataCash;
+    private boolean isChanged;
 
     @Override
     public TaskEntity created(TaskEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public TaskEntity update(TaskEntity entity) {
+        this.isChanged = true;
         return repository.save(entity);
     }
 
     @Override
     public List<TaskEntity> findAll() {
-        return (List<TaskEntity>)repository.findAll();
+        if(isChanged || dataCash.isEmpty()) {
+            this.dataCash = (List<TaskEntity>) repository.findAll();
+            this.isChanged = false;
+        }
+        return dataCash;
     }
 
     @Override
     public TaskEntity findById(String id) {
-        return repository.findById(id).orElseThrow(NotFoundEntity::new);
+        if(isChanged || dataCash.isEmpty()) {
+            return repository.findById(id)
+                             .orElseThrow(NotFoundEntity::new);
+        } else {
+            return dataCash.stream()
+                           .filter( i -> Objects.equals(i.getTitle(), id))
+                           .findFirst()
+                           .orElseThrow(NotFoundEntity::new);
+        }
     }
 
     @Override
     public void delete(String id) {
         repository.deleteById(id);
+        this.isChanged = true;
     }
 
     @Override
