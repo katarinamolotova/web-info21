@@ -8,7 +8,11 @@ public interface EduService<T, V> {
 
     T update(T entity);
 
-    List<T> findAll ();
+    List<T> findAll();
+
+    List<List<String>> findAllAsString();
+
+    String getTableName();
 
     T findById(V id);
 

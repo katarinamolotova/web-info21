@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.TaskEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,15 @@ public class TaskServices implements EduService<TaskEntity, String> {
     private final TaskRepository repository;
     private List<TaskEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<TaskEntity> entityHandler;
 
     @Autowired
-    public TaskServices(final TaskRepository repository) {
+    public TaskServices(
+            final TaskRepository repository,
+            final EntityHandler<TaskEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -43,6 +50,16 @@ public class TaskServices implements EduService<TaskEntity, String> {
             this.isChanged = false;
         }
         return dataCash;
+    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), TaskEntity.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.TASKS_TABLE.getName();
     }
 
     @Override

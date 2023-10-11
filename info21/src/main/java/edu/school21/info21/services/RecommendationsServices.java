@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.RecommendationsEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.RecommendationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,15 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
     private final RecommendationsRepository repository;
     private List<RecommendationsEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<RecommendationsEntity> entityHandler;
 
     @Autowired
-    public RecommendationsServices(final RecommendationsRepository repository) {
+    public RecommendationsServices(
+            final RecommendationsRepository repository,
+            final EntityHandler<RecommendationsEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -42,6 +49,16 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
             this.isChanged = false;
         }
         return dataCash;    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), RecommendationsEntity.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.RECOMMENDATIONS_TABLE.getName();
+    }
 
     @Override
     public RecommendationsEntity findById(Long id) {
