@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Data</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/style.css" th:href="@{/style.css}">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/table.css" th:href="@{/table.css}">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/data.css" th:href="@{/data.css}">
 </head>
 <body>
 
 <header>
     <div class="header">
         <div class="header_menu">
-            <div class="menu_item"><a aria-current="page" href="index.html">Главная</a></div>
-            <div class="menu_item menu_item_active"><a aria-current="page" class="active"  href="data.html">Данные</a></div>
-            <div class="menu_item"><a aria-current="page" href="operations.html">Операции</a></div>
+            <div class="menu_item"><a aria-current="page" href="/">Главная</a></div>
+            <div class="menu_item menu_item_active"><a aria-current="page" class="active"  href="/data">Данные</a></div>
+            <div class="menu_item"><a aria-current="page" href="/operations">Операции</a></div>
         </div>
     </div>
 </header>
@@ -22,6 +24,48 @@
 <ul>При любой модификации таблиц (create, update, delete) приложение должно запрашивать у пользователя подтверждение на осуществление операции</ul>
 <ul>После любого вида модификации таблиц пользователю должна выводиться измененная таблица</ul>
 <ul>Импорт и экспорт данных для каждой таблицы из файлов/в файлы с расширением .csv</ul>
+
+<div class="menu_raw">
+    <div class="menu_block">
+        <button class="tab active_tab" type="button" role="tab">Peers</button>
+        <button class="tab" type="button" role="tab">Checks</button>
+        <button class="tab" type="button" role="tab">Friends</button>
+        <button class="tab" type="button" role="tab">P2P</button>
+        <button class="tab" type="button" role="tab">Recommendations</button>
+        <button class="tab" type="button" role="tab">Tasks</button>
+        <button class="tab" type="button" role="tab">Time tracking</button>
+        <button class="tab" type="button" role="tab">Transferred points</button>
+        <button class="tab" type="button" role="tab">Verter</button>
+        <button class="tab" type="button" role="tab">XP</button>
+    </div>
+</div>
+
+<div class="table_block">
+    <table>
+        <thead>
+        <tr class="table_header_raw">
+            <th></th>
+            <th class="table_header_cell" th:each="col : ${cols}" th:text="${col}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="table_row table_raw_border" th:each="peer : ${peers}">
+            <td class="table_cell" th:text="${peer.nickname}"></td>
+            <td class="table_cell" th:text="${peer.birthday}"></td>
+            <td class="table_cell cell_settings">
+                <form action="/operations">
+                    <button class="settings_button" type="submit">Редактировать</button>
+                </form>
+            </td>
+            <td class="table_cell cell_settings">
+                <form action="/operations">
+                    <button class="settings_button" type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

@@ -31,9 +31,11 @@
     line-height: 20px;
     padding-bottom: 2px;
 }
+
 .menu_item:hover {
     color: #44EB99;
 }
+
 .menu_item a {
     color: #ffffff;
     cursor: pointer;
@@ -45,13 +47,27 @@
     padding-bottom: 2px;
     text-decoration: none;
 }
+
 .menu_item a:hover {
     color: #44EB99;
 }
+
 .menu_item_active {
     color: #44EB99;
     border-bottom: 2px solid #44EB99;
 }
+
 .menu_item_active a {
     color: #44EB99;
 }
+
+body {
+    margin: 0px;
+    color: rgb(33, 33, 33);
+    font-family: "SB Sans Text", Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    background-color: rgb(235, 236, 244);
+}
+
