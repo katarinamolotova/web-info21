@@ -1,4 +1,5 @@
 .menu_raw {
+    z-index: -1;
     width: 100%;
     box-sizing: border-box;
     flex-direction: row;
@@ -56,4 +57,30 @@
     font-family: "SB Sans Display", Helvetica, sans-serif;
     font-weight: 800;
     vertical-align: middle;
+}
+
+.button_row {
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: row;
+    display: flex;
+    justify-content: end;
+}
+
+.button_block {
+
+}
+
+button {
+    color: rgb(33, 33, 33);
+    background: rgb(255, 255, 255);
+    border: 1px solid rgb(210, 217, 225);
+    padding: 9px 15px;
+    border-radius: 7px;
+    align-content: center;
+}
+
+button:hover {
+    color: rgb(255, 255, 255);
+    background: #861BE3;
 }

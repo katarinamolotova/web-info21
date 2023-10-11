@@ -5,6 +5,7 @@ import edu.school21.info21.entities.PeerEntity;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.services.CheckServices;
+import edu.school21.info21.services.EduService;
 import edu.school21.info21.services.FriendsServices;
 import edu.school21.info21.services.P2pServices;
 import edu.school21.info21.services.PeerServices;
@@ -37,137 +38,75 @@ public class AllDataController {
     private final TransferredPointsServices transferredPointsServices;
     private final VerterServices verterServices;
     private final XpServices xpServices;
-    private final EntityHandler<PeerEntity> entityHandler;
 
     @GetMapping("/data/checks")
     public String getCheckTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = checkServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "checks");
+        addAttributeToModel(model, checkServices);
         return "data";
     }
 
     @GetMapping("/data/friends")
     public String getFriendsTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = friendsServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "friends");
+        addAttributeToModel(model, friendsServices);
         return "data";
     }
 
     @GetMapping("/data/p2p")
     public String getP2pTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = p2pServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "p2p");
+        addAttributeToModel(model, p2pServices);
         return "data";
     }
 
     @GetMapping("/data/peers")
     public String getPeerTable(final Model model) {
-        final List<PeerEntity> peers = peerServices.findAll();
-        final List<List<String>> list = entityHandler.mapEntitiesToListString(peers, PeerEntity.class);
-        model.addAttribute("rows", list);
-
-        final List<String> cols = peerServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "peers");
+        addAttributeToModel(model, peerServices);
         return "data";
     }
 
     @GetMapping("/data/recommendations")
     public String getRecommendationsTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = recommendationsServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "recommendations");
+        addAttributeToModel(model, recommendationsServices);
         return "data";
     }
 
     @GetMapping("/data/tasks")
     public String getTaskTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = taskServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "tasks");
+        addAttributeToModel(model, taskServices);
         return "data";
     }
 
     @GetMapping("/data/time-tracking")
     public String getTimeTrackingTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = timeTrackingServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "time_tracking");
+        addAttributeToModel(model, timeTrackingServices);
         return "data";
     }
 
     @GetMapping("/data/transferred-points")
     public String getTransferredTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = transferredPointsServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "transferred_points");
+        addAttributeToModel(model, transferredPointsServices);
         return "data";
     }
 
     @GetMapping("/data/verter")
-    public String getVerterTable(Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = verterServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "verter");
+    public String getVerterTable(final Model model) {
+        addAttributeToModel(model, verterServices);
         return "data";
     }
 
     @GetMapping("/data/xp")
     public String getXpTable(final Model model) {
-//        final List<P2pEntity> p2p = p2pServices.findAll();
-//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
-//        model.addAttribute("rows", list);
-
-        final List<String> cols = xpServices.getHeaderForTable();
-        model.addAttribute("cols", cols);
-
-        model.addAttribute("table", "xp");
+        addAttributeToModel(model, xpServices);
         return "data";
     }
 
+    private void addAttributeToModel(final Model model, final EduService service) {
+        final List list = service.findAllAsString();
+        model.addAttribute("rows", list);
+
+        final List cols = service.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", service.getTableName());
+    }
 }
 
