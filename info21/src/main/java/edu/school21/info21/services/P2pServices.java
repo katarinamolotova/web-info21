@@ -3,7 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.P2pEntity;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.repositories.P2pRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class P2pServices implements EduService<P2pEntity, Long> {
     private final P2pRepository repository;
     private List<P2pEntity> dataCash;
     private boolean isChanged;
+
+    @Autowired
+    public P2pServices(P2pRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public P2pEntity created(P2pEntity entity) {

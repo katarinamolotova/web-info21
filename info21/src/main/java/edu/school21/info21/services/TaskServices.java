@@ -3,7 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.TaskEntity;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.repositories.TaskRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -13,11 +13,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class TaskServices implements EduService<TaskEntity, String> {
     private final TaskRepository repository;
     private List<TaskEntity> dataCash;
     private boolean isChanged;
+
+    @Autowired
+    public TaskServices(final TaskRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public TaskEntity created(TaskEntity entity) {

@@ -3,7 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.RecommendationsEntity;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.repositories.RecommendationsRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class RecommendationsServices implements EduService<RecommendationsEntity, Long> {
     private final RecommendationsRepository repository;
     private List<RecommendationsEntity> dataCash;
     private boolean isChanged;
+
+    @Autowired
+    public RecommendationsServices(final RecommendationsRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public RecommendationsEntity created(RecommendationsEntity entity) {

@@ -3,7 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.PeerEntity;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.repositories.PeerRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -13,11 +13,15 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class PeerServices implements EduService<PeerEntity, String> {
     private final PeerRepository repository;
     private List<PeerEntity> dataCash;
     private boolean isChanged;
+
+    @Autowired
+    public PeerServices(final PeerRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public PeerEntity created(PeerEntity entity) {
