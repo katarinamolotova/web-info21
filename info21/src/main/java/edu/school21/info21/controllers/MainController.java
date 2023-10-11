@@ -1,6 +1,7 @@
 package edu.school21.info21.controllers;
 
 import edu.school21.info21.entities.PeerEntity;
+import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.services.CheckServices;
 import edu.school21.info21.services.FriendsServices;
 import edu.school21.info21.services.P2pServices;
@@ -16,7 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -33,23 +37,69 @@ public class MainController {
     private final XpServices xpServices;
 
 
-//    @GetMapping("/")
-//    public String getMainPage(Model model) {
-//        return "index";
-//    }
-//
-//    @GetMapping("/data/peers")
-//    public String getDataPage(Model model) {
-//        final List<PeerEntity> peers = peerServices.findAll();
-//        model.addAttribute("peers", peers);
-//
-//        final List<String> cols = peerServices.getHeaderForTable();
-//        model.addAttribute("cols", cols);
-//        return "data";
-//    }
-//
-//    @GetMapping("/operations")
-//    public String getOperationsPage(Model model) {
-//        return "operations";
-//    }
+    @GetMapping("/")
+    public String getMainPage(Model model) {
+        return "index";
+    }
+
+    @GetMapping("/data/peers")
+    public String getDataPage(final Model model) {
+        final List<PeerEntity> peers = peerServices.findAll();
+
+        Field[] fields = PeerEntity.class.getDeclaredFields();
+
+        List<List<String>> list = peers
+                .stream()
+                .map(entity -> Arrays.stream(fields)
+                                     .map(field -> {
+                                         if (!field.isAccessible()) {
+                                             field.setAccessible(true);
+                                         }
+                                         try {
+                                             return String.valueOf(field.get(entity));
+                                         } catch (IllegalAccessException e) {
+                                             return "error";
+                                         }
+                                     }).collect(Collectors.toList())
+                ).toList();
+
+        model.addAttribute("rows", list);
+
+        final List<String> cols = peerServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+        return "data";
+    }
+
+    @GetMapping("/data/xp")
+    public String getDatasPage(final Model model) {
+        final List<XpEntity> peers = xpServices.findAll();
+
+        Field[] fields = XpEntity.class.getDeclaredFields();
+
+        List<List<String>> list = peers
+                .stream()
+                .map(entity -> Arrays.stream(fields)
+                                     .map(field -> {
+                                         if (!field.isAccessible()) {
+                                             field.setAccessible(true);
+                                         }
+                                         try {
+                                             return String.valueOf(field.get(entity));
+                                         } catch (IllegalAccessException e) {
+                                             return "error";
+                                         }
+                                     }).collect(Collectors.toList())
+                ).toList();
+
+        model.addAttribute("rows", list);
+
+        final List<String> cols = peerServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+        return "data";
+    }
+
+    @GetMapping("/operations")
+    public String getOperationsPage(Model model) {
+        return "operations";
+    }
 }
