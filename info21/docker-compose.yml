@@ -7,6 +7,7 @@ services:
       - "./config_db.env"
     volumes:
       - ./dist/database:/var/lib/postgresql/data/pgdata/
+      - ./helper/data_for_import:/var/lib/postgresql/import
     restart: unless-stopped
 
   service-flyway:
@@ -31,6 +32,8 @@ services:
         condition: service_completed_successfully
     env_file:
       - "./config_backend.env"
+    volumes:
+      - ./dist/logs:/app/logs
 
   service-nginx:
     image: nginx

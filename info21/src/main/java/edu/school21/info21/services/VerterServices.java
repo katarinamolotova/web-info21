@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.VerterEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.VerterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,15 @@ public class VerterServices implements EduService<VerterEntity, Long> {
     private final VerterRepository repository;
     private List<VerterEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<VerterEntity> entityHandler;
 
     @Autowired
-    public VerterServices(final VerterRepository repository) {
+    public VerterServices(
+            final VerterRepository repository,
+            final EntityHandler<VerterEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -42,6 +49,16 @@ public class VerterServices implements EduService<VerterEntity, Long> {
             this.isChanged = false;
         }
         return dataCash;
+    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), VerterEntity.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.VERTER_TABLE.getName();
     }
 
     @Override

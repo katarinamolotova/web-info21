@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.TransferredPointsEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.TransferredPointsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,15 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     private final TransferredPointsRepository repository;
     private List<TransferredPointsEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<TransferredPointsEntity> entityHandler;
 
     @Autowired
-    public TransferredPointsServices(final TransferredPointsRepository repository) {
+    public TransferredPointsServices(
+            final TransferredPointsRepository repository,
+            final EntityHandler<TransferredPointsEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -42,6 +49,16 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
             this.isChanged = false;
         }
         return dataCash;
+    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), TransferredPointsEntity.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.TRANSFERRED_POINTS_TABLE.getName();
     }
 
     @Override
@@ -67,5 +84,6 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     public List<String> getHeaderForTable() {
         return Arrays.stream(TransferredPointsEntity.class.getDeclaredFields())
                      .map(Field::getName)
-                     .collect(Collectors.toList());    }
+                     .collect(Collectors.toList());
+    }
 }

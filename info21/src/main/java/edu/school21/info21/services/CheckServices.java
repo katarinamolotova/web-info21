@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.CheckEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.CheckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,15 @@ public class CheckServices implements EduService<CheckEntity, Long> {
     private final CheckRepository repository;
     private List<CheckEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<CheckEntity> entityHandler;
 
     @Autowired
-    public CheckServices(final CheckRepository repository) {
+    public CheckServices(
+            final CheckRepository repository,
+            final EntityHandler<CheckEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -42,6 +49,16 @@ public class CheckServices implements EduService<CheckEntity, Long> {
             this.isChanged = false;
         }
         return dataCash;
+    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), CheckEntity.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.CHECK_TABLE.getName();
     }
 
     @Override

@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.PeerEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.PeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,16 @@ public class PeerServices implements EduService<PeerEntity, String> {
     private final PeerRepository repository;
     private List<PeerEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<PeerEntity> entityHandler;
+
 
     @Autowired
-    public PeerServices(final PeerRepository repository) {
+    public PeerServices(
+            final PeerRepository repository,
+            final EntityHandler<PeerEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -43,6 +51,16 @@ public class PeerServices implements EduService<PeerEntity, String> {
             this.isChanged = false;
         }
         return dataCash;    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), PeerEntity.class );
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.PEERS_TABLE.getName();
+    }
 
     @Override
     public PeerEntity findById(String id) {

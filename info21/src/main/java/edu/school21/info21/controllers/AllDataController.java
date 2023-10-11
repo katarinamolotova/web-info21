@@ -37,7 +37,6 @@ public class AllDataController {
     private final TransferredPointsServices transferredPointsServices;
     private final VerterServices verterServices;
     private final XpServices xpServices;
-
     private final EntityHandler<PeerEntity> entityHandler;
 
     @GetMapping("/data/checks")

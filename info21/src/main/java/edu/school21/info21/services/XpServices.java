@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.XpEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.XpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,15 @@ public class XpServices implements EduService<XpEntity, Long> {
     private final XpRepository repository;
     private List<XpEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<XpEntity> entityHandler;
 
     @Autowired
-    public XpServices(final XpRepository repository) {
+    public XpServices(
+            final XpRepository repository,
+            final EntityHandler<XpEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -42,6 +49,16 @@ public class XpServices implements EduService<XpEntity, Long> {
             this.isChanged = false;
         }
         return dataCash;    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), XpEntity.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.XP_TABLE.getName();
+    }
 
     @Override
     public XpEntity findById(Long id) {
