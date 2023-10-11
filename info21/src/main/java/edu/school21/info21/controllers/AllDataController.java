@@ -1,5 +1,8 @@
 package edu.school21.info21.controllers;
 
+import edu.school21.info21.entities.PeerEntity;
+import edu.school21.info21.entities.XpEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.services.CheckServices;
 import edu.school21.info21.services.FriendsServices;
 import edu.school21.info21.services.P2pServices;
@@ -15,6 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Controller
 @AllArgsConstructor
 public class AllDataController {
@@ -28,6 +36,8 @@ public class AllDataController {
     private final TransferredPointsServices transferredPointsServices;
     private final VerterServices verterServices;
     private final XpServices xpServices;
+
+    private final EntityHandler<PeerEntity> entityHandler;
 
     @GetMapping("/data/checks")
     public String getCheckTable(Model model) {
@@ -46,7 +56,17 @@ public class AllDataController {
 
     @GetMapping("/data/peers")
     public String getPeerTable(Model model) {
-        return "index";
+        final List<PeerEntity> peers = peerServices.findAll();
+
+        List<List<String>> list = entityHandler.mapEntitiesToListString(peers, PeerEntity.class);
+
+        model.addAttribute("rows", list);
+
+        final List<String> cols = peerServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("page", "Peers");
+        return "data";
     }
 
     @GetMapping("/data/recommendations")
@@ -76,7 +96,32 @@ public class AllDataController {
 
     @GetMapping("/data/xp")
     public String getXpTable(Model model) {
-        return "index";
+        final List<XpEntity> peers = xpServices.findAll();
+
+        Field[] fields = XpEntity.class.getDeclaredFields();
+
+        List<List<String>> list = peers
+                .stream()
+                .map(entity -> Arrays.stream(fields)
+                                     .map(field -> {
+                                         if (!field.isAccessible()) {
+                                             field.setAccessible(true);
+                                         }
+                                         try {
+                                             return String.valueOf(field.get(entity));
+                                         } catch (IllegalAccessException e) {
+                                             return "error";
+                                         }
+                                     }).collect(Collectors.toList())
+                ).toList();
+
+        model.addAttribute("rows", list);
+
+        final List<String> cols = xpServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("page", "Xp");
+        return "data";
     }
 
 }
