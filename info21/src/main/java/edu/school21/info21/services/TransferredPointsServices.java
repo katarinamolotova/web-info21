@@ -84,5 +84,6 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     public List<String> getHeaderForTable() {
         return Arrays.stream(TransferredPointsEntity.class.getDeclaredFields())
                      .map(Field::getName)
-                     .collect(Collectors.toList());    }
+                     .collect(Collectors.toList());
+    }
 }

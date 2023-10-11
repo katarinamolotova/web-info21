@@ -1,7 +1,9 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.FriendsEntity;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,15 @@ public class FriendsServices implements EduService<FriendsEntity, Long> {
     private final FriendsRepository repository;
     private List<FriendsEntity> dataCash = new ArrayList<>();
     private boolean isChanged = true;
+    private final EntityHandler<FriendsEntity> entityHandler;
 
     @Autowired
-    public FriendsServices(final FriendsRepository repository) {
+    public FriendsServices(
+            final FriendsRepository repository,
+            final EntityHandler<FriendsEntity> entityHandler
+    ) {
         this.repository = repository;
+        this.entityHandler = entityHandler;
     }
 
     @Override
@@ -42,6 +49,16 @@ public class FriendsServices implements EduService<FriendsEntity, Long> {
             this.isChanged = false;
         }
         return dataCash;
+    }
+
+    @Override
+    public List<List<String>> findAllAsString() {
+        return entityHandler.mapEntitiesToListString(findAll(), FriendsEntity.class);
+    }
+
+    @Override
+    public String getTableName() {
+        return TableNames.FRIENDS_TABLE.getName();
     }
 
     @Override
