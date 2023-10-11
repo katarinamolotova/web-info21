@@ -1,0 +1,41 @@
+.menu_raw {
+    width: 100%;
+    box-sizing: border-box;
+    flex-direction: row;
+    display: flex;
+    justify-content: center;
+}
+
+.menu_block {
+    height: 36px;
+    display: inline-flex;
+    min-width: max-content;
+    border-radius: 18px;
+    background-color: #D2D9E1;
+}
+
+.tab {
+    color: #212121;
+    cursor: pointer;
+    opacity: 1;
+    padding: 0 16px;
+    font-size: 14px;
+    min-width: fit-content;
+    font-style: normal;
+    min-height: 0;
+    font-family: SB Sans Text, serif;
+    font-weight: normal;
+    white-space: nowrap;
+    text-transform: none;
+    border-radius: 18px;
+    border-color: transparent;
+    background-color: #D2D9E1;
+}
+
+.active_tab {
+    color: #212121;
+    position: relative;
+    box-shadow: 0 2px 3px rgba(81, 96, 119, 0.2);
+    font-weight: 600;
+    background-color: #ffffff;
+}
