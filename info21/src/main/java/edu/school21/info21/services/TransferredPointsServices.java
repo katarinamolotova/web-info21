@@ -3,7 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.TransferredPointsEntity;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.repositories.TransferredPointsRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class TransferredPointsServices implements EduService<TransferredPointsEntity, Long> {
     private final TransferredPointsRepository repository;
     private List<TransferredPointsEntity> dataCash;
     private boolean isChanged;
+
+    @Autowired
+    public TransferredPointsServices(final TransferredPointsRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public TransferredPointsEntity created(TransferredPointsEntity entity) {

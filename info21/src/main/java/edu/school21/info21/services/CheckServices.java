@@ -3,7 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.CheckEntity;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.repositories.CheckRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -12,11 +12,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class CheckServices implements EduService<CheckEntity, Long> {
     private final CheckRepository repository;
     private List<CheckEntity> dataCash;
     private boolean isChanged;
+
+    @Autowired
+    public CheckServices(final CheckRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public CheckEntity created(CheckEntity entity) {
