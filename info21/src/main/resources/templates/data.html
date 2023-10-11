@@ -28,7 +28,7 @@
 <div class="menu_raw">
     <div class="menu_block">
         <form action="/data/peers">
-            <button class="tab active_tab" type="submit" role="tab">Peers</button>
+            <button class="tab" th:classappend="${page == 'Peers'} ? 'active_tab'" type="submit" role="tab">Peers</button>
         </form>
         <form action="/data/checks">
             <button class="tab" type="submit" role="tab">Checks</button>
@@ -55,7 +55,9 @@
             <button class="tab" type="submit" role="tab">Verter</button>
         </form>
         <form action="/data/xp">
-            <button class="tab" type="submit" role="tab">XP</button>
+            <button class="tab"  th:classappend="${page == 'Xp'} ? 'active_tab'" type="submit" role="tab">
+                XP
+            </button>
         </form>
     </div>
 </div>
