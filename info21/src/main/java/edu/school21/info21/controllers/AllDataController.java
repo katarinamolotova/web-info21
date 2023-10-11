@@ -1,5 +1,6 @@
 package edu.school21.info21.controllers;
 
+import edu.school21.info21.entities.P2pEntity;
 import edu.school21.info21.entities.PeerEntity;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.handlers.EntityHandler;
@@ -40,87 +41,132 @@ public class AllDataController {
     private final EntityHandler<PeerEntity> entityHandler;
 
     @GetMapping("/data/checks")
-    public String getCheckTable(Model model) {
-        return "index";
+    public String getCheckTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = checkServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "checks");
+        return "data";
     }
 
     @GetMapping("/data/friends")
-    public String getFriendsTable(Model model) {
-        return "index";
+    public String getFriendsTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = friendsServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "friends");
+        return "data";
     }
 
     @GetMapping("/data/p2p")
-    public String getP2pTable(Model model) {
-        return "index";
+    public String getP2pTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = p2pServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "p2p");
+        return "data";
     }
 
     @GetMapping("/data/peers")
-    public String getPeerTable(Model model) {
+    public String getPeerTable(final Model model) {
         final List<PeerEntity> peers = peerServices.findAll();
-
-        List<List<String>> list = entityHandler.mapEntitiesToListString(peers, PeerEntity.class);
-
+        final List<List<String>> list = entityHandler.mapEntitiesToListString(peers, PeerEntity.class);
         model.addAttribute("rows", list);
 
         final List<String> cols = peerServices.getHeaderForTable();
         model.addAttribute("cols", cols);
 
-        model.addAttribute("page", "Peers");
+        model.addAttribute("table", "peers");
         return "data";
     }
 
     @GetMapping("/data/recommendations")
-    public String getRecommendationsTable(Model model) {
-        return "index";
+    public String getRecommendationsTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = recommendationsServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "recommendations");
+        return "data";
     }
 
     @GetMapping("/data/tasks")
-    public String getTaskTable(Model model) {
-        return "index";
+    public String getTaskTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = taskServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "tasks");
+        return "data";
     }
 
     @GetMapping("/data/time-tracking")
-    public String getTimeTrackingTable(Model model) {
-        return "index";
+    public String getTimeTrackingTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = timeTrackingServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "time_tracking");
+        return "data";
     }
 
     @GetMapping("/data/transferred-points")
-    public String getTransferredTable(Model model) {
-        return "index";
+    public String getTransferredTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = transferredPointsServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "transferred_points");
+        return "data";
     }
 
     @GetMapping("/data/verter")
     public String getVerterTable(Model model) {
-        return "index";
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
+
+        final List<String> cols = verterServices.getHeaderForTable();
+        model.addAttribute("cols", cols);
+
+        model.addAttribute("table", "verter");
+        return "data";
     }
 
     @GetMapping("/data/xp")
-    public String getXpTable(Model model) {
-        final List<XpEntity> peers = xpServices.findAll();
-
-        Field[] fields = XpEntity.class.getDeclaredFields();
-
-        List<List<String>> list = peers
-                .stream()
-                .map(entity -> Arrays.stream(fields)
-                                     .map(field -> {
-                                         if (!field.isAccessible()) {
-                                             field.setAccessible(true);
-                                         }
-                                         try {
-                                             return String.valueOf(field.get(entity));
-                                         } catch (IllegalAccessException e) {
-                                             return "error";
-                                         }
-                                     }).collect(Collectors.toList())
-                ).toList();
-
-        model.addAttribute("rows", list);
+    public String getXpTable(final Model model) {
+//        final List<P2pEntity> p2p = p2pServices.findAll();
+//        final List<List<String>> list = entityHandler.mapEntitiesToListString(p2p, P2pEntity.class);
+//        model.addAttribute("rows", list);
 
         final List<String> cols = xpServices.getHeaderForTable();
         model.addAttribute("cols", cols);
 
-        model.addAttribute("page", "Xp");
+        model.addAttribute("table", "xp");
         return "data";
     }
 

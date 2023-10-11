@@ -6,6 +6,13 @@
     <link rel="stylesheet" type="text/css" media="all" href="../static/style.css" th:href="@{/style.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/table.css" th:href="@{/table.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/data.css" th:href="@{/data.css}">
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">-->
+<!--    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}"/>-->
+<!--    <link rel="stylesheet" th:href="/webjars/font-awesome/5.0.10/web-fonts-with-css/css/fontawesome-all.min.css"/>-->
+
+<!--    <script src="/webjars/jquery/3.3.1-1/jquery.min.js"></script>-->
+<!--    <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>-->
+
 </head>
 <body>
 
@@ -28,36 +35,34 @@
 <div class="menu_raw">
     <div class="menu_block">
         <form action="/data/peers">
-            <button class="tab" th:classappend="${page == 'Peers'} ? 'active_tab'" type="submit" role="tab">Peers</button>
+            <button class="tab" th:classappend="${table == 'peers'} ? 'active_tab'" type="submit" role="tab">Peers</button>
         </form>
         <form action="/data/checks">
-            <button class="tab" type="submit" role="tab">Checks</button>
+            <button class="tab" th:classappend="${table == 'checks'} ? 'active_tab'" type="submit" role="tab">Checks</button>
         </form>
         <form action="/data/friends">
-            <button class="tab" type="submit" role="tab">Friends</button>
+            <button class="tab" th:classappend="${table == 'friends'} ? 'active_tab'" type="submit" role="tab">Friends</button>
         </form>
         <form action="/data/p2p">
-            <button class="tab" type="submit" role="tab">P2P</button>
+            <button class="tab" th:classappend="${table == 'p2p'} ? 'active_tab'" type="submit" role="tab">P2P</button>
         </form>
         <form action="/data/recommendations">
-            <button class="tab" type="submit" role="tab">Recommendations</button>
+            <button class="tab" th:classappend="${table == 'recommendations'} ? 'active_tab'" type="submit" role="tab">Recommendations</button>
         </form>
         <form action="/data/tasks">
-            <button class="tab" type="submit" role="tab">Tasks</button>
+            <button class="tab" th:classappend="${table == 'tasks'} ? 'active_tab'" type="submit" role="tab">Tasks</button>
         </form>
         <form action="/data/time-tracking">
-            <button class="tab" type="submit" role="tab">Time tracking</button>
+            <button class="tab" th:classappend="${table == 'time_tracking'} ? 'active_tab'" type="submit" role="tab">Time tracking</button>
         </form>
         <form action="/data/transferred-points">
-            <button class="tab" type="submit" role="tab">Transferred points</button>
+            <button class="tab" th:classappend="${table == 'transferred_points'} ? 'active_tab'" type="submit" role="tab">Transferred points</button>
         </form>
         <form action="/data/verter">
-            <button class="tab" type="submit" role="tab">Verter</button>
+            <button class="tab" th:classappend="${table == 'verter'} ? 'active_tab'" type="submit" role="tab">Verter</button>
         </form>
         <form action="/data/xp">
-            <button class="tab"  th:classappend="${page == 'Xp'} ? 'active_tab'" type="submit" role="tab">
-                XP
-            </button>
+            <button class="tab" th:classappend="${table == 'xp'} ? 'active_tab'" type="submit" role="tab">XP</button>
         </form>
     </div>
 </div>
@@ -65,7 +70,7 @@
 <div class="table_block">
     <table>
         <thead>
-        <tr class="table_header_raw">
+        <tr th:if="${not #lists.isEmpty(rows)}" class="table_header_raw">
             <th></th>
             <th class="table_header_cell" th:each="col : ${cols}" th:text="${col}"></th>
         </tr>
@@ -73,7 +78,6 @@
         <tbody>
         <tr class="table_row table_raw_border" th:each="row : ${rows}">
             <td class="table_cell" th:each="col : ${row}" th:text="${col}"></td>
-<!--            <td class="table_cell" th:text="${row.birthday}"></td>-->
             <td class="table_cell cell_settings">
                 <form action="/operations">
                     <button class="settings_button" type="submit">Редактировать</button>
@@ -81,13 +85,50 @@
             </td>
             <td class="table_cell cell_settings">
                 <form action="/operations">
-                    <button class="settings_button" type="submit">Удалить</button>
+                    <button class="settings_button" type="button" data-toggle="modal" data-target="#modal-delete">Удалить</button>
                 </form>
             </td>
+
+<!--            <div class="modal modal-delete" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--                <div class="modal-dialog">-->
+<!--                    <div class="modal-content">-->
+<!--                        <div class="modal-header">-->
+<!--                            <button type="button" class="close" data-dismiss="modal"-->
+<!--                                    aria-hidden="true">-->
+<!--                            </button>-->
+<!--                            <h3 id="delModalLabel">Delete Confirmation</h3>-->
+<!--                        </div>-->
+<!--                        <div class="modal-body">-->
+<!--                            <p class="error-text"><strong>Are you sure you want to-->
+<!--                                delete this task ?</strong></p>-->
+<!--                        </div>-->
+<!--                        <div class="modal-footer">-->
+<!--                            <button class="btn " data-dismiss="modal" aria-hidden="true">-->
+<!--                                Cancel-->
+<!--                            </button>-->
+<!--                            <a th:href="@{/task/delete/{id}(id=${raws[0][0]})}">-->
+<!--                                <span class="btn btn-danger" value="delete">Delete</span></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
         </tr>
         </tbody>
     </table>
 </div>
+
+<div th:if="${#lists.isEmpty(rows)}" th:classappend="'empty_text_block'">
+    <h2 th:classappend="'empty_text'" th:text="'Отсутствуют данные в таблице ' + ${table}"></h2>
+</div>
+
+
+<!--<script>-->
+<!--  $('#modal-delete').on('show.bs.modal', function (e) {-->
+<!--    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));-->
+<!--    $('#modal-deleteHiddenId').val($(this).find('.btn-ok').attr('href'));-->
+<!--  });-->
+<!--</script>-->
 
 </body>
 </html>
