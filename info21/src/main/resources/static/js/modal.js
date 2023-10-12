@@ -1,16 +1,9 @@
-function showModal() {
-  const modal = document.getElementById('myModal');
+function showModal(a) {
+  const modal = document.getElementById('del_modal'+arguments[0]);
   modal.style.display = "block";
 }
 
-function closeModal() {
-  const modal = document.getElementById('myModal');
+function closeModal(a) {
+  const modal = document.getElementById('del_modal'+arguments[0]);
   modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  const modal = document.getElementById('myModal');
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
 }
