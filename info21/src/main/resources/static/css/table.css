@@ -25,7 +25,6 @@ td {
 }
 
 .table_row {
-    z-index: 2;
     position: relative;
     background-color: #ffffff;
 }
@@ -95,9 +94,8 @@ thead {
     display: table-header-group;
     vertical-align: middle;
     border-color: inherit;
-
     top: 0;
-    z-index: 5;
+    z-index: -1;
     position: sticky;
 }
 
@@ -109,7 +107,6 @@ thead {
 }
 
 .table_header_raw {
-    z-index: 2;
     position: relative;
 }
 
@@ -155,19 +152,4 @@ thead {
     min-width: 100px;
     align-content: center;
     justify-content: center;
-}
-
-.settings_button {
-    color: rgb(0, 0, 0);
-    background: #44EB99;
-    border: #44EB99;
-    border-radius: 7px;
-    padding: 9px 15px;
-    align-content: center;
-}
-
-.settings_button:hover {
-    color: rgb(255, 255, 255);
-    background: #861BE3;
-    border: #861BE3;
 }
