@@ -1,9 +1,5 @@
 package edu.school21.info21.controllers;
 
-import edu.school21.info21.entities.P2pEntity;
-import edu.school21.info21.entities.PeerEntity;
-import edu.school21.info21.entities.XpEntity;
-import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.services.CheckServices;
 import edu.school21.info21.services.EduService;
 import edu.school21.info21.services.FriendsServices;
@@ -19,11 +15,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @AllArgsConstructor
@@ -41,65 +35,65 @@ public class AllDataController {
 
     @GetMapping("/data/checks")
     public String getCheckTable(final Model model) {
-        addAttributeToModel(model, checkServices);
+        addAttributeForFindAll(model, checkServices);
         return "data";
     }
 
     @GetMapping("/data/friends")
     public String getFriendsTable(final Model model) {
-        addAttributeToModel(model, friendsServices);
+        addAttributeForFindAll(model, friendsServices);
         return "data";
     }
 
     @GetMapping("/data/p2p")
     public String getP2pTable(final Model model) {
-        addAttributeToModel(model, p2pServices);
+        addAttributeForFindAll(model, p2pServices);
         return "data";
     }
 
     @GetMapping("/data/peers")
     public String getPeerTable(final Model model) {
-        addAttributeToModel(model, peerServices);
+        addAttributeForFindAll(model, peerServices);
         return "data";
     }
 
     @GetMapping("/data/recommendations")
     public String getRecommendationsTable(final Model model) {
-        addAttributeToModel(model, recommendationsServices);
+        addAttributeForFindAll(model, recommendationsServices);
         return "data";
     }
 
     @GetMapping("/data/tasks")
     public String getTaskTable(final Model model) {
-        addAttributeToModel(model, taskServices);
+        addAttributeForFindAll(model, taskServices);
         return "data";
     }
 
     @GetMapping("/data/time-tracking")
     public String getTimeTrackingTable(final Model model) {
-        addAttributeToModel(model, timeTrackingServices);
+        addAttributeForFindAll(model, timeTrackingServices);
         return "data";
     }
 
     @GetMapping("/data/transferred-points")
     public String getTransferredTable(final Model model) {
-        addAttributeToModel(model, transferredPointsServices);
+        addAttributeForFindAll(model, transferredPointsServices);
         return "data";
     }
 
     @GetMapping("/data/verter")
     public String getVerterTable(final Model model) {
-        addAttributeToModel(model, verterServices);
+        addAttributeForFindAll(model, verterServices);
         return "data";
     }
 
     @GetMapping("/data/xp")
     public String getXpTable(final Model model) {
-        addAttributeToModel(model, xpServices);
+        addAttributeForFindAll(model, xpServices);
         return "data";
     }
 
-    private void addAttributeToModel(final Model model, final EduService service) {
+    private void addAttributeForFindAll(final Model model, final EduService service) {
         final List list = service.findAllAsString();
         model.addAttribute("rows", list);
 
@@ -107,6 +101,17 @@ public class AllDataController {
         model.addAttribute("cols", cols);
 
         model.addAttribute("table", service.getTableName());
+    }
+
+    @GetMapping("/data/peers/edit/{id}")
+    public String getPeerEdit(@PathVariable String id, final Model model) {
+        return "edit";
+    }
+    @GetMapping("/data/peers/delete/{id}")
+    public String getPeerDelete(@PathVariable final String id, final Model model) {
+        peerServices.delete(id);
+        addAttributeForFindAll(model, peerServices);
+        return "redirect:/data/peers";
     }
 }
 

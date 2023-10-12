@@ -60,7 +60,9 @@
 }
 
 .button_row {
+    margin: 40px 0;
     width: 100%;
+    height: 40px;
     box-sizing: border-box;
     flex-direction: row;
     display: flex;
@@ -68,19 +70,5 @@
 }
 
 .button_block {
-
-}
-
-button {
-    color: rgb(33, 33, 33);
-    background: rgb(255, 255, 255);
-    border: 1px solid rgb(210, 217, 225);
-    padding: 9px 15px;
-    border-radius: 7px;
-    align-content: center;
-}
-
-button:hover {
-    color: rgb(255, 255, 255);
-    background: #861BE3;
+    padding: 0 24px;
 }
