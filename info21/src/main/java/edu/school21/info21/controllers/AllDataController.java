@@ -69,13 +69,13 @@ public class AllDataController {
         return "data";
     }
 
-    @GetMapping("/data/time-tracking")
+    @GetMapping("/data/time_tracking")
     public String getTimeTrackingTable(final Model model) {
         addAttributeForFindAll(model, timeTrackingServices);
         return "data";
     }
 
-    @GetMapping("/data/transferred-points")
+    @GetMapping("/data/transferred_points")
     public String getTransferredTable(final Model model) {
         addAttributeForFindAll(model, transferredPointsServices);
         return "data";
@@ -107,11 +107,75 @@ public class AllDataController {
     public String getPeerEdit(@PathVariable String id, final Model model) {
         return "edit";
     }
+
     @GetMapping("/data/peers/delete/{id}")
-    public String getPeerDelete(@PathVariable final String id, final Model model) {
+    public String peerDelete(@PathVariable final String id, final Model model) {
         peerServices.delete(id);
         addAttributeForFindAll(model, peerServices);
         return "redirect:/data/peers";
+    }
+
+    @GetMapping("/data/checks/delete/{id}")
+    public String checksDelete(@PathVariable final String id, final Model model) {
+        checkServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, checkServices);
+        return "redirect:/data/checks";
+    }
+
+    @GetMapping("/data/friends/delete/{id}")
+    public String friendsDelete(@PathVariable final String id, final Model model) {
+        friendsServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, friendsServices);
+        return "redirect:/data/friends";
+    }
+
+    @GetMapping("/data/p2p/delete/{id}")
+    public String p2pDelete(@PathVariable final String id, final Model model) {
+        p2pServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, p2pServices);
+        return "redirect:/data/p2p";
+    }
+
+    @GetMapping("/data/recommendations/delete/{id}")
+    public String recommendationsDelete(@PathVariable final String id, final Model model) {
+        recommendationsServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, recommendationsServices);
+        return "redirect:/data/recommendations";
+    }
+
+    @GetMapping("/data/tasks/delete/{id}")
+    public String tasksDelete(@PathVariable final String id, final Model model) {
+        taskServices.delete(id);
+        addAttributeForFindAll(model, taskServices);
+        return "redirect:/data/tasks";
+    }
+
+    @GetMapping("/data/time_tracking/delete/{id}")
+    public String timeTrackingDelete(@PathVariable final String id, final Model model) {
+        timeTrackingServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, timeTrackingServices);
+        return "redirect:/data/time_tracking";
+    }
+
+    @GetMapping("/data/transferred_points/delete/{id}")
+    public String transferredPointsDelete(@PathVariable final String id, final Model model) {
+        transferredPointsServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, transferredPointsServices);
+        return "redirect:/data/transferred_points";
+    }
+
+    @GetMapping("/data/verter/delete/{id}")
+    public String verterDelete(@PathVariable final String id, final Model model) {
+        verterServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, verterServices);
+        return "redirect:/data/verter";
+    }
+
+    @GetMapping("/data/xp/delete/{id}")
+    public String xpDelete(@PathVariable final String id, final Model model) {
+        xpServices.delete(Long.parseLong(id));
+        addAttributeForFindAll(model, xpServices);
+        return "redirect:/data/xp";
     }
 }
 

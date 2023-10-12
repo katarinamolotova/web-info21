@@ -88,13 +88,14 @@
         <tr class="table_row table_raw_border" th:each="row : ${rows}">
             <td class="table_cell" th:each="col : ${row}" th:text="${col}"></td>
             <td class="table_cell cell_settings">
-                <form th:action="@{'/data/peers/edit/{id}' (id=${row[0]})}">
+                <form th:action="@{'/data/'+${table}+'/edit/{id}' (id=${row[0]})}">
                     <button class="button_green" type="submit">Редактировать</button>
                 </form>
             </td>
             <td class="table_cell cell_settings">
-                <form th:action="@{'/data/peers/delete/{id}' (id=${row[0]})}">
+                <form th:action="@{'/data/'+${table}+'/delete/{id}' (id=${row[0]})}">
                     <button class="button_green" type="button" th:attr="onclick=|showModal('${row[0]}')|">Удалить</button>
+
                     <div th:id="'del_modal'+${row[0]}" class="modal">
                         <div class="modal_content">
                             <h3 class="modal_text">Вы уверены, что хотите удалить данные?</h3>
