@@ -3,7 +3,9 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.RecommendationsEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
+import edu.school21.info21.handlers.ServicesHandler;
 import edu.school21.info21.repositories.RecommendationsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,41 +14,48 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class RecommendationsServices implements EduService<RecommendationsEntity, Long> {
     private final RecommendationsRepository repository;
     private List<RecommendationsEntity> dataCash = new ArrayList<>();
-    private boolean isChanged = true;
+    private final CashHandler cashHandler;
+    private final UUID uuid;
     private final EntityHandler<RecommendationsEntity> entityHandler;
 
     @Autowired
     public RecommendationsServices(
             final RecommendationsRepository repository,
-            final EntityHandler<RecommendationsEntity> entityHandler
+            final CashHandler cashHandler,
+            final EntityHandler<RecommendationsEntity> entityHandler,
+            final ServicesHandler servicesHandler
     ) {
+        servicesHandler.registry("recommendations", this);
         this.repository = repository;
+        this.cashHandler = cashHandler;
+        this.uuid = cashHandler.registry();
         this.entityHandler = entityHandler;
     }
 
     @Override
     public RecommendationsEntity created(RecommendationsEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public RecommendationsEntity update(RecommendationsEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public List<RecommendationsEntity> findAll() {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<RecommendationsEntity>) repository.findAll();
-            this.isChanged = false;
+            cashHandler.localChanges(uuid, false);
         }
         return dataCash;    }
 
@@ -62,7 +71,7 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
 
     @Override
     public RecommendationsEntity findById(Long id) {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(id)
                              .orElseThrow(NotFoundEntity::new);
         } else {
@@ -75,8 +84,12 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
 
     @Override
     public void delete(Long id) {
-        repository.deleteById(id);
-        this.isChanged = true;
+        try {
+            repository.deleteById(id);
+            cashHandler.globalChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
