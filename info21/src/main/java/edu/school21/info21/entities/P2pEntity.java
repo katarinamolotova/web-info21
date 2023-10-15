@@ -14,7 +14,7 @@ import java.sql.Time;
 @Entity
 @Data
 @Table(name = "p2p", schema = "public", catalog = "info21java")
-public class P2pEntity {
+public class P2pEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

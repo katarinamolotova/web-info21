@@ -37,9 +37,9 @@ public class FriendsServices implements EduService<FriendsEntity> {
     }
 
     @Override
-    public FriendsEntity created(Object entity) {
+    public FriendsEntity created(FriendsEntity entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save((FriendsEntity) entity);
+        return repository.save(entity);
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.sql.Date;
 @Entity
 @Data
 @Table(name = "checks", schema = "public", catalog = "info21java")
-public class CheckEntity {
+public class CheckEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

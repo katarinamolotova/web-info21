@@ -15,7 +15,7 @@ import java.sql.Time;
 @Entity
 @Data
 @Table(name = "time_tracking", schema = "public", catalog = "info21java")
-public class TimeTrackingEntity {
+public class TimeTrackingEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

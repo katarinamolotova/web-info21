@@ -10,7 +10,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tasks", schema = "public", catalog = "info21java")
-public class TaskEntity {
+public class TaskEntity implements EntityInfo {
     @Id
     @Column(name = "title")
     private String title;
