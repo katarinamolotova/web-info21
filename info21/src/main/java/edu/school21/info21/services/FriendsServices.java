@@ -97,4 +97,9 @@ public class FriendsServices implements EduService<FriendsEntity> {
                      .collect(Collectors.toList());
 
     }
+
+    @Override
+    public FriendsEntity getEmptyEntity() {
+        return new FriendsEntity();
+    }
 }

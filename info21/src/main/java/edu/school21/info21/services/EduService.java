@@ -20,4 +20,6 @@ public interface EduService<T> {
 
     List<String> getHeaderForTable();
 
+    T getEmptyEntity();
+
 }

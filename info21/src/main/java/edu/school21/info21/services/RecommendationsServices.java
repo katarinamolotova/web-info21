@@ -95,4 +95,9 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public RecommendationsEntity getEmptyEntity() {
+        return new RecommendationsEntity();
+    }
 }
