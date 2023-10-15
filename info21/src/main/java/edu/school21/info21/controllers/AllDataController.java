@@ -1,29 +1,7 @@
 package edu.school21.info21.controllers;
 
-import edu.school21.info21.entities.CheckEntity;
-import edu.school21.info21.entities.FriendsEntity;
-import edu.school21.info21.entities.P2pEntity;
-import edu.school21.info21.entities.PeerEntity;
-import edu.school21.info21.entities.RecommendationsEntity;
-import edu.school21.info21.entities.TaskEntity;
-import edu.school21.info21.entities.TimeTrackingEntity;
-import edu.school21.info21.entities.TransferredPointsEntity;
-import edu.school21.info21.entities.VerterEntity;
-import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
-import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.services.ApiService;
-import edu.school21.info21.services.CheckServices;
-import edu.school21.info21.services.EduService;
-import edu.school21.info21.services.FriendsServices;
-import edu.school21.info21.services.P2pServices;
-import edu.school21.info21.services.PeerServices;
-import edu.school21.info21.services.RecommendationsServices;
-import edu.school21.info21.services.TaskServices;
-import edu.school21.info21.services.TimeTrackingServices;
-import edu.school21.info21.services.TransferredPointsServices;
-import edu.school21.info21.services.VerterServices;
-import edu.school21.info21.services.XpServices;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.EnumSet;
-import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -58,7 +35,7 @@ public class AllDataController {
 
     @GetMapping("/data/{table}/{id}")
     public String editById(@PathVariable final String table, @PathVariable final String id, final Model model) {
-        model.addAttribute("object", apiService.findById(table, id));
+        model.addAttribute("object", apiService.findByIdObject(table, id));
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
         return "data";
@@ -66,14 +43,13 @@ public class AllDataController {
 
     @GetMapping("/data/{table}/add")
     public String create(@PathVariable final String table, final Model model) {
-        // TODO
-//        model.addAttribute("object", new PeerEntity());
-
+        model.addAttribute("object", apiService.getEmptyEntity(table));
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
         return "data";
     }
 
+    //  cannot be cast to clas
     @PostMapping("/data/{table}")
     public String add(
             @PathVariable final String table,
@@ -94,9 +70,9 @@ public class AllDataController {
 
     private void addAttributeForCreate(final Model model) {
         model.addAttribute("operations", "create");
-        model.addAttribute("peers", apiService.findAll("peers"));
-        model.addAttribute("tasks", apiService.findAll("tasks"));
-        model.addAttribute("checks", apiService.findAll("checks"));
+        model.addAttribute("peers", apiService.findAllObjects("peers"));
+        model.addAttribute("tasks", apiService.findAllObjects("tasks"));
+        model.addAttribute("checks", apiService.findAllObjects("checks"));
         model.addAttribute("states", EnumSet.allOf(CheckState.class));
     }
 }

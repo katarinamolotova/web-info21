@@ -6,6 +6,7 @@ import edu.school21.info21.handlers.ServicesHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -26,6 +27,18 @@ public class ApiService {
         }
     }
 
+    public Object findByIdObject(final String base, final String id) {
+        try {
+            return servicesHandler.getService(base).findById(id);
+        } catch (ApiWrongParameter e) {
+            return "Base not found";
+        } catch (NumberFormatException e) {
+            return "Id for this base must be Long format";
+        } catch (NotFoundEntity e) {
+            return "Entity not found";
+        }
+    }
+
     public List findAllAsString(final String base) {
         return servicesHandler.getService(base).findAllAsString();
     }
@@ -35,6 +48,14 @@ public class ApiService {
             return servicesHandler.getService(base).findAll().toString();
         } catch (ApiWrongParameter e) {
             return "base not found";
+        }
+    }
+
+    public List findAllObjects(final String base) {
+        try {
+            return servicesHandler.getService(base).findAll();
+        } catch (ApiWrongParameter e) {
+            return Collections.emptyList();
         }
     }
 
