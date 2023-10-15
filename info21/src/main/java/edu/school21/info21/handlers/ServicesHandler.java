@@ -14,14 +14,8 @@ public record ServicesHandler(Map<String, EduService> services) {
     @Autowired
     public ServicesHandler {}
 
-    public void registry(String serviceName, EduService service) {
-        Object result = services.putIfAbsent(serviceName, service);
-        if (!Objects.isNull(result)) {
-            throw new IllegalArgumentException("Wrong service name");
-        }
-    }
-
     public EduService getService(String serviceName) {
-        return Optional.ofNullable(services.get(serviceName)).orElseThrow(ApiWrongParameter::new);
+        return Optional.ofNullable(services.get(serviceName))
+                       .orElseThrow(ApiWrongParameter::new);
     }
 }
