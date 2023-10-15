@@ -3,6 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.XpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,41 +13,46 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class XpServices implements EduService<XpEntity, Long> {
+@Service("xp")
+public class XpServices implements EduService<XpEntity> {
     private final XpRepository repository;
     private List<XpEntity> dataCash = new ArrayList<>();
-    private boolean isChanged = true;
+    private final CashHandler cashHandler;
+    private final UUID uuid;
     private final EntityHandler<XpEntity> entityHandler;
 
     @Autowired
     public XpServices(
             final XpRepository repository,
+            final CashHandler cashHandler,
             final EntityHandler<XpEntity> entityHandler
     ) {
         this.repository = repository;
+        this.cashHandler = cashHandler;
+        this.uuid = cashHandler.registry();
         this.entityHandler = entityHandler;
     }
 
     @Override
     public XpEntity created(XpEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public XpEntity update(XpEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public List<XpEntity> findAll() {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<XpEntity>) repository.findAll();
-            this.isChanged = false;
+            cashHandler.localChanges(uuid, false);
         }
         return dataCash;    }
 
@@ -61,22 +67,26 @@ public class XpServices implements EduService<XpEntity, Long> {
     }
 
     @Override
-    public XpEntity findById(Long id) {
-        if(isChanged || dataCash.isEmpty()) {
-            return repository.findById(id)
+    public XpEntity findById(String id) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
+            return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
             return dataCash.stream()
-                           .filter( i -> i.getId() == id)
+                           .filter( i -> i.getId() == Long.parseLong(id))
                            .findFirst()
                            .orElseThrow(NotFoundEntity::new);
         }
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-        this.isChanged = true;
+    public void delete(String id) {
+        try {
+            repository.deleteById(Long.parseLong(id));
+            cashHandler.globalChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

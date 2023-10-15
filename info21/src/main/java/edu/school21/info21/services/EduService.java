@@ -2,7 +2,7 @@ package edu.school21.info21.services;
 
 import java.util.List;
 
-public interface EduService<T, V> {
+public interface EduService<T> {
 
     T created(T entity);
 
@@ -14,9 +14,9 @@ public interface EduService<T, V> {
 
     String getTableName();
 
-    T findById(V id);
+    T findById(String id);
 
-    void delete(V id);
+    void delete(String id);
 
     List<String> getHeaderForTable();
 

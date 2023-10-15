@@ -3,6 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.TaskEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,41 +14,46 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class TaskServices implements EduService<TaskEntity, String> {
+@Service("tasks")
+public class TaskServices implements EduService<TaskEntity> {
     private final TaskRepository repository;
     private List<TaskEntity> dataCash = new ArrayList<>();
-    private boolean isChanged = true;
+    private final CashHandler cashHandler;
+    private final UUID uuid;
     private final EntityHandler<TaskEntity> entityHandler;
 
     @Autowired
     public TaskServices(
             final TaskRepository repository,
+            final CashHandler cashHandler,
             final EntityHandler<TaskEntity> entityHandler
     ) {
         this.repository = repository;
+        this.cashHandler = cashHandler;
+        this.uuid = cashHandler.registry();
         this.entityHandler = entityHandler;
     }
 
     @Override
     public TaskEntity created(TaskEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public TaskEntity update(TaskEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public List<TaskEntity> findAll() {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<TaskEntity>) repository.findAll();
-            this.isChanged = false;
+            cashHandler.localChanges(uuid, false);
         }
         return dataCash;
     }
@@ -64,7 +70,7 @@ public class TaskServices implements EduService<TaskEntity, String> {
 
     @Override
     public TaskEntity findById(String id) {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(id)
                              .orElseThrow(NotFoundEntity::new);
         } else {
@@ -77,8 +83,12 @@ public class TaskServices implements EduService<TaskEntity, String> {
 
     @Override
     public void delete(String id) {
-        repository.deleteById(id);
-        this.isChanged = true;
+        try {
+            repository.deleteById(id);
+            cashHandler.globalChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.PeerEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.PeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,42 +14,47 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class PeerServices implements EduService<PeerEntity, String> {
+@Service("peers")
+public class PeerServices implements EduService<PeerEntity> {
     private final PeerRepository repository;
     private List<PeerEntity> dataCash = new ArrayList<>();
-    private boolean isChanged = true;
+    private final CashHandler cashHandler;
+    private final UUID uuid;
     private final EntityHandler<PeerEntity> entityHandler;
 
 
     @Autowired
     public PeerServices(
             final PeerRepository repository,
+            final CashHandler cashHandler,
             final EntityHandler<PeerEntity> entityHandler
     ) {
         this.repository = repository;
+        this.cashHandler = cashHandler;
+        this.uuid = cashHandler.registry();
         this.entityHandler = entityHandler;
     }
 
     @Override
     public PeerEntity created(PeerEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public PeerEntity update(PeerEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public List<PeerEntity> findAll() {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<PeerEntity>) repository.findAll();
-            this.isChanged = false;
+            cashHandler.localChanges(uuid, false);
         }
         return dataCash;    }
 
@@ -64,7 +70,7 @@ public class PeerServices implements EduService<PeerEntity, String> {
 
     @Override
     public PeerEntity findById(String id) {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(id)
                              .orElseThrow(NotFoundEntity::new);
         } else {
@@ -74,10 +80,15 @@ public class PeerServices implements EduService<PeerEntity, String> {
                            .orElseThrow(NotFoundEntity::new);
         }
     }
+
     @Override
     public void delete(String id) {
-        repository.deleteById(id);
-        this.isChanged = true;
+        try {
+            repository.deleteById(id);
+            cashHandler.globalChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

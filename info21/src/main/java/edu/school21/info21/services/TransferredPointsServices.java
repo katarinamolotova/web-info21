@@ -3,6 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.TransferredPointsEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.TransferredPointsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,41 +13,46 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class TransferredPointsServices implements EduService<TransferredPointsEntity, Long> {
+@Service("transferred-points")
+public class TransferredPointsServices implements EduService<TransferredPointsEntity> {
     private final TransferredPointsRepository repository;
     private List<TransferredPointsEntity> dataCash = new ArrayList<>();
-    private boolean isChanged = true;
+    private final CashHandler cashHandler;
+    private final UUID uuid;
     private final EntityHandler<TransferredPointsEntity> entityHandler;
 
     @Autowired
     public TransferredPointsServices(
             final TransferredPointsRepository repository,
+            final CashHandler cashHandler,
             final EntityHandler<TransferredPointsEntity> entityHandler
     ) {
         this.repository = repository;
+        this.cashHandler = cashHandler;
+        this.uuid = cashHandler.registry();
         this.entityHandler = entityHandler;
     }
 
     @Override
     public TransferredPointsEntity created(TransferredPointsEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public TransferredPointsEntity update(TransferredPointsEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public List<TransferredPointsEntity> findAll() {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<TransferredPointsEntity>) repository.findAll();
-            this.isChanged = false;
+            cashHandler.localChanges(uuid, false);
         }
         return dataCash;
     }
@@ -62,22 +68,26 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     }
 
     @Override
-    public TransferredPointsEntity findById(Long id) {
-        if(isChanged || dataCash.isEmpty()) {
-            return repository.findById(id)
+    public TransferredPointsEntity findById(String id) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
+            return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
             return dataCash.stream()
-                           .filter( i -> i.getId() == id)
+                           .filter( i -> i.getId() == Long.parseLong(id))
                            .findFirst()
                            .orElseThrow(NotFoundEntity::new);
         }
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-        this.isChanged = true;
+    public void delete(String id) {
+        try {
+            repository.deleteById(Long.parseLong(id));
+            cashHandler.globalChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

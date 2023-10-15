@@ -3,6 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.TimeTrackingEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.TimeTrackingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,41 +13,46 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class TimeTrackingServices implements EduService<TimeTrackingEntity, Long> {
+@Service("time-tracking")
+public class TimeTrackingServices implements EduService<TimeTrackingEntity> {
     private final TimeTrackingRepository repository;
     private List<TimeTrackingEntity> dataCash = new ArrayList<>();
-    private boolean isChanged = true;
+    private final CashHandler cashHandler;
+    private final UUID uuid;
     private final EntityHandler<TimeTrackingEntity> entityHandler;
 
     @Autowired
     public TimeTrackingServices(
             final TimeTrackingRepository repository,
+            final CashHandler cashHandler,
             final EntityHandler<TimeTrackingEntity> entityHandler
     ) {
         this.repository = repository;
+        this.cashHandler = cashHandler;
+        this.uuid = cashHandler.registry();
         this.entityHandler = entityHandler;
     }
 
     @Override
     public TimeTrackingEntity created(TimeTrackingEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public TimeTrackingEntity update(TimeTrackingEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public List<TimeTrackingEntity> findAll() {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<TimeTrackingEntity>) repository.findAll();
-            this.isChanged = false;
+            cashHandler.localChanges(uuid, false);
         }
         return dataCash;
     }
@@ -62,27 +68,32 @@ public class TimeTrackingServices implements EduService<TimeTrackingEntity, Long
     }
 
     @Override
-    public TimeTrackingEntity findById(Long id) {
-        if(isChanged || dataCash.isEmpty()) {
-            return repository.findById(id)
+    public TimeTrackingEntity findById(String id) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
+            return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
             return dataCash.stream()
-                           .filter( i -> i.getId() == id)
+                           .filter( i -> i.getId() == Long.parseLong(id))
                            .findFirst()
                            .orElseThrow(NotFoundEntity::new);
         }
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-        this.isChanged = true;
+    public void delete(String id) {
+        try {
+            repository.deleteById(Long.parseLong(id));
+            cashHandler.globalChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public List<String> getHeaderForTable() {
         return Arrays.stream(TimeTrackingEntity.class.getDeclaredFields())
                      .map(Field::getName)
-                     .collect(Collectors.toList());    }
+                     .collect(Collectors.toList());
+    }
 }

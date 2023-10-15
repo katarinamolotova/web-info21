@@ -3,6 +3,7 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.FriendsEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
+import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
 import edu.school21.info21.repositories.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,41 +13,46 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class FriendsServices implements EduService<FriendsEntity, Long> {
+@Service("friends")
+public class FriendsServices implements EduService<FriendsEntity> {
     private final FriendsRepository repository;
     private List<FriendsEntity> dataCash = new ArrayList<>();
-    private boolean isChanged = true;
+    private final CashHandler cashHandler;
+    private final UUID uuid;
     private final EntityHandler<FriendsEntity> entityHandler;
 
     @Autowired
     public FriendsServices(
             final FriendsRepository repository,
+            final CashHandler cashHandler,
             final EntityHandler<FriendsEntity> entityHandler
     ) {
         this.repository = repository;
+        this.cashHandler = cashHandler;
+        this.uuid = cashHandler.registry();
         this.entityHandler = entityHandler;
     }
 
     @Override
     public FriendsEntity created(FriendsEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public FriendsEntity update(FriendsEntity entity) {
-        this.isChanged = true;
+        cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
     public List<FriendsEntity> findAll() {
-        if(isChanged || dataCash.isEmpty()) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<FriendsEntity>) repository.findAll();
-            this.isChanged = false;
+            cashHandler.localChanges(uuid, false);
         }
         return dataCash;
     }
@@ -62,22 +68,26 @@ public class FriendsServices implements EduService<FriendsEntity, Long> {
     }
 
     @Override
-    public FriendsEntity findById(Long id) {
-        if(isChanged || dataCash.isEmpty()) {
-            return repository.findById(id)
+    public FriendsEntity findById(String id) {
+        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
+            return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
             return dataCash.stream()
-                           .filter( i -> i.getId() == id)
+                           .filter( i -> i.getId() == Long.parseLong(id))
                            .findFirst()
                            .orElseThrow(NotFoundEntity::new);
         }
     }
 
     @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-        this.isChanged = true;
+    public void delete(String id) {
+        try {
+            repository.deleteById(Long.parseLong(id));
+            cashHandler.globalChanges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
