@@ -37,9 +37,9 @@ public class P2pServices implements EduService<P2pEntity> {
     }
 
     @Override
-    public P2pEntity created(P2pEntity entity) {
+    public P2pEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((P2pEntity)entity);
     }
 
     @Override

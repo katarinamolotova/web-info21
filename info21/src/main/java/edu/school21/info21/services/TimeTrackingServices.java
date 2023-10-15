@@ -37,9 +37,9 @@ public class TimeTrackingServices implements EduService<TimeTrackingEntity> {
     }
 
     @Override
-    public TimeTrackingEntity created(TimeTrackingEntity entity) {
+    public TimeTrackingEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((TimeTrackingEntity)entity);
     }
 
     @Override

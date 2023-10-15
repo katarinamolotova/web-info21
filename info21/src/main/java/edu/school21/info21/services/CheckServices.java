@@ -37,9 +37,9 @@ public class CheckServices implements EduService<CheckEntity> {
     }
 
     @Override
-    public CheckEntity created(CheckEntity entity) {
+    public CheckEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((CheckEntity) entity);
     }
 
     @Override

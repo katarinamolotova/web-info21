@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface EduService<T> {
 
-    T created(T entity);
+    T created(Object entity);
 
     T update(T entity);
 
