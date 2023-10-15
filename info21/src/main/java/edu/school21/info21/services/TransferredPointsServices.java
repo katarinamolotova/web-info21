@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service("transferred-points")
+@Service("transferred_points")
 public class TransferredPointsServices implements EduService<TransferredPointsEntity> {
     private final TransferredPointsRepository repository;
     private List<TransferredPointsEntity> dataCash = new ArrayList<>();

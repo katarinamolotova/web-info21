@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service("p2ps")
+@Service("p2p")
 public class P2pServices implements EduService<P2pEntity> {
     private final P2pRepository repository;
     private List<P2pEntity> dataCash = new ArrayList<>();

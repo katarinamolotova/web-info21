@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service("time-tracking")
+@Service("time_tracking")
 public class TimeTrackingServices implements EduService<TimeTrackingEntity> {
     private final TimeTrackingRepository repository;
     private List<TimeTrackingEntity> dataCash = new ArrayList<>();
