@@ -37,9 +37,9 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     }
 
     @Override
-    public TransferredPointsEntity created(TransferredPointsEntity entity) {
+    public TransferredPointsEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((TransferredPointsEntity)entity);
     }
 
     @Override

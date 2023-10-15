@@ -38,9 +38,9 @@ public class TaskServices implements EduService<TaskEntity> {
     }
 
     @Override
-    public TaskEntity created(TaskEntity entity) {
+    public TaskEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((TaskEntity) entity);
     }
 
     @Override
