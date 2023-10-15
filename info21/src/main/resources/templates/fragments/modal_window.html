@@ -5,12 +5,10 @@
 </head>
 <body>
 
-<!-- передать параметр и объект для отображения-->
-<!-- сущность / список стрингов / isEdit -->
 <!-- валидация -->
 
 <div th:if="${table} == 'peers'" th:fragment="peer_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">nickname</p>
     <input th:class="modal_input" placeholder="Введите текст" type="text" th:field="*{nickname}"/>
@@ -20,7 +18,7 @@
 </div>
 
 <div th:if="${table} == 'checks'" th:fragment="check_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">peer</p>
     <select th:class="modal_input" th:field="*{peer}">
@@ -37,7 +35,7 @@
 </div>
 
 <div th:if="${table} == 'friends'" th:fragment="friends_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">first peer</p>
     <select th:class="modal_input" th:field="*{peer1}">
@@ -51,7 +49,7 @@
 </div>
 
 <div th:if="${table} == 'p2p'" th:fragment="p2p_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">check id</p>
     <select th:class="modal_input" th:field="*{checkId}">
@@ -69,11 +67,11 @@
     </select>
 
     <p th:class="modal_p">time</p>
-    <input th:class="modal_input" type="time" th:field="*{checkTime}"/>
+    <input th:class="modal_input" type="time" step="1" th:field="*{checkTime}"/>
 </div>
 
 <div th:if="${table} == 'recommendations'" th:fragment="recommendations_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">Who recommends them?</p>
     <select th:class="modal_input" th:field="*{peer}">
@@ -87,7 +85,7 @@
 </div>
 
 <div th:if="${table} == 'tasks'" th:fragment="tasks_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">title</p>
     <input th:class="modal_input" placeholder="Введите текст" type="text" th:field="*{title}"/>
@@ -98,11 +96,11 @@
     </select>
 
     <p th:class="modal_p">max xp</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number" th:field="*{maxXp}"/>
+    <input th:class="modal_input" placeholder="Введите число" type="number" min="0" th:field="*{maxXp}"/>
 </div>
 
 <div th:if="${table} == 'time_tracking'" th:fragment="time_tracking_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">peer</p>
     <select th:class="modal_input" th:field="*{peer}">
@@ -113,14 +111,14 @@
     <input th:class="modal_input" type="date" th:field="*{visitDate}"/>
 
     <p th:class="modal_p">visit time</p>
-    <input th:class="modal_input" type="time" th:field="*{visitTime}"/>
+    <input th:class="modal_input" type="time" step="1" th:field="*{visitTime}"/>
 
     <p th:class="modal_p">state (1 - in, 2 - out)</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number" th:field="*{state}"/>
+    <input th:class="modal_input" placeholder="Введите число" type="number"  min="1" max="2" th:field="*{state}"/>
 </div>
 
 <div th:if="${table} == 'transferred_points'" th:fragment="transferred_points_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">checking peer</p>
     <select th:class="modal_input" th:field="*{checkingPeer}">
@@ -133,11 +131,11 @@
     </select>
 
     <p th:class="modal_p">number of points</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number" th:field="*{pointsAmount}"/>
+    <input th:class="modal_input" placeholder="Введите число" type="number" min="0" th:field="*{pointsAmount}"/>
 </div>
 
 <div th:if="${table} == 'verter'" th:fragment="verter_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">check id</p>
     <select th:class="modal_input" th:field="*{checkId}">
@@ -150,11 +148,11 @@
     </select>
 
     <p th:class="modal_p">time</p>
-    <input th:class="modal_input" type="time" th:field="*{verterTime}"/>
+    <input th:class="modal_input" type="time" step="1" th:field="*{verterTime}"/>
 </div>
 
 <div th:if="${table} == 'xp'" th:fragment="xp_add">
-    <h3 class="modal_header_text" th:text="'Добавление в таблицу '+${table}"> </h3>
+    <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">check id</p>
     <select th:class="modal_input" th:field="*{checkId}">
@@ -162,7 +160,7 @@
     </select>
 
     <p th:class="modal_p">number of xp</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number" th:field="*{xpAmount}"/>
+    <input th:class="modal_input" placeholder="Введите число" type="number" min="0" th:field="*{xpAmount}"/>
 </div>
 
 </body>

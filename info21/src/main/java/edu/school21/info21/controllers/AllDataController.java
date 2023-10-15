@@ -1,5 +1,16 @@
 package edu.school21.info21.controllers;
 
+import edu.school21.info21.entities.CheckEntity;
+import edu.school21.info21.entities.EntityInfo;
+import edu.school21.info21.entities.FriendsEntity;
+import edu.school21.info21.entities.P2pEntity;
+import edu.school21.info21.entities.PeerEntity;
+import edu.school21.info21.entities.RecommendationsEntity;
+import edu.school21.info21.entities.TaskEntity;
+import edu.school21.info21.entities.TimeTrackingEntity;
+import edu.school21.info21.entities.TransferredPointsEntity;
+import edu.school21.info21.entities.VerterEntity;
+import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
 import edu.school21.info21.services.ApiService;
 import jakarta.validation.Valid;
@@ -49,15 +60,89 @@ public class AllDataController {
         return "data";
     }
 
-    //  cannot be cast to clas
-    @PostMapping("/data/{table}")
-    public String add(
-            @PathVariable final String table,
-            @Valid final Object object,
+    @PostMapping("/data/peers")
+    public String createPeer(
+            @Valid final PeerEntity entity,
             final BindingResult bindingResult
     ) {
+        return create(entity, "peers", bindingResult);
+    }
+
+    @PostMapping("/data/checks")
+    public String createCheck(
+            @Valid final CheckEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "checks", bindingResult);
+    }
+
+    @PostMapping("/data/friends")
+    public String createFriends(
+            @Valid final FriendsEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "friends", bindingResult);
+    }
+
+    @PostMapping("/data/p2p")
+    public String createP2p(
+            @Valid final P2pEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "p2p", bindingResult);
+    }
+
+    @PostMapping("/data/recommendations")
+    public String createRecommendations(
+            @Valid final RecommendationsEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "recommendations", bindingResult);
+    }
+
+    @PostMapping("/data/tasks")
+    public String createTask(
+            @Valid final TaskEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "tasks", bindingResult);
+    }
+
+    @PostMapping("/data/time_tracking")
+    public String createTimeTracking(
+            @Valid final TimeTrackingEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "time_tracking", bindingResult);
+    }
+
+    @PostMapping("/data/transferred_points")
+    public String createTransferredPoints(
+            @Valid final TransferredPointsEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "transferred_points", bindingResult);
+    }
+
+    @PostMapping("/data/verter")
+    public String createVerter(
+            @Valid final VerterEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "verter", bindingResult);
+    }
+
+    @PostMapping("/data/xp")
+    public String createXp(
+            @Valid final XpEntity entity,
+            final BindingResult bindingResult
+    ) {
+        return create(entity, "xp", bindingResult);
+    }
+
+    private String create(final EntityInfo entity, final String table, final BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
-            apiService.created(object, table);
+            apiService.created(entity, table);
         }
         return String.format("redirect:/data/%s", table);
     }
