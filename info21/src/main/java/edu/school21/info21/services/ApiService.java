@@ -6,6 +6,8 @@ import edu.school21.info21.handlers.ServicesHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -24,6 +26,10 @@ public class ApiService {
         }
     }
 
+    public List findAllAsString(final String base) {
+        return servicesHandler.getService(base).findAllAsString();
+    }
+
     public String findAll(final String base) {
         try {
             return servicesHandler.getService(base).findAll().toString();
@@ -32,23 +38,21 @@ public class ApiService {
         }
     }
 
-//    public String findById(final String base, final String id) {
-//        try {
-//            return servicesHandler.getService(base).findById(id).toString();
-//        } catch (ApiWrongParameter e) {
-//            return "Base not found";
-//        } catch (NumberFormatException e) {
-//            return "Id for this base must be Long format";
-//        } catch (NotFoundEntity e) {
-//            return "Entity not found";
-//        }
-//    }
+    public Object created(final Object entity, final String base) {
+        return servicesHandler.getService(base).created(entity);
+    }
 
-    public String doOperation(final String base,
-                              final String operation,
-                              final String id
-    ){
-        return "varible 2";
+    public Object update(final Object entity, final String base) {
+        servicesHandler.getService(base);
+        return servicesHandler.getService(base).update(entity);
+    }
+
+    public void delete(final String id, final String base) {
+        servicesHandler.getService(base).delete(id);
+    }
+
+    public List getHeaderForTable(final String base) {
+        return servicesHandler.getService(base).getHeaderForTable();
     }
 
 }
