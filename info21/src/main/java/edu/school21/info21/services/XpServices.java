@@ -37,9 +37,9 @@ public class XpServices implements EduService<XpEntity> {
     }
 
     @Override
-    public XpEntity created(XpEntity entity) {
+    public XpEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((XpEntity)entity);
     }
 
     @Override

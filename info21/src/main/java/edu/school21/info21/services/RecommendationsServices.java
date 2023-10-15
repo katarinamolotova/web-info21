@@ -37,9 +37,9 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
     }
 
     @Override
-    public RecommendationsEntity created(RecommendationsEntity entity) {
+    public RecommendationsEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((RecommendationsEntity)entity);
     }
 
     @Override

@@ -37,9 +37,9 @@ public class VerterServices implements EduService<VerterEntity> {
     }
 
     @Override
-    public VerterEntity created(VerterEntity entity) {
+    public VerterEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((VerterEntity)entity);
     }
 
     @Override

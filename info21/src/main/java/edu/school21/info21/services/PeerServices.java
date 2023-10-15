@@ -39,9 +39,9 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public PeerEntity created(PeerEntity entity) {
+    public PeerEntity created(Object entity) {
         cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
+        return repository.save((PeerEntity)entity);
     }
 
     @Override

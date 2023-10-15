@@ -15,69 +15,68 @@ import java.util.List;
 public class ApiService {
     private final ServicesHandler servicesHandler;
 
-    public String findById(final String base, final String id) {
+    public String findById(final String table, final String id) {
         try {
-            return servicesHandler.getService(base).findById(id).toString();
+            return servicesHandler.getService(table).findById(id).toString();
         } catch (ApiWrongParameter e) {
-            return "Base not found";
+            return "table not found";
         } catch (NumberFormatException e) {
-            return "Id for this base must be Long format";
+            return "Id for this table must be Long format";
         } catch (NotFoundEntity e) {
             return "Entity not found";
         }
     }
 
-    public Object findByIdObject(final String base, final String id) {
+    public Object findByIdObject(final String table, final String id) {
         try {
-            return servicesHandler.getService(base).findById(id);
+            return servicesHandler.getService(table).findById(id);
         } catch (ApiWrongParameter e) {
-            return "Base not found";
+            return "table not found";
         } catch (NumberFormatException e) {
-            return "Id for this base must be Long format";
+            return "Id for this table must be Long format";
         } catch (NotFoundEntity e) {
             return "Entity not found";
         }
     }
 
-    public List findAllAsString(final String base) {
-        return servicesHandler.getService(base).findAllAsString();
+    public List findAllAsString(final String table) {
+        return servicesHandler.getService(table).findAllAsString();
     }
 
-    public String findAll(final String base) {
+    public String findAll(final String table) {
         try {
-            return servicesHandler.getService(base).findAll().toString();
+            return servicesHandler.getService(table).findAll().toString();
         } catch (ApiWrongParameter e) {
-            return "base not found";
+            return "table not found";
         }
     }
 
-    public List findAllObjects(final String base) {
+    public List findAllObjects(final String table) {
         try {
-            return servicesHandler.getService(base).findAll();
+            return servicesHandler.getService(table).findAll();
         } catch (ApiWrongParameter e) {
             return Collections.emptyList();
         }
     }
 
-    public Object created(final Object entity, final String base) {
-        return servicesHandler.getService(base).created(entity);
+    public Object created(final Object entity, final String table) {
+        return servicesHandler.getService(table).created(entity);
     }
 
-    public Object update(final Object entity, final String base) {
-        servicesHandler.getService(base);
-        return servicesHandler.getService(base).update(entity);
+    public Object update(final Object entity, final String table) {
+        servicesHandler.getService(table);
+        return servicesHandler.getService(table).update(entity);
     }
 
-    public void delete(final String id, final String base) {
-        servicesHandler.getService(base).delete(id);
+    public void delete(final String id, final String table) {
+        servicesHandler.getService(table).delete(id);
     }
 
-    public List getHeaderForTable(final String base) {
-        return servicesHandler.getService(base).getHeaderForTable();
+    public List getHeaderForTable(final String table) {
+        return servicesHandler.getService(table).getHeaderForTable();
     }
 
-    public Object getEmptyEntity(final String base) {
-        return servicesHandler.getService(base).getEmptyEntity();
+    public Object getEmptyEntity(final String table) {
+        return servicesHandler.getService(table).getEmptyEntity();
     }
-
 }
