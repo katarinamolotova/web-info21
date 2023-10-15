@@ -97,4 +97,9 @@ public class PeerServices implements EduService<PeerEntity> {
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public PeerEntity getEmptyEntity() {
+        return new PeerEntity();
+    }
 }

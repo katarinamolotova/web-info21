@@ -96,4 +96,9 @@ public class TimeTrackingServices implements EduService<TimeTrackingEntity> {
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public TimeTrackingEntity getEmptyEntity() {
+        return new TimeTrackingEntity();
+    }
 }

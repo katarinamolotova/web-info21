@@ -95,4 +95,9 @@ public class XpServices implements EduService<XpEntity> {
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public XpEntity getEmptyEntity() {
+        return new XpEntity();
+    }
 }

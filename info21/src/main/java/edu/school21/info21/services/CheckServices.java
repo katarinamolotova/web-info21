@@ -96,4 +96,9 @@ public class CheckServices implements EduService<CheckEntity> {
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public CheckEntity getEmptyEntity() {
+        return new CheckEntity();
+    }
 }

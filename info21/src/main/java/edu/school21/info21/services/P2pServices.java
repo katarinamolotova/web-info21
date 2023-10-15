@@ -96,4 +96,9 @@ public class P2pServices implements EduService<P2pEntity> {
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public P2pEntity getEmptyEntity() {
+        return new P2pEntity();
+    }
 }

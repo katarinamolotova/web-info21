@@ -96,4 +96,9 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public TransferredPointsEntity getEmptyEntity() {
+        return new TransferredPointsEntity();
+    }
 }

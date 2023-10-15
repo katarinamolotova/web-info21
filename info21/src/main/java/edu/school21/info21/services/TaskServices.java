@@ -97,4 +97,9 @@ public class TaskServices implements EduService<TaskEntity> {
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public TaskEntity getEmptyEntity() {
+        return new TaskEntity();
+    }
 }

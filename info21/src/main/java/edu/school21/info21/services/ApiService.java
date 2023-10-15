@@ -55,4 +55,8 @@ public class ApiService {
         return servicesHandler.getService(base).getHeaderForTable();
     }
 
+    public Object getEmptyEntity(final String base) {
+        return servicesHandler.getService(base).getEmptyEntity();
+    }
+
 }

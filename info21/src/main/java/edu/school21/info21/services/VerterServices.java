@@ -96,4 +96,9 @@ public class VerterServices implements EduService<VerterEntity> {
                      .map(Field::getName)
                      .collect(Collectors.toList());
     }
+
+    @Override
+    public VerterEntity getEmptyEntity() {
+        return new VerterEntity();
+    }
 }
