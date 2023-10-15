@@ -16,7 +16,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "recommendations", schema = "public", catalog = "info21java")
-public class RecommendationsEntity {
+public class RecommendationsEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

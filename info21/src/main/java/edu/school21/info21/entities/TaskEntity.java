@@ -16,7 +16,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "tasks", schema = "public", catalog = "info21java")
-public class TaskEntity {
+public class TaskEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "title")

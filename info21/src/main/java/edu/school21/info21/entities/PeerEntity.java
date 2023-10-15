@@ -12,7 +12,7 @@ import java.sql.Date;
 @Data
 @Entity
 @Table(name = "peers", schema = "public", catalog = "info21java")
-public class PeerEntity {
+public class PeerEntity implements EntityInfo {
     @Id
     @Column(name = "nickname")
     private String nickname;

@@ -17,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "verter", schema = "public", catalog = "info21java")
-public class VerterEntity {
+public class VerterEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

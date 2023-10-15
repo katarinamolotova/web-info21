@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +18,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "checks", schema = "public", catalog = "info21java")
-public class CheckEntity {
+public class CheckEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

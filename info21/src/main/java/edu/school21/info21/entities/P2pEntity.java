@@ -17,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name = "p2p", schema = "public", catalog = "info21java")
-public class P2pEntity {
+public class P2pEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")

@@ -1,5 +1,6 @@
 package edu.school21.info21.services;
 
+import edu.school21.info21.entities.EntityInfo;
 import edu.school21.info21.exceptions.ApiWrongParameter;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.handlers.ServicesHandler;
@@ -38,13 +39,13 @@ public class ApiService {
         }
     }
 
-    public Object created(final Object entity, final String table) {
-        return servicesHandler.getService(table).created(entity);
+    public EntityInfo created(final EntityInfo entity, final String table) {
+        return (EntityInfo) servicesHandler.getService(table).created(entity);
     }
 
-    public Object update(final Object entity, final String table) {
+    public EntityInfo update(final EntityInfo entity, final String table) {
         servicesHandler.getService(table);
-        return servicesHandler.getService(table).update(entity);
+        return (EntityInfo) servicesHandler.getService(table).update(entity);
     }
 
     public void delete(final String id, final String table) {
