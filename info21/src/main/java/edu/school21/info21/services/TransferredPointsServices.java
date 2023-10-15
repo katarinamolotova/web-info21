@@ -5,7 +5,6 @@ import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
-import edu.school21.info21.handlers.ServicesHandler;
 import edu.school21.info21.repositories.TransferredPointsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class TransferredPointsServices implements EduService<TransferredPointsEntity, Long> {
+@Service("transferred-points")
+public class TransferredPointsServices implements EduService<TransferredPointsEntity> {
     private final TransferredPointsRepository repository;
     private List<TransferredPointsEntity> dataCash = new ArrayList<>();
     private final CashHandler cashHandler;
@@ -29,10 +28,8 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     public TransferredPointsServices(
             final TransferredPointsRepository repository,
             final CashHandler cashHandler,
-            final EntityHandler<TransferredPointsEntity> entityHandler,
-            final ServicesHandler servicesHandler
+            final EntityHandler<TransferredPointsEntity> entityHandler
     ) {
-        servicesHandler.registry("transferred-points", this);
         this.repository = repository;
         this.cashHandler = cashHandler;
         this.uuid = cashHandler.registry();
@@ -71,22 +68,22 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     }
 
     @Override
-    public TransferredPointsEntity findById(Long id) {
+    public TransferredPointsEntity findById(String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
-            return repository.findById(id)
+            return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
             return dataCash.stream()
-                           .filter( i -> i.getId() == id)
+                           .filter( i -> i.getId() == Long.parseLong(id))
                            .findFirst()
                            .orElseThrow(NotFoundEntity::new);
         }
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(String id) {
         try {
-            repository.deleteById(id);
+            repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
         } catch (Exception e) {
             e.printStackTrace();

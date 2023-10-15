@@ -5,7 +5,6 @@ import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
-import edu.school21.info21.handlers.ServicesHandler;
 import edu.school21.info21.repositories.PeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class PeerServices implements EduService<PeerEntity, String> {
+@Service("peers")
+public class PeerServices implements EduService<PeerEntity> {
     private final PeerRepository repository;
     private List<PeerEntity> dataCash = new ArrayList<>();
     private final CashHandler cashHandler;
@@ -31,10 +30,8 @@ public class PeerServices implements EduService<PeerEntity, String> {
     public PeerServices(
             final PeerRepository repository,
             final CashHandler cashHandler,
-            final EntityHandler<PeerEntity> entityHandler,
-            final ServicesHandler servicesHandler
+            final EntityHandler<PeerEntity> entityHandler
     ) {
-        servicesHandler.registry("peers", this);
         this.repository = repository;
         this.cashHandler = cashHandler;
         this.uuid = cashHandler.registry();

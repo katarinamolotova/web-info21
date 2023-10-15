@@ -5,7 +5,6 @@ import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
-import edu.school21.info21.handlers.ServicesHandler;
 import edu.school21.info21.repositories.XpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +16,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class XpServices implements EduService<XpEntity, Long> {
+@Service("xp")
+public class XpServices implements EduService<XpEntity> {
     private final XpRepository repository;
     private List<XpEntity> dataCash = new ArrayList<>();
     private final CashHandler cashHandler;
@@ -29,10 +28,8 @@ public class XpServices implements EduService<XpEntity, Long> {
     public XpServices(
             final XpRepository repository,
             final CashHandler cashHandler,
-            final EntityHandler<XpEntity> entityHandler,
-            final ServicesHandler servicesHandler
+            final EntityHandler<XpEntity> entityHandler
     ) {
-        servicesHandler.registry("xp", this);
         this.repository = repository;
         this.cashHandler = cashHandler;
         this.uuid = cashHandler.registry();
@@ -70,22 +67,22 @@ public class XpServices implements EduService<XpEntity, Long> {
     }
 
     @Override
-    public XpEntity findById(Long id) {
+    public XpEntity findById(String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
-            return repository.findById(id)
+            return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
             return dataCash.stream()
-                           .filter( i -> i.getId() == id)
+                           .filter( i -> i.getId() == Long.parseLong(id))
                            .findFirst()
                            .orElseThrow(NotFoundEntity::new);
         }
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(String id) {
         try {
-            repository.deleteById(id);
+            repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
         } catch (Exception e) {
             e.printStackTrace();

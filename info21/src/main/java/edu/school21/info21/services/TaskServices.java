@@ -5,7 +5,6 @@ import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.handlers.CashHandler;
 import edu.school21.info21.handlers.EntityHandler;
-import edu.school21.info21.handlers.ServicesHandler;
 import edu.school21.info21.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Service
-public class TaskServices implements EduService<TaskEntity, String> {
+@Service("tasks")
+public class TaskServices implements EduService<TaskEntity> {
     private final TaskRepository repository;
     private List<TaskEntity> dataCash = new ArrayList<>();
     private final CashHandler cashHandler;
@@ -30,10 +29,8 @@ public class TaskServices implements EduService<TaskEntity, String> {
     public TaskServices(
             final TaskRepository repository,
             final CashHandler cashHandler,
-            final EntityHandler<TaskEntity> entityHandler,
-            final ServicesHandler servicesHandler
+            final EntityHandler<TaskEntity> entityHandler
     ) {
-        servicesHandler.registry("tasks", this);
         this.repository = repository;
         this.cashHandler = cashHandler;
         this.uuid = cashHandler.registry();

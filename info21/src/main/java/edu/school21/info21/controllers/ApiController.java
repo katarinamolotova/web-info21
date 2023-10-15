@@ -16,12 +16,10 @@ public class ApiController {
 
     private final ApiService service;
 
-    @GetMapping("/api/{base}/{operation}/{id}")
-    public String apiOperations(@PathVariable String operation,
-                      @PathVariable String id,
-                      @PathVariable String base) {
-        return "do notfing";
-//        return service.doOperation(base, operation, id);
+    @GetMapping("/api/{base}/{id}")
+    public String apiOperations(@PathVariable String base,
+                                @PathVariable String id) {
+        return service.findById(base, id);
     }
 
     @GetMapping("/api/{base}")
@@ -41,5 +39,4 @@ public class ApiController {
             return e.getMessage();
         }
     }
-
 }
