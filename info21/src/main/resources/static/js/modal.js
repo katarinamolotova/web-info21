@@ -1,9 +1,10 @@
 function showModal(a) {
-  const modal = document.getElementById('del_modal'+arguments[0]);
+  const modal = document.getElementById(arguments[0]);
   modal.style.display = "block";
 }
 
-function closeModal(a) {
-  const modal = document.getElementById('del_modal'+arguments[0]);
+function closeModal(a, b) {
+  const modal = document.getElementById(arguments[0]);
   modal.style.display = "none";
+  window.location.replace("/data/" + arguments[1]);
 }

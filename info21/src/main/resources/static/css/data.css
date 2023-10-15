@@ -71,4 +71,7 @@
 
 .button_block {
     padding: 0 24px;
+    height: 36px;
+    display: inline-flex;
+    min-width: max-content;
 }

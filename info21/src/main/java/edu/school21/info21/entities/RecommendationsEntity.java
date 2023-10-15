@@ -7,14 +7,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.Objects;
+import lombok.Data;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "recommendations", schema = "public", catalog = "info21java")
 public class RecommendationsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,23 +23,4 @@ public class RecommendationsEntity {
     @Basic
     @Column(name = "recommended_peer")
     private String recommendedPeer;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        RecommendationsEntity that = (RecommendationsEntity) o;
-        return id == that.id &&
-               Objects.equals(peer, that.peer) &&
-               Objects.equals(recommendedPeer, that.recommendedPeer);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, peer, recommendedPeer);
-    }
 }

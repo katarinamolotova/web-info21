@@ -7,15 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.sql.Time;
-import java.util.Objects;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "p2p", schema = "public", catalog = "info21java")
 public class P2pEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,25 +31,4 @@ public class P2pEntity {
     @Basic
     @Column(name = "check_time")
     private Time checkTime;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        P2pEntity p2PEntity = (P2pEntity) o;
-        return id == p2PEntity.id &&
-               checkId == p2PEntity.checkId &&
-               Objects.equals(checkingPeer, p2PEntity.checkingPeer) &&
-               Objects.equals(state, p2PEntity.state) &&
-               Objects.equals(checkTime, p2PEntity.checkTime);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, checkId, checkingPeer, state, checkTime);
-    }
 }

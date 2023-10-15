@@ -7,15 +7,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.sql.Date;
-import java.util.Objects;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "checks", schema = "public", catalog = "info21java")
 public class CheckEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,24 +28,4 @@ public class CheckEntity {
     @Basic
     @Column(name = "check_date")
     private Date checkDate;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        CheckEntity that = (CheckEntity) o;
-        return id == that.id &&
-               Objects.equals(peer, that.peer) &&
-               Objects.equals(task, that.task) &&
-               Objects.equals(checkDate, that.checkDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, peer, task, checkDate);
-    }
 }
