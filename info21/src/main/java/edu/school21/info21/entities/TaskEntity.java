@@ -11,12 +11,15 @@ import lombok.Data;
 @Data
 @Table(name = "tasks", schema = "public", catalog = "info21java")
 public class TaskEntity implements EntityInfo {
+
     @Id
     @Column(name = "title")
     private String title;
+
     @Basic
     @Column(name = "parent_task")
     private String parentTask;
+
     @Basic
     @Column(name = "max_xp")
     private int maxXp;

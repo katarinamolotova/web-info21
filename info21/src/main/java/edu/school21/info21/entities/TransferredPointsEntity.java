@@ -17,12 +17,15 @@ public class TransferredPointsEntity implements EntityInfo {
     @Id
     @Column(name = "id")
     private long id;
+
     @Basic
     @Column(name = "checking_peer")
     private String checkingPeer;
+
     @Basic
     @Column(name = "checked_peer")
     private String checkedPeer;
+
     @Basic
     @Column(name = "points_amount")
     private int pointsAmount;

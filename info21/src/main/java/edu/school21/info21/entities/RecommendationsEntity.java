@@ -13,13 +13,16 @@ import lombok.Data;
 @Data
 @Table(name = "recommendations", schema = "public", catalog = "info21java")
 public class RecommendationsEntity implements EntityInfo {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
+
     @Basic
     @Column(name = "peer")
     private String peer;
+
     @Basic
     @Column(name = "recommended_peer")
     private String recommendedPeer;

@@ -118,7 +118,7 @@ WITH temp AS (
     SELECT check_date, count(check_date) AS amount, t.task
     FROM (SELECT check_date::date, check_id, checks.task
           FROM p2p JOIN checks ON check_id = checks.id
-          WHERE state in ('success', 'failure')) AS t
+          WHERE state in ('SUCCESS', 'FAILURE')) AS t
     GROUP BY check_date, check_id, t.task)
 SELECT DISTINCT check_date AS day, checked.task
 FROM temp AS checked
@@ -233,10 +233,10 @@ CREATE OR REPLACE FUNCTION successful_and_unsuccessful_checks_on_birthday()
 AS
 $$
 WITH counts AS (SELECT count(peer)
-                       filter (WHERE p2p.state = 'success' AND verter.state <> 'failure') AS success,
+                       filter (WHERE p2p.state = 'SUCCESS' AND verter.state <> 'FAILURE') AS success,
                             count(peer)
-                            filter (WHERE (p2p.state = 'success' AND verter.state = 'failure') or p2p.state =
-                                'failure') AS fail
+                            filter (WHERE (p2p.state = 'SUCCESS' AND verter.state = 'FAILURE') or p2p.state =
+                                'FAILURE') AS fail
                 FROM checks
                          JOIN p2p ON checks.id = p2p.check_id
                          JOIN verter ON checks.id = verter.check_id
@@ -262,11 +262,11 @@ SELECT DISTINCT peer
 FROM checks AS foo
 WHERE exists(SELECT peer
              FROM checks JOIN p2p ON checks.id = p2p.check_id
-             WHERE task = project1 AND state = 'success' AND peer = foo.peer)
+             WHERE task = project1 AND state = 'SUCCESS' AND peer = foo.peer)
              AND exists(SELECT peer FROM checks JOIN p2p ON checks.id = p2p.check_id
-             WHERE task = project2 AND state = 'success' AND peer = foo.peer)
+             WHERE task = project2 AND state = 'SUCCESS' AND peer = foo.peer)
              AND (NOT exists(SELECT peer  FROM checks JOIN p2p ON checks.id = p2p.check_id
-             WHERE task = project3 AND state = 'success' AND peer = foo.peer)
+             WHERE task = project3 AND state = 'SUCCESS' AND peer = foo.peer)
              );
 $$ LANGUAGE sql;
 
@@ -307,13 +307,13 @@ WITH temp_table AS (SELECT t.check_date,
                                 row_number() OVER (PARTITION BY t.check_date, flag ORDER BY t.check_date) -
                             CASE WHEN flag != 0 THEN 1 ELSE 0 END AS counter
                     FROM (SELECT c.check_date,
-                                      count(CASE WHEN p1.state <> 'success' OR v.state <> 'success' THEN 1 END )
+                                      count(CASE WHEN p1.state <> 'SUCCESS' OR v.state <> 'SUCCESS' THEN 1 END )
                                       OVER (PARTITION by c.check_date ORDER BY p1.check_time) AS flag
                           FROM checks AS c
-                                   LEFT JOIN p2p p1 ON c.id = p1.check_id AND p1.state <> 'start'
+                                   LEFT JOIN p2p p1 ON c.id = p1.check_id AND p1.state <> 'START'
                                    LEFT JOIN p2p p2 ON c.id = p2.check_id AND p2.check_time < p1.check_time AND
-                              p2.state = 'start'
-                                   LEFT JOIN verter v ON c.id = v.check_id AND v.state <> 'start'
+                              p2.state = 'START'
+                                   LEFT JOIN verter v ON c.id = v.check_id AND v.state <> 'START'
                           ORDER BY check_date, p2.check_time) AS t)
 SELECT check_date
 FROM temp_table

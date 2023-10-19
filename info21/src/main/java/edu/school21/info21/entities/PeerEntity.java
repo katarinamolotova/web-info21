@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Past;
 import lombok.Data;
 
 import java.sql.Date;
@@ -16,7 +17,9 @@ public class PeerEntity implements EntityInfo {
     @Id
     @Column(name = "nickname")
     private String nickname;
+
     @Basic
     @Column(name = "birthday")
+    @Past
     private Date birthday;
 }

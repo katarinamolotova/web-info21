@@ -21,9 +21,11 @@ public class XpEntity implements EntityInfo {
     @Id
     @Column(name = "id")
     private long id;
+
     @Basic
     @Column(name = "check_id")
     private int checkId;
+
     @Basic
     @Column(name = "xp_amount")
     private int xpAmount;

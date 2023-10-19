@@ -16,19 +16,24 @@ import java.sql.Time;
 @Data
 @Table(name = "time_tracking", schema = "public", catalog = "info21java")
 public class TimeTrackingEntity implements EntityInfo {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
+
     @Basic
     @Column(name = "peer")
     private String peer;
+
     @Basic
     @Column(name = "visit_date")
     private Date visitDate;
+
     @Basic
     @Column(name = "visit_time")
     private Time visitTime;
+
     @Basic
     @Column(name = "state")
     private int state;
