@@ -6,17 +6,69 @@
 </head>
 <body>
 
-<header>
-    <div class="header">
-        <div class="header_menu">
-            <div class="menu_item menu_item_active"><a aria-current="page" class="active" href="/">Главная</a></div>
-            <div class="menu_item"><a aria-current="page" href="/data/peers">Данные</a></div>
-            <div class="menu_item"><a aria-current="page" href="/operations">Операции</a></div>
+<header th:replace="~{fragments/header :: header}"></header>
+<br><br>
+
+<div class="body">
+<div class="gray_block">
+    <div class="white_block">
+        <h2 class="title">Info21 v2.0 Web</h2>
+        <p>Web-интерфейса для проекта SQL2 на языке Java.</p>
+
+        <p>Интерфейс позволяет:</p>
+        <ul>
+            <li>Делать CRUD операции над всеми таблицами;</li>
+            <li>Вызывать заготовленные функции и процедуры;</li>
+            <li>Делать импорт во все таблицы базы данных;</li>
+            <li>Писать самостоятельно запрос в базу данных;</li>
+            <li>Делать экспорт всех таблиц и результатов функций/процедур.</li>
+        </ul>
+    </div>
+
+    <div class="white_block">
+        <h2 class="title">Разработчики</h2>
+        <div class="row" style="margin-bottom: 24px">
+            <img src="../static/images/katerina.jpg" th:src="@{/images/katerina.jpg}" class="round">
+            <div class="column">
+                <h4 class="zero_margin">Молотова Катерина (chastity), 14 волна</h4>
+                <p class="zero_margin">Java Backend SberTech</p>
+
+                <p>Роль на проекте:</p>
+                <ul>
+                    <li>Java Backend</li>
+                    <li>Frontend (html/css/js)</li>
+                    <li>Designer</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <img src="../static/images/mikhail.jpg" th:src="@{/images/mikhail.jpg}" class="round">
+            <div class="column">
+                <h4 class="zero_margin">Кухтачев Михаил (rebbecca), 14 волна</h4>
+                <p class="zero_margin">Java Backend SberTech</p>
+
+                <p>Роль на проекте:</p>
+                <ul>
+                    <li>Java Backend</li>
+                    <li>DevOps (docker/scripts/nginx/flyway)</li>
+                    <li>QA</li>
+                </ul>
+            </div>
         </div>
     </div>
-</header>
-<br>
-<h1>Поле «О себе», содержащее основную информацию о студенте, выполнившем проект</h1>
 
+    <div class="white_block">
+        <h2 class="title">Отзывы</h2>
+        <div class="row">
+            <img src="../static/images/margo.jpg" th:src="@{/images/margo.jpg}" class="round">
+            <div class="column">
+                <h4 class="zero_margin">Кашапова Маргарита, ADM</h4>
+                <p>Проект топ и ребята классные)</p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>

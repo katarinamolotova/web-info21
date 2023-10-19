@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     @GetMapping("/")
-    public String getMainPage(Model model) {
+    public String getMainPage(final Model model) {
+        model.addAttribute("tab", "main");
         return "index";
     }
 
     @GetMapping("/operations")
-    public String getOperationsPage(Model model) {
+    public String getOperationsPage(final Model model) {
+        model.addAttribute("tab", "operations");
         return "operations";
     }
 }

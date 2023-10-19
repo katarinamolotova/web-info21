@@ -34,7 +34,7 @@
     margin-bottom: 32px;
     font-size: 22px;
     font-style: normal;
-    font-family: "SB Sans Display", Helvetica, sans-serif;
+    font-family: "SB Sans Text", Helvetica, sans-serif;
     font-weight: 600;
     line-height: 30px;
     overflow: hidden;
@@ -73,7 +73,15 @@
     margin-bottom: 25px;
 }
 
-.modal_input:hover, .modal_input:focus, .modal_input:active {
+.modal_input:hover, .modal_input:focus:enabled, .modal_input:active:enabled, .modal_input:focus-visible:enabled {
     padding: 10px 15px 10px 15px;
     border: 2px solid rgb(134, 27, 227);
+}
+
+.modal_id:read-only, .modal_id:read-only:hover, .modal_id:read-only:focus,
+.modal_id:read-only:active, .modal_id:read-only:focus-visible {
+    color: rgb(44, 44, 44);
+    padding: 10px 15px 10px 15px;
+    border: 1px solid rgb(174, 187, 202);
+    background-color: rgb(221, 227, 233);
 }

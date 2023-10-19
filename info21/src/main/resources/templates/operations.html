@@ -7,15 +7,7 @@
 </head>
 <body>
 
-<header>
-    <div class="header">
-        <div class="header_menu">
-            <div class="menu_item"><a aria-current="page" href="/">Главная</a></div>
-            <div class="menu_item"><a aria-current="page" href="/data/peers">Данные</a></div>
-            <div class="menu_item menu_item_active"><a aria-current="page" class="active"  href="/operations">Операции</a></div>
-        </div>
-    </div>
-</header>
+<header th:replace="~{fragments/header :: header}"></header>
 
 <br><br>
 <ul>Блок, содержащий все возможные для вызова запросы из проекта SQL2, наименование/краткое описание сути запроса</ul>

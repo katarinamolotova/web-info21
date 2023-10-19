@@ -148,6 +148,7 @@ public class AllDataController {
     }
 
     private void addAttributeForFindAll(final Model model, final String table) {
+        model.addAttribute("tab", "data");
         model.addAttribute("rows", apiService.findAllAsString(table));
         model.addAttribute("cols", apiService.getHeaderForTable(table));
         model.addAttribute("table", table);
