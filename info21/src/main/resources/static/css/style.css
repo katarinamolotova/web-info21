@@ -121,7 +121,6 @@ body {
 }
 
 .gray_block {
-    width: 60%;
     color: #212121;
     padding: 24px;
     border-radius: 16px;
@@ -129,6 +128,7 @@ body {
     gap: 24px;
     display: flex;
     flex-direction: column;
+    margin-bottom: 16px;
 }
 
 .white_block {
