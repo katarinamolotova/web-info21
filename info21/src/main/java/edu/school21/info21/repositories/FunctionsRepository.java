@@ -13,6 +13,12 @@ import java.util.List;
 public class FunctionsRepository {
     private EntityManager entityManager;
 
+    //  перенести формирование запроса в сервис?
+    public List doNativeQuery(final String query) {
+        return entityManager.createNativeQuery(query)
+                            .getResultList();
+    }
+
     //  получение имен столбцов?
     public List transferredPointsFromPeers() {
         final Query query = entityManager.createNativeQuery("SELECT * FROM transferred_points_form()");
