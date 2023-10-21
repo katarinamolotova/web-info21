@@ -21,5 +21,9 @@
 
 docker-compose down;
 rm -rf dist
+#rm -rf target
+#docker-compose up -d --no-deps --build service-backend
+
+#docker-compose up --build
 docker-compose up;
 #docker-compose up -d;

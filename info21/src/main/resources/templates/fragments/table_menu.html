@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+<div th:fragment="table_menu" class="menu_raw">
+    <div class="menu_block">
+        <form action="/data/peers">
+            <button class="tab" th:classappend="${table == 'peers'} ? 'active_tab'" type="submit" role="tab">
+                Peers
+            </button>
+        </form>
+        <form action="/data/checks">
+            <button class="tab" th:classappend="${table == 'checks'} ? 'active_tab'" type="submit" role="tab">
+                Checks
+            </button>
+        </form>
+        <form action="/data/friends">
+            <button class="tab" th:classappend="${table == 'friends'} ? 'active_tab'" type="submit" role="tab">
+                Friends
+            </button>
+        </form>
+        <form action="/data/p2p">
+            <button class="tab" th:classappend="${table == 'p2p'} ? 'active_tab'" type="submit" role="tab">
+                P2P
+            </button>
+        </form>
+        <form action="/data/recommendations">
+            <button class="tab" th:classappend="${table == 'recommendations'} ? 'active_tab'" type="submit" role="tab">
+                Recommendations
+            </button>
+        </form>
+        <form action="/data/tasks">
+            <button class="tab" th:classappend="${table == 'tasks'} ? 'active_tab'" type="submit" role="tab">
+                Tasks
+            </button>
+        </form>
+        <form action="/data/time_tracking">
+            <button class="tab" th:classappend="${table == 'time_tracking'} ? 'active_tab'" type="submit" role="tab">
+                Time tracking
+            </button>
+        </form>
+        <form action="/data/transferred_points">
+            <button class="tab" th:classappend="${table == 'transferred_points'} ? 'active_tab'" type="submit" role="tab">
+                Transferred points
+            </button>
+        </form>
+        <form action="/data/verter">
+            <button class="tab" th:classappend="${table == 'verter'} ? 'active_tab'" type="submit" role="tab">
+                Verter
+            </button>
+        </form>
+        <form action="/data/xp">
+            <button class="tab" th:classappend="${table == 'xp'} ? 'active_tab'" type="submit" role="tab">
+                XP
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
