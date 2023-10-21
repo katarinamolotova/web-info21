@@ -4,7 +4,7 @@
 CREATE OR REPLACE FUNCTION tr_new_transferred_points() RETURNS TRIGGER AS
 $$
 BEGIN
-    IF (new.state = 'start')
+    IF (new.state = 'START')
     THEN
         update transferred_points
         set points_amount = points_amount + 1
@@ -43,8 +43,8 @@ BEGIN
                      INNER JOIN p2p p ON c.id = p.check_id
                      LEFT JOIN verter v ON c.id = v.check_id
             WHERE c.id = NEW.check_id
-                    AND p.state = 'success'
-                    AND (v.state = 'success' OR v.state IS NULL)) THEN
+                    AND p.state = 'SUCCESS'
+                    AND (v.state = 'SUCCESS' OR v.state IS NULL)) THEN
         RETURN NULL;
     END IF;
     RETURN NEW;

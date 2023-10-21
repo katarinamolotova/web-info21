@@ -1,5 +1,4 @@
--- Постгресу нужен абсолютный путь, либо нужно чудным образом перенести все необходимые файлы
--- и скрипт в дерикторию, где работает бд
+-- Постгресу нужен абсолютный путь до файла
 
 CREATE OR REPLACE PROCEDURE import_db(name VARCHAR, sep VARCHAR = ',') AS
 $$
@@ -29,10 +28,10 @@ $$ LANGUAGE plpgsql;
 -- Если задан статус "начало", в качестве проверки указать только что добавленную запись, иначе указать проверку с незавершенным P2P этапом.
 
 CREATE OR REPLACE PROCEDURE add_to_p2p(checked_peer VARCHAR, new_checking_peer VARCHAR,
-                                       task_name VARCHAR, status check_status, start_time TIME) AS
+                                       task_name VARCHAR, status CHECK_STATE, start_time TIME) AS
 $$
 BEGIN
-    IF (status = 'start') THEN
+    IF (status = 'START') THEN
         INSERT INTO checks
         VALUES ((SELECT max(id) + 1 FROM checks),
                 checked_peer, task_name, now());
@@ -53,7 +52,7 @@ $$ LANGUAGE plpgsql;
 --  поздним (по времени) успешным P2P этапом)
 
 CREATE OR REPLACE PROCEDURE add_to_verter(checked_peer VARCHAR, task_name VARCHAR,
-                                          status check_status, END_time time) AS
+                                          status CHECK_STATE, END_time time) AS
 $$
 BEGIN
     INSERT INTO verter
@@ -61,10 +60,10 @@ BEGIN
             (SELECT p2p.check_id
              FROM p2p
                       JOIN checks c ON c.id = p2p.check_id
-             WHERE p2p.state = 'success'
+             WHERE p2p.state = 'SUCCESS'
                      AND task = task_name
                      AND peer = checked_peer
-                     AND check_time >= ANY (SELECT check_time FROM p2p WHERE state = 'success' AND task = task_name)),
+                     AND check_time >= ANY (SELECT check_time FROM p2p WHERE state = 'SUCCESS' AND task = task_name)),
             status, END_time);
 END
 $$ LANGUAGE plpgsql;
