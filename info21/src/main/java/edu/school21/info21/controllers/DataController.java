@@ -27,7 +27,7 @@ import java.util.Objects;
 
 @Controller
 @AllArgsConstructor
-public class AllDataController {
+public class DataController {
 
     private final ApiService apiService;
 

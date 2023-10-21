@@ -5,6 +5,7 @@
     <title>Operations</title>
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/style.css" th:href="@{/css/style.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/operations.css" th:href="@{/css/operations.css}">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/css/table.css" th:href="@{/css/table.css}">
 </head>
 <body>
 
@@ -33,6 +34,27 @@
             <div class="white_block">
                 <h4>Input</h4>
             </div>
+        </div>
+
+        <div class="table_block">
+            <table style="width: 96%;">
+                <thead>
+<!--                как достать?-->
+<!--                <tr th:if="${not #lists.isEmpty(rows)}" class="table_header_raw">-->
+<!--                    <th></th>-->
+<!--                    <th class="table_header_cell" th:each="col : ${cols}" th:text="${col}"></th>-->
+<!--                </tr>-->
+                </thead>
+                <tbody>
+                <tr class="table_row table_raw_border" th:each="row : ${table}">
+                    <td class="table_cell" th:each="col : ${row}" th:text="${col}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${#lists.isEmpty(table)}" th:classappend="'empty_text_block'">
+            <h2 th:classappend="'empty_text'">По данному запросу нет результата</h2>
         </div>
     </main>
 
