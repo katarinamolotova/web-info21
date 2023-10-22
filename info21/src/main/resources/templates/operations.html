@@ -60,13 +60,18 @@
 
     <aside>
         <div class="white_block" style="margin-bottom: 20px">
-            <h4 class="title">Click to export result</h4>
-            <button class="button_green" style="width: 120px; height: 40px">Export</button>
+            <h4 class="title">Нажми чтобы экспортировать результат</h4>
+            <button class="button_green" style="width: 120px; height: 40px">Экспорт</button>
         </div>
 
         <div class="gray_block" style="gap: 0">
-            <h4 class="zero_margin">Functions</h4>
+            <h4 class="zero_margin">Функции</h4>
             <div class="line"></div>
+            <div class="functions_block">
+                <div class="function_block" th:each="func : ${functions}" >
+                    <a class="function" th:text="${func.key}"></a>
+                </div>
+            </div>
         </div>
     </aside>
 </div>

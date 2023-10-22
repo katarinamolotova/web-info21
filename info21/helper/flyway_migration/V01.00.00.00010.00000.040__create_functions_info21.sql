@@ -185,7 +185,7 @@ $$ LANGUAGE sql;
 -- Формат вывода: процент приступивших только к первому блоку, процент приступивших только ко второму блоку,
 -- процент приступивших к обоим, процент не приступивших ни к одному
 
-CREATE OR REPLACE FUNCTION percent_of_peers_doing_projects(block1 VARCHAR, block2 VARCHAR)
+CREATE OR REPLACE FUNCTION percent_peers_doing_projects(block1 VARCHAR, block2 VARCHAR)
     RETURNS TABLE (
         started_block_1         INT,
         started_block_2         INT,
@@ -225,7 +225,7 @@ $$ LANGUAGE sql;
 -- Также определите процент пиров, которые хоть раз проваливали проверку в свой день рождения.
 -- Формат вывода: процент пиров, успешно прошедших проверку в день рождения, процент пиров, проваливших проверку в день рождения
 
-CREATE OR REPLACE FUNCTION successful_and_unsuccessful_checks_on_birthday()
+CREATE OR REPLACE FUNCTION successful_checks_on_birthday()
     RETURNS TABLE (
         successful_checks   INT,
         unsuccessful_checks INT
@@ -325,15 +325,15 @@ $$ LANGUAGE sql;
 -- 14) Определить пира с наибольшим количеством XP
 -- Формат вывода: ник пира, количество XP
 
-CREATE OR REPLACE FUNCTION peer_WITH_the_most_xp()
+CREATE OR REPLACE FUNCTION peer_with_the_most_xp()
     RETURNS TABLE (
-        peer VARCHAR,
-        xp   BIGINT
+        PEER VARCHAR,
+        XP   BIGINT
     )
 AS
 $$
-SELECT t.nickname AS peer, sum(t.max_xp_amount) AS xp
-FROM (SELECT nickname, max(check_date), max(xp_amount) AS max_xp_amount
+SELECT t.nickname AS peer, SUM(t.max_xp_amount) AS xp
+FROM (SELECT nickname, MAX(check_date), MAX(xp_amount) AS max_xp_amount
       FROM peers
                LEFT JOIN checks c ON peers.nickname = c.peer
                LEFT JOIN xp x ON c.id = x.check_id
@@ -343,6 +343,7 @@ GROUP BY nickname
 ORDER BY xp DESC
 LIMIT 1;
 $$ LANGUAGE sql;
+
 
 -- 15) Определить пиров, приходивших раньше заданного времени не менее N раз за всё время
 -- Параметры процедуры: время, количество раз N.
@@ -369,7 +370,7 @@ $$ LANGUAGE sql;
 -- Параметры процедуры: количество дней N, количество раз M.
 -- Формат вывода: список пиров
 
-CREATE OR REPLACE FUNCTION determine_who_has_gone_out_more_than_m_times_in_the_last_m_days(n int, m int)
+CREATE OR REPLACE FUNCTION peers_who_came_out_more(n int, m int)
     RETURNS TABLE (
         Peer VARCHAR
     )
