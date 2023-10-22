@@ -47,6 +47,10 @@ a.function {
     line-height: 20px;
 }
 
+a.active {
+    color: #861BE3;
+}
+
 a.function:hover {
     color: #861BE3;
 }
