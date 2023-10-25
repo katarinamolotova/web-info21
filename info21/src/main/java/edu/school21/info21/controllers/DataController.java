@@ -41,7 +41,7 @@ public class DataController {
     @GetMapping("/data/{table}/delete/{id}")
     public String deleteById(@PathVariable final String table, @PathVariable final String id, final Model model) {
         apiService.delete(id, table);
-        addAttributeForFindAll(model, table);
+        addAttributeForFindAll(model, table);  //  delete?
         return String.format("redirect:/data/%s", table);
     }
 

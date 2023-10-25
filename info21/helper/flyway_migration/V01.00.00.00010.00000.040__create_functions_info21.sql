@@ -166,7 +166,7 @@ CREATE OR REPLACE FUNCTION recommended_checking_peer_for_each_peer()
 AS
 $$
 SELECT DISTINCT ON (p.nickname) p.nickname AS peer,
-    coalesce(r.recommENDed_peer, 'no friENDs or recommENDations') AS recommENDed_peer
+    coalesce(r.recommENDed_peer, 'no friends or recommendations') AS recommENDed_peer
 FROM peers AS p
          LEFT JOIN friENDs f ON p.nickname = f.peer1
          LEFT JOIN recommENDations r ON f.peer2 = r.peer AND p.nickname <> r.recommENDed_peer

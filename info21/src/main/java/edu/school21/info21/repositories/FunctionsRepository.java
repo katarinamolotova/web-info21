@@ -53,8 +53,8 @@ public class FunctionsRepository {
     }
 
     @Name(valueRu = "02. Успешно выполненные проекты", valueEn = "02_successfully_completed_projects")
-    @Description("Функция, которая возвращает таблицу вида: ник, название проверенного задания и кол-ва полученного ХР." +
-                 "Только для успешно пройденных проектов")
+    @Description("Функция, которая возвращает таблицу вида: ник, название проверенного задания и кол-ва полученного ХР. " +
+                 "Только для успешно пройденных проектов.")
     public List successfullyCompletedProjects() {
         return doNativeQueryByString(SUCCESSFULLY_COMPLETED_PROJECTS);
     }
@@ -79,6 +79,7 @@ public class FunctionsRepository {
         return doNativeQueryByString(CHANGING_PEERS_POINTS_V2);
     }
 
+    // TODO empty result
     @Name(valueRu = "06. Часто проверяемое задание", valueEn = "06_most_checked_task")
     @Description("Функция, определяющая самое часто проверяемое задание за каждый день")
     public List mostCheckedTask() {
@@ -109,6 +110,7 @@ public class FunctionsRepository {
         return doNativeQueryByQuery(query);
     }
 
+    // TODO division by zero
     @Name(valueRu = "10. Успешные проверки в день рождения", valueEn = "10_successful_checks_on_birthday")
     @Description("Функция, определяющая процент пиров, которые когда-либо успешно проходили проверку в свой день рождения")
     public List successfulChecksOnBirthday() {
@@ -142,7 +144,7 @@ public class FunctionsRepository {
 
     @Name(valueRu = "14. Пир с наибольшим кол-вом опыта", valueEn = "14_peer_with_the_most_xp")
     @Description("Функция, определяющая пира с наибольшим кол-вом опыта")
-    public List peerWithTheMostAmountOfXp(final String amount) {
+    public List peerWithTheMostAmountOfXp() {
         return doNativeQueryByString(PEER_WITH_MOST_AMOUNT_OF_XP);
     }
 

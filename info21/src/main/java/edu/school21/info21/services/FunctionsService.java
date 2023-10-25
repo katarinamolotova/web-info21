@@ -6,8 +6,12 @@ import jdk.jfr.Description;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 @Service
@@ -16,6 +20,27 @@ public class FunctionsService {
     private final Map<String, String> methodsNameToDescription = new TreeMap<>();
     private final Map<String, String> methodsEnNameToRuName = new TreeMap<>();
     private FunctionsRepository repository;
+
+    public List executeFunctionWithoutParameters(final String name) {
+        final Method method = getMethodByName(name);
+        if (method != null) {
+            try {
+                return (List) method.invoke(repository);
+            } catch (final Exception e) {
+                //  do nothing || log
+            }
+        }
+        return null;
+    }
+
+    private Method getMethodByName(final String name) {
+        final Method[] methods =  FunctionsRepository.class.getDeclaredMethods();
+        return Arrays.stream(methods)
+              .filter(method -> method.isAnnotationPresent(Name.class))
+              .filter(method -> Objects.equals(method.getAnnotation(Name.class).valueEn(), name))
+              .findAny()
+              .orElse(null);
+    }
 
     public String getDescriptionForMethod(final String name) {
         if (methodsNameToDescription.isEmpty()) {

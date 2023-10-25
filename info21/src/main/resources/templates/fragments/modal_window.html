@@ -49,7 +49,7 @@
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="modal_p">nickname</p>
-    <input class="modal_input modal_id"
+    <input class="input_block modal_id"
            th:field="*{nickname}"
            th:readonly="${object.nickname != null}"
            placeholder="Введите текст" type="text" />

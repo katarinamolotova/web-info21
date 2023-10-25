@@ -8,13 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Map;
 
 @Controller
 @AllArgsConstructor
 public class OperationsController {
     private final FunctionsService service;
-    private final FunctionsRepository repository;
 
 //    @GetMapping("/operations/transferred_points_from")
 //    public String getAll(final Model model) {
@@ -27,12 +25,22 @@ public class OperationsController {
 
     @GetMapping("/operations/{func}")
     public String get(final Model model, @PathVariable final String func) {
-//        model.addAttribute("table", repository.transferredPointsFromPeers()); //  общая функция для всех?
-        final Map<String, String> methodsName = service.getMethodsEnNameToRuName();
-        model.addAttribute("functions", methodsName);
-        model.addAttribute("description", service.getDescriptionForMethod(func));
-        model.addAttribute("active", methodsName.get(func));
-        model.addAttribute("tab", "operations");
+        setCommonAttributeToModel(model, func);
         return "operations";
+    }
+
+    //  without parameters
+    @GetMapping("/operations/{func}/execute")
+    public String execute(final Model model, @PathVariable final String func) {
+        model.addAttribute("table", service.executeFunctionWithoutParameters(func));
+        setCommonAttributeToModel(model, func);
+        return "operations";
+    }
+
+    private void setCommonAttributeToModel(final Model model, final String func) {
+        model.addAttribute("functions", service.getMethodsEnNameToRuName());
+        model.addAttribute("description", service.getDescriptionForMethod(func));
+        model.addAttribute("active", func);
+        model.addAttribute("tab", "operations");
     }
 }
