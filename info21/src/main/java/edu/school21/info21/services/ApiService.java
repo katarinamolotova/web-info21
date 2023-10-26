@@ -80,4 +80,10 @@ public class ApiService {
     public Object getEmptyEntity(final String table) {
         return servicesHandler.getService(table).getEmptyEntity();
     }
+
+    public boolean existsById(final String table,
+                              final String id) {
+        return servicesHandler.getService(table)
+                              .existsById(id);
+    }
 }

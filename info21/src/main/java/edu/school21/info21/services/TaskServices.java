@@ -38,13 +38,13 @@ public class TaskServices implements EduService<TaskEntity> {
     }
 
     @Override
-    public TaskEntity created(TaskEntity entity) {
+    public TaskEntity created(final TaskEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
-    public TaskEntity update(TaskEntity entity) {
+    public TaskEntity update(final TaskEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -69,7 +69,7 @@ public class TaskServices implements EduService<TaskEntity> {
     }
 
     @Override
-    public TaskEntity findById(String id) {
+    public TaskEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(id)
                              .orElseThrow(NotFoundEntity::new);
@@ -82,7 +82,7 @@ public class TaskServices implements EduService<TaskEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(id);
             cashHandler.globalChanges();
@@ -101,5 +101,10 @@ public class TaskServices implements EduService<TaskEntity> {
     @Override
     public TaskEntity getEmptyEntity() {
         return new TaskEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(id);
     }
 }

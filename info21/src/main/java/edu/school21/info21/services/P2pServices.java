@@ -37,13 +37,13 @@ public class P2pServices implements EduService<P2pEntity> {
     }
 
     @Override
-    public P2pEntity created(P2pEntity entity) {
+    public P2pEntity created(final P2pEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
-    public P2pEntity update(P2pEntity entity) {
+    public P2pEntity update(final P2pEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -68,7 +68,7 @@ public class P2pServices implements EduService<P2pEntity> {
     }
 
     @Override
-    public P2pEntity findById(String id) {
+    public P2pEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
@@ -81,7 +81,7 @@ public class P2pServices implements EduService<P2pEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
@@ -100,5 +100,10 @@ public class P2pServices implements EduService<P2pEntity> {
     @Override
     public P2pEntity getEmptyEntity() {
         return new P2pEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }

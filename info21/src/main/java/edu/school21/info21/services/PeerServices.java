@@ -39,13 +39,13 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public PeerEntity created(PeerEntity entity) {
+    public PeerEntity created(final PeerEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
-    public PeerEntity update(PeerEntity entity) {
+    public PeerEntity update(final PeerEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -69,7 +69,7 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public PeerEntity findById(String id) {
+    public PeerEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(id)
                              .orElseThrow(NotFoundEntity::new);
@@ -82,7 +82,7 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(id);
             cashHandler.globalChanges();
@@ -101,5 +101,10 @@ public class PeerServices implements EduService<PeerEntity> {
     @Override
     public PeerEntity getEmptyEntity() {
         return new PeerEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(id);
     }
 }
