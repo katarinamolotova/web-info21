@@ -4,19 +4,77 @@
     <meta charset="UTF-8">
     <title>Operations</title>
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/style.css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/css/operations.css" th:href="@{/css/operations.css}">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/css/table.css" th:href="@{/css/table.css}">
 </head>
 <body>
 
 <header th:replace="~{fragments/header :: header}"></header>
 
 <br><br>
-<ul>Блок, содержащий все возможные для вызова запросы из проекта SQL2, наименование/краткое описание сути запроса</ul>
-<ul>Блок с возможностью самостоятельного ввода пользователем SQL-запроса для работы с данными в базе</ul>
+<ul>
+    <li>Возможность экспорта результата в файл разрешения .csv</li>
+    <li>Если введенные аргументы/SQL-запрос были некорректны, то приложение должно обрабатывать подобную ситуацию (выдавать ошибку о некорректности введенных и данных и предлагать повторную попытку ввода)</li>
+    <li>При осуществлении процедур / функций / запросов необходимо вызывать оригинальные хранимые операции, описанные в базе данных на языке SQL</li>
+</ul>
 
-<br>
-<ul>Выбор желаемой процедуры / функции / запроса из разработанных в проекте SQL2 с выводом результата и возможность экспорта результата в файл разрешения .csv</ul>
-<ul>В случае необходимости введения параметров для выполнения процедуры или функции, графический интерфейс должен предоставлять форму для ввода данных</ul>
-<ul>Если введенные аргументы/SQL-запрос были некорректны, то приложение должно обрабатывать подобную ситуацию (выдавать ошибку о некорректности введенных и данных и предлагать повторную попытку ввода)</ul>
-<ul>При осуществлении процедур / функций / запросов необходимо вызывать оригинальные хранимые операции, описанные в базе данных на языке SQL</ul>
+
+<div class="grid">
+    <main>
+        <div class="gray_block">
+            <div class="white_block">
+                <h4 class="zero_margin" th:text="${description}"></h4>
+            </div>
+        </div>
+
+        <div class="gray_block">
+            <div class="white_block">
+                <form th:replace="~{fragments/operations_input :: input_form}"></form>
+            </div>
+        </div>
+
+        <div th:if="${table}" class="table_block">
+            <table th:if="${#lists.size(table) > 0}" style="width: 96%;">
+                <thead>
+<!--                как достать?-->
+<!--                <tr th:if="${not #lists.isEmpty(rows)}" class="table_header_raw">-->
+<!--                    <th></th>-->
+<!--                    <th class="table_header_cell" th:each="col : ${cols}" th:text="${col}"></th>-->
+<!--                </tr>-->
+                </thead>
+                <tbody>
+                <tr class="table_row table_raw_border" th:each="row : ${table}">
+                    <td class="table_cell" th:each="col : ${row}" th:text="${col}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div th:if="${#lists.isEmpty(table)}" th:classappend="'empty_text_block'">
+                <h2 th:classappend="'empty_text'">По данному запросу нет результата</h2>
+            </div>
+        </div>
+    </main>
+
+    <aside>
+        <div class="white_block" style="margin-bottom: 20px">
+            <h4 class="title">Нажми чтобы экспортировать результат</h4>
+            <button class="button_green" style="width: 100px;">Экспорт</button>
+        </div>
+
+        <div class="gray_block" style="gap: 0">
+            <h4 class="zero_margin">Функции</h4>
+            <div class="line"></div>
+            <div class="functions_block">
+                <div class="function_block" th:each="func : ${functions}" >
+                    <a class="function"
+                       th:classappend="${func.key == active} ? 'active'"
+                       th:text="${func.value}"
+                       th:href="'/operations/'+${func.key}"></a>
+                </div>
+            </div>
+        </div>
+    </aside>
+</div>
+
 </body>
 </html>

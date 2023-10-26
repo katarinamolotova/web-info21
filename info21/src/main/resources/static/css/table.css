@@ -1,6 +1,6 @@
 
 table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     text-indent: initial;
     border-spacing: 2px;
@@ -79,9 +79,11 @@ td {
 }
 
 .table_block {
-    padding: 0 40px 20px;
+    width: 100%;
+    display: flex;
     margin-left: auto;
     margin-right: auto;
+    justify-content: center;
 }
 
 th {

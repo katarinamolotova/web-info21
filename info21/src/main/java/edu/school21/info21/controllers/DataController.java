@@ -23,10 +23,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.EnumSet;
+import java.util.Objects;
 
 @Controller
 @AllArgsConstructor
-public class AllDataController {
+public class DataController {
 
     private final ApiService apiService;
 
@@ -40,7 +41,7 @@ public class AllDataController {
     @GetMapping("/data/{table}/delete/{id}")
     public String deleteById(@PathVariable final String table, @PathVariable final String id, final Model model) {
         apiService.delete(id, table);
-        addAttributeForFindAll(model, table);
+        addAttributeForFindAll(model, table);  //  delete?
         return String.format("redirect:/data/%s", table);
     }
 
@@ -60,12 +61,30 @@ public class AllDataController {
         return "data";
     }
 
+    @GetMapping("/data/{table}/{id}/error")
+    public String editError(@PathVariable final String table, @PathVariable final String id, final Model model) {
+        model.addAttribute("object", apiService.findByIdObject(table, id));
+        model.addAttribute("error", true);
+        addAttributeForCreate(model);
+        addAttributeForFindAll(model, table);
+        return "data";
+    }
+
+    @GetMapping("/data/{table}/add/error")
+    public String createError(@PathVariable final String table, final Model model) {
+        model.addAttribute("object", apiService.getEmptyEntity(table));
+        model.addAttribute("error", true);
+        addAttributeForCreate(model);
+        addAttributeForFindAll(model, table);
+        return "data";
+    }
+
     @PostMapping("/data/peers")
     public String createPeer(
             @Valid final PeerEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "peers", bindingResult);
+        return create(entity, entity.getNickname(), "peers", bindingResult);
     }
 
     @PostMapping("/data/checks")
@@ -73,7 +92,7 @@ public class AllDataController {
             @Valid final CheckEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "checks", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "checks", bindingResult);
     }
 
     @PostMapping("/data/friends")
@@ -81,7 +100,7 @@ public class AllDataController {
             @Valid final FriendsEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "friends", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "friends", bindingResult);
     }
 
     @PostMapping("/data/p2p")
@@ -89,7 +108,7 @@ public class AllDataController {
             @Valid final P2pEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "p2p", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "p2p", bindingResult);
     }
 
     @PostMapping("/data/recommendations")
@@ -97,7 +116,7 @@ public class AllDataController {
             @Valid final RecommendationsEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "recommendations", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "recommendations", bindingResult);
     }
 
     @PostMapping("/data/tasks")
@@ -105,7 +124,7 @@ public class AllDataController {
             @Valid final TaskEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "tasks", bindingResult);
+        return create(entity, entity.getTitle(), "tasks", bindingResult);
     }
 
     @PostMapping("/data/time_tracking")
@@ -113,7 +132,7 @@ public class AllDataController {
             @Valid final TimeTrackingEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "time_tracking", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "time_tracking", bindingResult);
     }
 
     @PostMapping("/data/transferred_points")
@@ -121,7 +140,7 @@ public class AllDataController {
             @Valid final TransferredPointsEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "transferred_points", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "transferred_points", bindingResult);
     }
 
     @PostMapping("/data/verter")
@@ -129,7 +148,7 @@ public class AllDataController {
             @Valid final VerterEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "verter", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "verter", bindingResult);
     }
 
     @PostMapping("/data/xp")
@@ -137,14 +156,32 @@ public class AllDataController {
             @Valid final XpEntity entity,
             final BindingResult bindingResult
     ) {
-        return create(entity, "xp", bindingResult);
+        return create(entity, String.valueOf(entity.getId()), "xp", bindingResult);
     }
 
-    private String create(final EntityInfo entity, final String table, final BindingResult bindingResult) {
-        if (!bindingResult.hasErrors()) {
-            apiService.created(entity, table);
+    private String create(
+            final EntityInfo entity,
+            final String id,
+            final String table,
+            final BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            return redirectToAddOrEditWithError(id, table);
         }
+
+        try {
+            apiService.created(entity, table);
+        } catch (final Exception ex) {
+            return redirectToAddOrEditWithError(id, table);
+        }
+
         return String.format("redirect:/data/%s", table);
+    }
+
+    private String redirectToAddOrEditWithError(final String id, final String table) {
+        return Objects.nonNull(id) && !id.isEmpty() && !id.equals("0")?
+                String.format("redirect:/data/%s/%s/error", table, id) :
+                String.format("redirect:/data/%s/add/error", table);
     }
 
     private void addAttributeForFindAll(final Model model, final String table) {
