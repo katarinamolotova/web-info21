@@ -12,7 +12,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "transferred_points", schema = "public", catalog = "info21java")
-public class TransferredPointsEntity {
+public class TransferredPointsEntity implements EntityInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
