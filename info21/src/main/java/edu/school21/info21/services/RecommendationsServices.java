@@ -37,13 +37,13 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
     }
 
     @Override
-    public RecommendationsEntity created(RecommendationsEntity entity) {
+    public RecommendationsEntity created(final RecommendationsEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
-    public RecommendationsEntity update(RecommendationsEntity entity) {
+    public RecommendationsEntity update(final RecommendationsEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -67,7 +67,7 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
     }
 
     @Override
-    public RecommendationsEntity findById(String id) {
+    public RecommendationsEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
@@ -80,7 +80,7 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
@@ -99,5 +99,10 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
     @Override
     public RecommendationsEntity getEmptyEntity() {
         return new RecommendationsEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }

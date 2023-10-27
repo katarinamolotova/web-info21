@@ -23,41 +23,41 @@ services:
       service-db:
         condition: service_started
 
-#  service-backend:
-#    image: backend_info
-#    container_name: S21BackEnd
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    depends_on:
-#      service-flyway:
-#        condition: service_completed_successfully
-#    env_file:
-#      - "./config_backend.env"
-#    volumes:
-#      - ./dist/logs:/app/logs
-#
-#  service-nginx:
-#    image: nginx
-#    container_name: S21Nginx
-#    restart: always
-#    depends_on:
-#      service-backend:
-#        condition: service_started
-#    ports:
-#      - "80:80"
-#    volumes:
-#      - ./helper/nginx:/etc/nginx/conf.d
-#
-#  service-pgadmin:
-#    image: dpage/pgadmin4:7
-#    container_name: S21PGadmin
-#    env_file:
-#      - "./config_pgadmin.env"
-#    ports:
-#      - "5050:80"
-#    volumes:
-#      - ./dist/pgadmin:/var/lib/pgadmin
-#      - ./pgadmin_config/servers.json:/pgadmin4/servers.json
-#      - ./pgadmin_config/pgpass:/pgpass
-#    restart: always
+  service-backend:
+    image: backend_info
+    container_name: S21BackEnd
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      service-flyway:
+        condition: service_completed_successfully
+    env_file:
+      - "./config_backend.env"
+    volumes:
+      - ./dist/logs:/app/logs
+
+  service-nginx:
+    image: nginx
+    container_name: S21Nginx
+    restart: always
+    depends_on:
+      service-backend:
+        condition: service_started
+    ports:
+      - "80:80"
+    volumes:
+      - ./helper/nginx:/etc/nginx/conf.d
+
+  service-pgadmin:
+    image: dpage/pgadmin4:7
+    container_name: S21PGadmin
+    env_file:
+      - "./config_pgadmin.env"
+    ports:
+      - "5050:80"
+    volumes:
+      - ./dist/pgadmin:/var/lib/pgadmin
+      - ./pgadmin_config/servers.json:/pgadmin4/servers.json
+      - ./pgadmin_config/pgpass:/pgpass
+    restart: always

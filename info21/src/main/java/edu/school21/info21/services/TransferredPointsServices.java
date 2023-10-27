@@ -37,13 +37,13 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     }
 
     @Override
-    public TransferredPointsEntity created(TransferredPointsEntity entity) {
+    public TransferredPointsEntity created(final TransferredPointsEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
-    public TransferredPointsEntity update(TransferredPointsEntity entity) {
+    public TransferredPointsEntity update(final TransferredPointsEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -68,7 +68,7 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     }
 
     @Override
-    public TransferredPointsEntity findById(String id) {
+    public TransferredPointsEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
@@ -81,7 +81,7 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
@@ -100,5 +100,10 @@ public class TransferredPointsServices implements EduService<TransferredPointsEn
     @Override
     public TransferredPointsEntity getEmptyEntity() {
         return new TransferredPointsEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }

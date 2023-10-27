@@ -37,13 +37,13 @@ public class FriendsServices implements EduService<FriendsEntity> {
     }
 
     @Override
-    public FriendsEntity created(FriendsEntity entity) {
+    public FriendsEntity created(final FriendsEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
 
     @Override
-    public FriendsEntity update(FriendsEntity entity) {
+    public FriendsEntity update(final FriendsEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -68,7 +68,7 @@ public class FriendsServices implements EduService<FriendsEntity> {
     }
 
     @Override
-    public FriendsEntity findById(String id) {
+    public FriendsEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
@@ -81,7 +81,7 @@ public class FriendsServices implements EduService<FriendsEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
@@ -101,5 +101,10 @@ public class FriendsServices implements EduService<FriendsEntity> {
     @Override
     public FriendsEntity getEmptyEntity() {
         return new FriendsEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }
