@@ -43,12 +43,6 @@ public class VerterServices implements EduService<VerterEntity> {
     }
 
     @Override
-    public VerterEntity update(final VerterEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<VerterEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<VerterEntity>) repository.findAll();
@@ -85,8 +79,8 @@ public class VerterServices implements EduService<VerterEntity> {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 

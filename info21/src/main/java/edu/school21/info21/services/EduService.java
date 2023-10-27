@@ -6,8 +6,6 @@ public interface EduService<T> {
 
     T created(final T entity);
 
-    T update(final T entity);
-
     List<T> findAll();
 
     List<List<String>> findAllAsString();

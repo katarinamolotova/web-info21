@@ -29,15 +29,7 @@ public class ApiService {
     }
 
     public Object findByIdObject(final String table, final String id) {
-        try {
-            return servicesHandler.getService(table).findById(id);
-        } catch (ApiWrongParameter e) {
-            return "table not found";
-        } catch (NumberFormatException e) {
-            return "Id for this table must be Long format";
-        } catch (NotFoundEntity e) {
-            return "Entity not found";
-        }
+        return servicesHandler.getService(table).findById(id);
     }
 
     public List findAllAsString(final String table) {
@@ -53,20 +45,11 @@ public class ApiService {
     }
 
     public List findAllObjects(final String table) {
-        try {
-            return servicesHandler.getService(table).findAll();
-        } catch (ApiWrongParameter e) {
-            return Collections.emptyList();
-        }
+        return servicesHandler.getService(table).findAll();
     }
 
     public EntityInfo created(final EntityInfo entity, final String table) {
         return (EntityInfo) servicesHandler.getService(table).created(entity);
-    }
-
-    public EntityInfo update(final EntityInfo entity, final String table) {
-        servicesHandler.getService(table);
-        return (EntityInfo) servicesHandler.getService(table).update(entity);
     }
 
     public void delete(final String id, final String table) {

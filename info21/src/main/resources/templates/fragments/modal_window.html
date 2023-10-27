@@ -48,55 +48,55 @@
 <div th:if="${table} == 'peers'" th:fragment="peer_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:class="modal_p">nickname</p>
+    <p th:class="p_input">nickname</p>
     <input class="input_block modal_id"
            th:field="*{nickname}"
            th:readonly="${object.nickname != null}"
            placeholder="Введите текст" type="text" />
 
-    <p th:class="modal_p">birthday</p>
-    <input th:class="modal_input" type="date" th:field="*{birthday}"/>
+    <p th:class="p_input">birthday</p>
+    <input th:class="input_block" type="date" th:field="*{birthday}"/>
 </div>
 
 <div th:if="${table} == 'checks'" th:fragment="check_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">peer</p>
-    <select th:class="modal_input" th:field="*{peer}">
+    <p th:class="p_input">peer</p>
+    <select th:class="input_block" th:field="*{peer}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 
-    <p th:class="modal_p">task</p>
-    <select th:class="modal_input" th:field="*{task}">
+    <p th:class="p_input">task</p>
+    <select th:class="input_block" th:field="*{task}">
         <option th:each="item : ${tasks}" th:text="${item.title}" th:value="${item.title}"></option>
     </select>
 
-    <p th:class="modal_p">check date</p>
-    <input th:class="modal_input" type="date" th:field="*{checkDate}"/>
+    <p th:class="p_input">check date</p>
+    <input th:class="input_block" type="date" th:field="*{checkDate}"/>
 </div>
 
 <div th:if="${table} == 'friends'" th:fragment="friends_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">first peer</p>
-    <select th:class="modal_input" th:field="*{peer1}">
+    <p th:class="p_input">first peer</p>
+    <select th:class="input_block" th:field="*{peer1}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 
-    <p th:class="modal_p">second peer</p>
-    <select th:class="modal_input" th:field="*{peer2}">
+    <p th:class="p_input">second peer</p>
+    <select th:class="input_block" th:field="*{peer2}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 </div>
@@ -104,47 +104,47 @@
 <div th:if="${table} == 'p2p'" th:fragment="p2p_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">check id</p>
-    <select th:class="modal_input" th:field="*{checkId}">
+    <p th:class="p_input">check id</p>
+    <select th:class="input_block" th:field="*{checkId}">
         <option th:each="item : ${checks}" th:text="${item.id}" th:value="${item.id}"></option>
     </select>
 
-    <p th:class="modal_p">checking peer</p>
-    <select th:class="modal_input" th:field="*{checkingPeer}">
+    <p th:class="p_input">checking peer</p>
+    <select th:class="input_block" th:field="*{checkingPeer}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 
-    <p th:class="modal_p">state</p>
-    <select th:class="modal_input" th:field="*{state}">
+    <p th:class="p_input">state</p>
+    <select th:class="input_block" th:field="*{state}">
         <option th:each="item : ${states}" th:text="${item.name}" th:value="${item.name}"></option>
     </select>
 
-    <p th:class="modal_p">time</p>
-    <input th:class="modal_input" type="time" step="1" th:field="*{checkTime}"/>
+    <p th:class="p_input">time</p>
+    <input th:class="input_block" type="time" step="1" th:field="*{checkTime}"/>
 </div>
 
 <div th:if="${table} == 'recommendations'" th:fragment="recommendations_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">Who recommends them?</p>
-    <select th:class="modal_input" th:field="*{peer}">
+    <p th:class="p_input">Who recommends them?</p>
+    <select th:class="input_block" th:field="*{peer}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 
-    <p th:class="modal_p">Who is recommended?</p>
-    <select th:class="modal_input" th:field="*{recommendedPeer}">
+    <p th:class="p_input">Who is recommended?</p>
+    <select th:class="input_block" th:field="*{recommendedPeer}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 </div>
@@ -152,107 +152,107 @@
 <div th:if="${table} == 'tasks'" th:fragment="tasks_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:class="modal_p">title</p>
-    <input class="modal_input modal_id"
+    <p th:class="p_input">title</p>
+    <input class="input_block modal_id"
            th:field="*{title}"
            th:readonly="${object.title != null}"
            placeholder="Введите текст" type="text"/>
 
-    <p th:class="modal_p">parent task</p>
-    <select th:class="modal_input" th:field="*{parentTask}">
+    <p th:class="p_input">parent task</p>
+    <select th:class="input_block" th:field="*{parentTask}">
         <option th:each="item : ${tasks}" th:text="${item.title}" th:value="${item.title}"></option>
     </select>
 
-    <p th:class="modal_p">max xp</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number" min="0" th:field="*{maxXp}"/>
+    <p th:class="p_input">max xp</p>
+    <input th:class="input_block" placeholder="Введите число" type="number" min="0" th:field="*{maxXp}"/>
 </div>
 
 <div th:if="${table} == 'time_tracking'" th:fragment="time_tracking_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">peer</p>
-    <select th:class="modal_input" th:field="*{peer}">
+    <p th:class="p_input">peer</p>
+    <select th:class="input_block" th:field="*{peer}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 
-    <p th:class="modal_p">visit date</p>
-    <input th:class="modal_input" type="date" th:field="*{visitDate}"/>
+    <p th:class="p_input">visit date</p>
+    <input th:class="input_block" type="date" th:field="*{visitDate}"/>
 
-    <p th:class="modal_p">visit time</p>
-    <input th:class="modal_input" type="time" step="1" th:field="*{visitTime}"/>
+    <p th:class="p_input">visit time</p>
+    <input th:class="input_block" type="time" step="1" th:field="*{visitTime}"/>
 
-    <p th:class="modal_p">state (1 - in, 2 - out)</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number"  min="1" max="2" th:field="*{state}"/>
+    <p th:class="p_input">state (1 - in, 2 - out)</p>
+    <input th:class="input_block" placeholder="Введите число" type="number"  min="1" max="2" th:field="*{state}"/>
 </div>
 
 <div th:if="${table} == 'transferred_points'" th:fragment="transferred_points_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">checking peer</p>
-    <select th:class="modal_input" th:field="*{checkingPeer}">
+    <p th:class="p_input">checking peer</p>
+    <select th:class="input_block" th:field="*{checkingPeer}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 
-    <p th:class="modal_p">checked peer</p>
-    <select th:class="modal_input" th:field="*{checkedPeer}">
+    <p th:class="p_input">checked peer</p>
+    <select th:class="input_block" th:field="*{checkedPeer}">
         <option th:each="item : ${peers}" th:text="${item.nickname}" th:value="${item.nickname}"></option>
     </select>
 
-    <p th:class="modal_p">number of points</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number" min="0" th:field="*{pointsAmount}"/>
+    <p th:class="p_input">number of points</p>
+    <input th:class="input_block" placeholder="Введите число" type="number" min="0" th:field="*{pointsAmount}"/>
 </div>
 
 <div th:if="${table} == 'verter'" th:fragment="verter_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">check id</p>
-    <select th:class="modal_input" th:field="*{checkId}">
+    <p th:class="p_input">check id</p>
+    <select th:class="input_block" th:field="*{checkId}">
         <option th:each="item : ${checks}" th:text="${item.id}" th:value="${item.id}"></option>
     </select>
 
-    <p th:class="modal_p">state</p>
-    <select th:class="modal_input" th:field="*{state}">
+    <p th:class="p_input">state</p>
+    <select th:class="input_block" th:field="*{state}">
         <option th:each="item : ${states}" th:text="${item.name}" th:value="${item.name}"></option>
     </select>
 
-    <p th:class="modal_p">time</p>
-    <input th:class="modal_input" type="time" step="1" th:field="*{verterTime}"/>
+    <p th:class="p_input">time</p>
+    <input th:class="input_block" type="time" step="1" th:field="*{verterTime}"/>
 </div>
 
 <div th:if="${table} == 'xp'" th:fragment="xp_add">
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
-    <p th:if="${object.id != 0}" th:class="modal_p">id</p>
+    <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="modal_input modal_id"
+           class="input_block modal_id"
            placeholder="Введите текст" type="text" readonly/>
 
-    <p th:class="modal_p">check id</p>
-    <select th:class="modal_input" th:field="*{checkId}">
+    <p th:class="p_input">check id</p>
+    <select th:class="input_block" th:field="*{checkId}">
         <option th:each="item : ${checks}" th:text="${item.id}" th:value="${item.id}"></option>
     </select>
 
-    <p th:class="modal_p">number of xp</p>
-    <input th:class="modal_input" placeholder="Введите число" type="number" min="0" th:field="*{xpAmount}"/>
+    <p th:class="p_input">number of xp</p>
+    <input th:class="input_block" placeholder="Введите число" type="number" min="0" th:field="*{xpAmount}"/>
 </div>
 
 </body>

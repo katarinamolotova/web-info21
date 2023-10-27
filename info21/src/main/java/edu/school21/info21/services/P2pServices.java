@@ -43,12 +43,6 @@ public class P2pServices implements EduService<P2pEntity> {
     }
 
     @Override
-    public P2pEntity update(final P2pEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<P2pEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<P2pEntity>) repository.findAll();
@@ -85,8 +79,8 @@ public class P2pServices implements EduService<P2pEntity> {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 

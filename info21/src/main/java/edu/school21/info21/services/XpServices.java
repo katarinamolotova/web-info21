@@ -43,12 +43,6 @@ public class XpServices implements EduService<XpEntity> {
     }
 
     @Override
-    public XpEntity update(final XpEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<XpEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<XpEntity>) repository.findAll();
@@ -84,8 +78,8 @@ public class XpServices implements EduService<XpEntity> {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 
