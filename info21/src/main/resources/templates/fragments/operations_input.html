@@ -4,60 +4,65 @@
 </head>
 <body>
 
-<form th:fragment="input_form"  th:switch="${active}" th:action="@{'/operations/'+${active}+'/execute'}">
+<form th:fragment="input_form"
+      th:switch="${active}"
+      th:object="${context}"
+      th:action="@{'/operations/'+${active}}"
+      th:method="post">
+
     <div th:case="'00_native_query'">
         <p class="p_input">Введите запрос</p>
-        <textarea class="input_block" style="height: 100px; resize: none;"></textarea>
+        <textarea th:field="*{stringParameters[0]}" class="input_block" style="height: 100px; resize: none;"></textarea>
     </div>
 
     <div th:case="'03_peers_did_not_come_out'">
         <p class="p_input">Выберите день</p>
-        <input class="input_block" type="date" />
+        <input th:field="*{date}" class="input_block" type="date" />
     </div>
 
     <div th:case="'07_peers_and_completed_blocks'">
         <p class="p_input">Блок задач (C, CPP и т.д.)</p>
-        <input class="input_block" placeholder="Введите текст" type="text" />
+        <input th:field="*{stringParameters[0]}" class="input_block" placeholder="Введите текст" type="text" />
     </div>
 
     <div th:case="'09_percent_peers_doing_projects'">
         <p class="p_input">Первый блок задач (C, CPP и т.д.)</p>
-        <input class="input_block" placeholder="Введите текст" type="text" />
+        <input th:field="*{stringParameters[0]}" class="input_block" placeholder="Введите текст" type="text" />
 
         <p class="p_input">Второй блок задач (C, CPP и т.д.)</p>
-        <input class="input_block" placeholder="Введите текст" type="text" />
+        <input th:field="*{stringParameters[1]}" class="input_block" placeholder="Введите текст" type="text" />
     </div>
 
     <div th:case="'11_peers_and_projects'">
         <p class="p_input">Первое задание</p>
-        <input class="input_block" placeholder="Введите текст" type="text" />
+        <input th:field="*{stringParameters[0]}" class="input_block" placeholder="Введите текст" type="text" />
 
         <p class="p_input">Второе задание</p>
-        <input class="input_block" placeholder="Введите текст" type="text" />
+        <input th:field="*{stringParameters[1]}" class="input_block" placeholder="Введите текст" type="text" />
 
         <p class="p_input">Третье задание</p>
-        <input class="input_block" placeholder="Введите текст" type="text" />
+        <input th:field="*{stringParameters[2]}" class="input_block" placeholder="Введите текст" type="text" />
     </div>
 
     <div th:case="'13_luck_days'">
         <p class="p_input">Количество проверок</p>
-        <input class="input_block" placeholder="Введите число" type="number" min="1"/>
+        <input th:field="*{intParameters[0]}" class="input_block" placeholder="Введите число" type="number" min="1"/>
     </div>
 
     <div th:case="'15_determine_who_came_before_time'">
         <p class="p_input">Время</p>
-        <input class="input_block" type="time" />
+        <input th:field="*{time}" class="input_block" type="time" />
 
         <p class="p_input">Количество посещений</p>
-        <input class="input_block" placeholder="Введите число" type="number" min="1"/>
+        <input th:field="*{intParameters[0]}" class="input_block" placeholder="Введите число" type="number" min="1"/>
     </div>
 
     <div th:case="'16_peers_who_came_out_more'">
         <p class="p_input">Количество дней</p>
-        <input class="input_block" placeholder="Введите число" type="number" min="1"/>
+        <input th:field="*{intParameters[0]}" class="input_block" placeholder="Введите число" type="number" min="1"/>
 
         <p class="p_input">Количество выходов</p>
-        <input class="input_block" placeholder="Введите число" type="number" min="1"/>
+        <input th:field="*{intParameters[1]}" class="input_block" placeholder="Введите число" type="number" min="1"/>
     </div>
 
     <div th:case="*">

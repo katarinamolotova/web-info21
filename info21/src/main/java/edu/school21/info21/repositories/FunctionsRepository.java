@@ -136,7 +136,7 @@ public class FunctionsRepository {
     @Name(valueRu = "13. Удачные для проверок дни", valueEn = "13_luck_days")
     @Description("Функция, определяющая удачные для проверок дни. День считается удачным, если в нем есть хотя бы" +
                  "N идущих подряд успешных проверок.")
-    public List luckyDaysForChecking(final String amount) {
+    public List luckyDaysForChecking(final Integer amount) {
         final Query query = entityManager.createNativeQuery(LUCKY_DAYS_FOR_CHECKING)
                                          .setParameter("amount", amount);
         return doNativeQueryByQuery(query);
@@ -150,7 +150,7 @@ public class FunctionsRepository {
 
     @Name(valueRu = "15. Пиры, приходившие раньше времени", valueEn = "15_determine_who_came_before_time")
     @Description("Функция, определяющая пиров, приходивших раньше заданного времени не менее N раз за все время")
-    public List peersWhoCameBefore(final LocalTime time, final String amount) {
+    public List peersWhoCameBefore(final LocalTime time, final Integer amount) {
         final Query query = entityManager.createNativeQuery(PEERS_WHO_CAME_BEFORE)
                                          .setParameter("time", time)
                                          .setParameter("amount", amount);
@@ -159,7 +159,7 @@ public class FunctionsRepository {
 
     @Name(valueRu = "16. Пиры, выходившие из кампуса", valueEn = "16_peers_who_came_out_more")
     @Description("Функция, определяющая пиров, выходивших за последние N дней из кампуса не больше М раз")
-    public List peersWhoCameOutMore(final String day, final String amount) {
+    public List peersWhoCameOutMore(final Integer day, final Integer amount) {
         final Query query = entityManager.createNativeQuery(PEERS_WHO_CAME_OUT_MORE)
                                          .setParameter("day", day)
                                          .setParameter("amount", amount);
