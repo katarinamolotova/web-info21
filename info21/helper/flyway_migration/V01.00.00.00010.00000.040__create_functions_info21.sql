@@ -161,7 +161,7 @@ $$ LANGUAGE sql;
 CREATE OR REPLACE FUNCTION recommended_checking_peer_for_each_peer()
     RETURNS TABLE (
         peer             VARCHAR,
-        recommENDed_peer VARCHAR
+        recommended_peer VARCHAR
     )
 AS
 $$
@@ -299,7 +299,7 @@ $$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION luck_days(n int)
     RETURNS TABLE (
-        Day DATE
+        day DATE
     )
 AS
 $$
@@ -327,8 +327,8 @@ $$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION peer_with_the_most_xp()
     RETURNS TABLE (
-        PEER VARCHAR,
-        XP   BIGINT
+        peer VARCHAR,
+        xp   BIGINT
     )
 AS
 $$
@@ -351,7 +351,7 @@ $$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION determine_who_came_before_time(time_entry TIME, n INT)
     RETURNS TABLE (
-        Peer VARCHAR
+        peer VARCHAR
     )
 AS
 $$
@@ -372,7 +372,7 @@ $$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION peers_who_came_out_more(n int, m int)
     RETURNS TABLE (
-        Peer VARCHAR
+        peer VARCHAR
     )
 AS
 $$

@@ -1,9 +1,8 @@
 package edu.school21.info21.services;
 
-import edu.school21.info21.annotations.Name;
+import edu.school21.info21.annotations.FunctionInfo;
 import edu.school21.info21.repositories.FunctionsRepository;
 import edu.school21.info21.services.context.FunctionContext;
-import jdk.jfr.Description;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -92,17 +91,21 @@ public class FunctionsService {
     private Method getMethodByName(final String name) {
         final Method[] methods =  FunctionsRepository.class.getDeclaredMethods();
         return Arrays.stream(methods)
-              .filter(method -> method.isAnnotationPresent(Name.class))
-              .filter(method -> Objects.equals(method.getAnnotation(Name.class).valueEn(), name))
+              .filter(method -> method.isAnnotationPresent(FunctionInfo.class))
+              .filter(method -> Objects.equals(method.getAnnotation(FunctionInfo.class).nameEn(), name))
               .findAny()
               .orElse(null);
     }
 
-    public String getDescriptionForMethod(final String name) {
+    public String[] getColumnsNameByFuncName(final String funcName) {
+        return getMethodByName(funcName).getAnnotation(FunctionInfo.class).columnsName();
+    }
+
+    public String getDescriptionForMethod(final String funcName) {
         if (methodsNameToDescription.isEmpty()) {
             getMethodsNameAndDescription();
         }
-        return methodsNameToDescription.get(name);
+        return methodsNameToDescription.get(funcName);
     }
 
     public Map<String, String> getMethodsEnNameToRuName() {
@@ -112,9 +115,9 @@ public class FunctionsService {
 
         final Method[] methods =  FunctionsRepository.class.getDeclaredMethods();
         for (final Method m : methods) {
-            if (m.isAnnotationPresent(Name.class)) {
-                final Name name = m.getAnnotation(Name.class);
-                methodsEnNameToRuName.put(name.valueEn(), name.valueRu());
+            if (m.isAnnotationPresent(FunctionInfo.class)) {
+                final FunctionInfo functionInfo = m.getAnnotation(FunctionInfo.class);
+                methodsEnNameToRuName.put(functionInfo.nameEn(), functionInfo.nameRu());
             }
         }
         return methodsEnNameToRuName;
@@ -123,10 +126,9 @@ public class FunctionsService {
     private void getMethodsNameAndDescription() {
         final Method[] methods =  FunctionsRepository.class.getDeclaredMethods();
         for (final Method m : methods) {
-            if (m.isAnnotationPresent(Name.class) && m.isAnnotationPresent(Description.class)) {
-                final Name name = m.getAnnotation(Name.class);
-                final Description description = m.getAnnotation(Description.class);
-                methodsNameToDescription.put(name.valueEn(), description.value());
+            if (m.isAnnotationPresent(FunctionInfo.class)) {
+                final FunctionInfo functionInfo = m.getAnnotation(FunctionInfo.class);
+                methodsNameToDescription.put(functionInfo.nameEn(), functionInfo.description());
             }
         }
     }
