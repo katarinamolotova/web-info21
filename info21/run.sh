@@ -2,7 +2,6 @@
 
 # =============== Prepare service structure ===============
 
-docker-compose down;
 echo "Prepare directory struct"
 if [ -d $(pwd)/dist ]; then
     rm -rf $(pwd)/dist;
@@ -32,6 +31,7 @@ if [ $# = 0 ]; then
   cp -r $(pwd)/helper/docker/ $(pwd);
   echo "Copy file for launch"
 
+  docker-compose down;
   docker-compose up --build
   #docker-compose up;
   #docker-compose up -d;
