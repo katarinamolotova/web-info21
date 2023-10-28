@@ -14,10 +14,4 @@ public class MainController {
         model.addAttribute("tab", "main");
         return "index";
     }
-
-    @GetMapping("/operations")
-    public String getOperationsPage(final Model model) {
-        model.addAttribute("tab", "operations");
-        return "operations";
-    }
 }

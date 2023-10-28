@@ -15,10 +15,7 @@
 
 <br><br>
 <ul>
-    <li>Проблемы с автогенерацией</li>
     <li>Импорт и экспорт данных для каждой таблицы из файлов/в файлы с расширением .csv</li>
-    <li>При создание, если id совпадает у пир и таск он его отредачит, проверка на контаинс?</li>
-    <li>Если руками ввести неправильный ид, покажется сломанное модальное окно - нужен метод контаинс</li>
 </ul>
 
 <div class="button_row">
@@ -60,21 +57,7 @@
             <td class="table_cell cell_settings">
                 <form th:action="@{'/data/'+${table}+'/delete/{id}' (id=${row[0]})}">
                     <button class="button_green" type="button" th:attr="onclick=|showModal('del_modal_${row[0]}')|">Удалить</button>
-
-                    <!--       delete modal window        -->
-                    <div th:id="'del_modal_'+${row[0]}" class="modal">
-                        <div class="modal_content">
-                            <h3 class="modal_header_text">Вы уверены, что хотите удалить данные?</h3>
-                            <div class="modal_buttons">
-                                <button class="button_green"
-                                        type="button"
-                                        th:attr="onclick=|closeModalAndRedirect('del_modal_${row[0]}', '${table}')|">
-                                    Отменить
-                                </button>
-                                <button type="submit" class="button_white">Подтвердить</button>
-                            </div>
-                        </div>
-                    </div>
+                    <div th:replace="~{fragments/modal_window :: del_modal}"></div>
                 </form>
             </td>
         </tr>
@@ -86,7 +69,9 @@
     <h2 th:classappend="'empty_text'" th:text="'Отсутствуют данные в таблице ' + ${table}"></h2>
 </div>
 
-<div th:if="${operations} == 'create'" th:id="'create_modal_'+${table}" style="display: block" class="modal">
+<div th:if="${operations} == 'create' and ${object} != null"
+     th:id="'create_modal_'+${table}"
+     style="display: block" class="modal">
     <div th:class="modal_content">
         <form th:action="@{'/data/'+${table}}" th:object="${object}" th:method="post">
 
@@ -119,6 +104,5 @@
         </form>
     </div>
 </div>
-
 </body>
 </html>

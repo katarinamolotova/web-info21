@@ -5,9 +5,14 @@ $$
 DECLARE
     str TEXT;
 BEGIN
-    str := 'copy ' || name || ' FROM ''/var/lib/postgresql/import/' || name || '.csv'' delimiter ''' || sep ||
-        ''' csv header';
+        str := 'copy ' || name || ' FROM ''/app/import/'
+--         str := 'copy ' || name || ' FROM ''/var/lib/postgresql/import/'
+            || name || '.csv'' delimiter ''' || sep || ''' csv header';
     EXECUTE (str);
+    IF name != 'peers' AND name != 'tasks' THEN
+        str :=  'SELECT setval(''' || name || '_id_seq'', max(id)) FROM ' || name;
+        EXECUTE (str);
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
 

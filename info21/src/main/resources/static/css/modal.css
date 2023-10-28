@@ -43,41 +43,6 @@
     text-overflow: ellipsis;
 }
 
-.modal_p {
-    margin-top: 0;
-    margin-bottom: 0;
-    color: #516077;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    font-style: normal;
-    font-family: "SB Sans Text", Helvetica, sans-serif;
-    font-weight: 400;
-    line-height: 20px;
-}
-
-.modal_input {
-    padding: 11px 16px 11px 16px;
-    color: rgb(33, 33, 33);
-    border: 1px solid rgb(174, 187, 202);
-    font-size: 14px;
-    min-width: 104px;
-    box-sizing: border-box;
-    font-style: normal;
-    font-family: "SB Sans Text", Helvetica, sans-serif;
-    font-weight: 400;
-    line-height: 20px;
-    border-radius: 8px;
-    background-color: rgb(255, 255, 255);
-    width: 100%;
-    margin-bottom: 25px;
-}
-
-.modal_input:hover, .modal_input:focus:enabled, .modal_input:active:enabled, .modal_input:focus-visible:enabled {
-    padding: 10px 15px 10px 15px;
-    border: 2px solid rgb(134, 27, 227);
-}
-
 .modal_id:read-only, .modal_id:read-only:hover, .modal_id:read-only:focus,
 .modal_id:read-only:active, .modal_id:read-only:focus-visible {
     color: rgb(44, 44, 44);

@@ -1,29 +1,39 @@
 #!/bin/bash
 
-#echo "Prepare directoty struct"
-#if [ -d $(pwd)/../dist ]; then
-#    rm -rf $(pwd)/../dist;
-#    echo "Catalog structure rebuilding"
-#fi
-#
-#mkdir $(pwd)/../dist;
-#echo "Created dist directory"
-#mkdir $(pwd)/../dist/database;
-#echo "Created database directory"
-#mkdir $(pwd)/../dist/export;
-#echo "Created export directory"
-#mkdir $(pwd)/../dist/docker-entrypoint-initdb;
-#echo "Created docker-entrypoint-initdb directory"
+# =============== Prepare service structure ===============
 
-#cp $(pwd)/part1/* $(pwd)/../dist/docker-entrypoint-initdb/
-#cp $(pwd)/helper/docker-compose.yml $(pwd)/../dist
-#cd ../dist
+echo "Prepare directory struct"
+if [ -d $(pwd)/dist ]; then
+    rm -rf $(pwd)/dist;
+    rm -rf $(pwd)/target;
+    rm -rf config_backend.env;
+    rm -rf config_db.env;
+    rm -rf config_pgadmin.env;
+    rm -rf docker-compose.yml;
+    rm -rf Dockerfile;
+    echo "Catalog structure rebuilding"
+fi
 
-docker-compose down;
-rm -rf dist
-#rm -rf target
-#docker-compose up -d --no-deps --build service-backend
+if [ $# = 0 ]; then
+  mkdir $(pwd)/dist;
+  mkdir $(pwd)/dist/nginx;
+  mkdir $(pwd)/dist/flyway_config;
+  mkdir $(pwd)/dist/flyway_migration;
+  mkdir $(pwd)/dist/import;
+  echo "Created dist directory structure"
 
-#docker-compose up --build
-docker-compose up;
-#docker-compose up -d;
+
+  cp -r $(pwd)/helper/data_for_import/ $(pwd)/dist/import;
+  cp -r $(pwd)/helper/flyway_migration/ $(pwd)/dist/flyway_migration;
+  cp -r $(pwd)/helper/flyway_config/ $(pwd)/dist/flyway_config;
+  cp -r $(pwd)/helper/nginx/ $(pwd)/dist/nginx;
+  cp -r $(pwd)/helper/configs/ $(pwd);
+  cp -r $(pwd)/helper/docker/ $(pwd);
+  echo "Copy file for launch"
+
+  docker-compose down;
+  docker-compose up --build
+  #docker-compose up;
+  #docker-compose up -d;
+fi
+

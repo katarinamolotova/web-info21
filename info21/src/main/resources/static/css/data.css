@@ -42,23 +42,6 @@
     background-color: #ffffff;
 }
 
-.empty_text_block {
-    width: 100%;
-    display: inline-flex;
-    min-width: max-content;
-    justify-content: center;
-}
-
-.empty_text {
-    color: #516077;
-    height: 56px;
-    padding: 8px 16px;
-    font-style: normal;
-    font-family: "SB Sans Text", Helvetica, sans-serif;
-    font-weight: 800;
-    vertical-align: middle;
-}
-
 .button_row {
     margin: 40px 0;
     width: 100%;

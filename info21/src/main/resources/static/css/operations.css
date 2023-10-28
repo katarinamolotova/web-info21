@@ -21,3 +21,36 @@ main {
 aside {
     grid-column: span 4;
 }
+
+.functions_block {
+    display: grid;
+    row-gap: 16px;
+}
+
+.function_block {
+    display: grid;
+    column-gap: 10px;
+    align-items: center;
+}
+
+a.function {
+    color: #212121;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: "SB Sans Text", Helvetica, sans-serif;
+    user-select: none;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 20px;
+}
+
+a.active {
+    color: #861BE3;
+}
+
+a.function:hover {
+    color: #861BE3;
+}

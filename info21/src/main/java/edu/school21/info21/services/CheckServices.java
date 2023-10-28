@@ -3,8 +3,8 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.CheckEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
-import edu.school21.info21.handlers.CashHandler;
-import edu.school21.info21.handlers.EntityHandler;
+import edu.school21.info21.services.handlers.CashHandler;
+import edu.school21.info21.services.handlers.EntityHandler;
 import edu.school21.info21.repositories.CheckRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +37,7 @@ public class CheckServices implements EduService<CheckEntity> {
     }
 
     @Override
-    public CheckEntity created(CheckEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
-    public CheckEntity update(CheckEntity entity) {
+    public CheckEntity created(final CheckEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -68,8 +62,8 @@ public class CheckServices implements EduService<CheckEntity> {
     }
 
     @Override
-    public CheckEntity findById(String id) {
-        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
+    public CheckEntity findById(final String id) {
+        if (cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
@@ -81,12 +75,12 @@ public class CheckServices implements EduService<CheckEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (NotFoundEntity e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 
@@ -100,5 +94,10 @@ public class CheckServices implements EduService<CheckEntity> {
     @Override
     public CheckEntity getEmptyEntity() {
         return new CheckEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }

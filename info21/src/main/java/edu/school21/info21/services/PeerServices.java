@@ -3,8 +3,8 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.PeerEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
-import edu.school21.info21.handlers.CashHandler;
-import edu.school21.info21.handlers.EntityHandler;
+import edu.school21.info21.services.handlers.CashHandler;
+import edu.school21.info21.services.handlers.EntityHandler;
 import edu.school21.info21.repositories.PeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,13 +39,7 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public PeerEntity created(PeerEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
-    public PeerEntity update(PeerEntity entity) {
+    public PeerEntity created(final PeerEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -69,7 +63,7 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public PeerEntity findById(String id) {
+    public PeerEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(id)
                              .orElseThrow(NotFoundEntity::new);
@@ -82,12 +76,12 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(id);
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 
@@ -101,5 +95,10 @@ public class PeerServices implements EduService<PeerEntity> {
     @Override
     public PeerEntity getEmptyEntity() {
         return new PeerEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(id);
     }
 }

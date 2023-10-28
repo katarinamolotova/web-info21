@@ -15,6 +15,7 @@ import edu.school21.info21.enums.CheckState;
 import edu.school21.info21.services.ApiService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,9 +26,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.EnumSet;
 import java.util.Objects;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
-public class AllDataController {
+public class DataController {
 
     private final ApiService apiService;
 
@@ -41,13 +43,18 @@ public class AllDataController {
     @GetMapping("/data/{table}/delete/{id}")
     public String deleteById(@PathVariable final String table, @PathVariable final String id, final Model model) {
         apiService.delete(id, table);
-        addAttributeForFindAll(model, table);
         return String.format("redirect:/data/%s", table);
     }
 
     @GetMapping("/data/{table}/{id}")
     public String editById(@PathVariable final String table, @PathVariable final String id, final Model model) {
-        model.addAttribute("object", apiService.findByIdObject(table, id));
+        try {
+            model.addAttribute("object", apiService.findByIdObject(table, id));
+        } catch (final Exception e) {
+            log.warn("Not found entity {} by id = {}", table, id);
+            return String.format("redirect:/data/%s", table);
+        }
+
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
         return "data";
@@ -63,7 +70,14 @@ public class AllDataController {
 
     @GetMapping("/data/{table}/{id}/error")
     public String editError(@PathVariable final String table, @PathVariable final String id, final Model model) {
-        model.addAttribute("object", apiService.findByIdObject(table, id));
+        log.warn("Error when editing entity with id = {} from {}", id, table);
+        try {
+            model.addAttribute("object", apiService.findByIdObject(table, id));
+        } catch (final Exception e) {
+            log.warn("Not found entity {} by id = {}", table, id);
+            return String.format("redirect:/data/%s", table);
+        }
+
         model.addAttribute("error", true);
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
@@ -72,6 +86,7 @@ public class AllDataController {
 
     @GetMapping("/data/{table}/add/error")
     public String createError(@PathVariable final String table, final Model model) {
+        log.warn("Error when adding to {} table", table);
         model.addAttribute("object", apiService.getEmptyEntity(table));
         model.addAttribute("error", true);
         addAttributeForCreate(model);
@@ -165,7 +180,8 @@ public class AllDataController {
             final String table,
             final BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() ||
+            ((table.equals("peers") || table.equals("tasks")) && apiService.existsById(table, id))) {
             return redirectToAddOrEditWithError(id, table);
         }
 
@@ -179,7 +195,7 @@ public class AllDataController {
     }
 
     private String redirectToAddOrEditWithError(final String id, final String table) {
-        return Objects.nonNull(id) && !id.isEmpty() && !id.equals("0")?
+        return Objects.nonNull(id) && !id.equals("0") && !id.isEmpty() ?
                 String.format("redirect:/data/%s/%s/error", table, id) :
                 String.format("redirect:/data/%s/add/error", table);
     }
