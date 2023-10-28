@@ -2,6 +2,7 @@ package edu.school21.info21.controllers;
 
 import edu.school21.info21.services.IOFileService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +17,7 @@ public class FileUploadController {
         this.service = service;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @PostMapping(value = "/upload")
     @ResponseBody
     public String fileUpload(
             @RequestParam("name") final String name,

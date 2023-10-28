@@ -7,7 +7,7 @@
 
 <div th:fragment="import_modal" th:id="import_modal" class="modal">
     <div class="modal_content">
-        <h3 class="modal_header_text" th:text="'Импорт данных в таблицу '+${table}"></h3>
+        <h3 class="modal_header_text" th:text="'Импорт данных в таблицу'"></h3>
 
         <p th:class="p_input">file</p>
         <label class="input-file">
@@ -17,7 +17,9 @@
         </label>
 
         <p th:class="p_input">table</p>
-        <input class="input_block disabled_input" th:value="*{table}" readonly type="text" name="name">
+        <select th:class="input_block" name="name">
+            <option th:each="item : ${tables}" th:text="${item}" th:value="${item}"></option>
+        </select>
 
 
         <div class="modal_buttons">
