@@ -44,12 +44,6 @@ public class TaskServices implements EduService<TaskEntity> {
     }
 
     @Override
-    public TaskEntity update(final TaskEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<TaskEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<TaskEntity>) repository.findAll();
@@ -86,8 +80,8 @@ public class TaskServices implements EduService<TaskEntity> {
         try {
             repository.deleteById(id);
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 

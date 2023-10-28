@@ -12,6 +12,7 @@ import edu.school21.info21.entities.TransferredPointsEntity;
 import edu.school21.info21.entities.VerterEntity;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
+import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.services.ApiService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -41,13 +42,17 @@ public class DataController {
     @GetMapping("/data/{table}/delete/{id}")
     public String deleteById(@PathVariable final String table, @PathVariable final String id, final Model model) {
         apiService.delete(id, table);
-        addAttributeForFindAll(model, table);  //  delete?
         return String.format("redirect:/data/%s", table);
     }
 
     @GetMapping("/data/{table}/{id}")
     public String editById(@PathVariable final String table, @PathVariable final String id, final Model model) {
-        model.addAttribute("object", apiService.findByIdObject(table, id));
+        try {
+            model.addAttribute("object", apiService.findByIdObject(table, id));
+        } catch (final Exception e) {
+            return String.format("redirect:/data/%s", table);
+        }
+
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
         return "data";
@@ -63,7 +68,12 @@ public class DataController {
 
     @GetMapping("/data/{table}/{id}/error")
     public String editError(@PathVariable final String table, @PathVariable final String id, final Model model) {
-        model.addAttribute("object", apiService.findByIdObject(table, id));
+        try {
+            model.addAttribute("object", apiService.findByIdObject(table, id));
+        } catch (final Exception e) {
+            return String.format("redirect:/data/%s", table);
+        }
+
         model.addAttribute("error", true);
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
@@ -165,7 +175,8 @@ public class DataController {
             final String table,
             final BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() ||
+            (table.equals("peers") || table.equals("tasks") && apiService.existsById(table, id))) {
             return redirectToAddOrEditWithError(id, table);
         }
 
@@ -179,7 +190,7 @@ public class DataController {
     }
 
     private String redirectToAddOrEditWithError(final String id, final String table) {
-        return Objects.nonNull(id) && !id.isEmpty() && !id.equals("0")?
+        return Objects.nonNull(id) && !id.equals("0") && !id.isEmpty() ?
                 String.format("redirect:/data/%s/%s/error", table, id) :
                 String.format("redirect:/data/%s/add/error", table);
     }

@@ -43,12 +43,6 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
     }
 
     @Override
-    public RecommendationsEntity update(final RecommendationsEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<RecommendationsEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<RecommendationsEntity>) repository.findAll();
@@ -84,8 +78,8 @@ public class RecommendationsServices implements EduService<RecommendationsEntity
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 

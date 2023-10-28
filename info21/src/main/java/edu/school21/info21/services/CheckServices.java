@@ -43,12 +43,6 @@ public class CheckServices implements EduService<CheckEntity> {
     }
 
     @Override
-    public CheckEntity update(final CheckEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<CheckEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<CheckEntity>) repository.findAll();
@@ -69,7 +63,7 @@ public class CheckServices implements EduService<CheckEntity> {
 
     @Override
     public CheckEntity findById(final String id) {
-        if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
+        if (cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
         } else {
@@ -85,8 +79,8 @@ public class CheckServices implements EduService<CheckEntity> {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (NotFoundEntity e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 

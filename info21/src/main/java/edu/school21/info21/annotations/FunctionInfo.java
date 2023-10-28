@@ -7,7 +7,9 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Name {
-    String valueRu();
-    String valueEn();
+public @interface FunctionInfo {
+    String nameRu();
+    String nameEn();
+    String description() default "";
+    String[] columnsName() default {};
 }

@@ -45,12 +45,6 @@ public class PeerServices implements EduService<PeerEntity> {
     }
 
     @Override
-    public PeerEntity update(final PeerEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<PeerEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<PeerEntity>) repository.findAll();
@@ -86,8 +80,8 @@ public class PeerServices implements EduService<PeerEntity> {
         try {
             repository.deleteById(id);
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 

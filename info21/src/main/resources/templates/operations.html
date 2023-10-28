@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/style.css" th:href="@{/css/style.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/operations.css" th:href="@{/css/operations.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/table.css" th:href="@{/css/table.css}">
+    <link rel="stylesheet" type="text/css" media="all" href="../static/css/modal.css" th:href="@{/css/modal.css}">
+    <script src="../static/js/modal.js" th:src="@{/js/modal.js}"></script>
 </head>
 <body>
 
@@ -14,8 +16,7 @@
 <br><br>
 <ul>
     <li>Возможность экспорта результата в файл разрешения .csv</li>
-    <li>Если введенные аргументы/SQL-запрос были некорректны, то приложение должно обрабатывать подобную ситуацию (выдавать ошибку о некорректности введенных и данных и предлагать повторную попытку ввода)</li>
-    <li>При осуществлении процедур / функций / запросов необходимо вызывать оригинальные хранимые операции, описанные в базе данных на языке SQL</li>
+    <li>Вынести таблицу во фрагмент?</li>
 </ul>
 
 
@@ -34,13 +35,12 @@
         </div>
 
         <div th:if="${table}" class="table_block">
-            <table th:if="${#lists.size(table) > 0}" style="width: 96%;">
+            <table th:if="${not #lists.isEmpty(table)}" style="width: 96%;">
                 <thead>
-<!--                как достать?-->
-<!--                <tr th:if="${not #lists.isEmpty(rows)}" class="table_header_raw">-->
-<!--                    <th></th>-->
-<!--                    <th class="table_header_cell" th:each="col : ${cols}" th:text="${col}"></th>-->
-<!--                </tr>-->
+                <tr th:if="${not #lists.isEmpty(cols)}" class="table_header_raw">
+                    <th></th>
+                    <th class="table_header_cell" th:each="col : ${cols}" th:text="${col}"></th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr class="table_row table_raw_border" th:each="row : ${table}">
@@ -75,6 +75,8 @@
         </div>
     </aside>
 </div>
+
+<div th:replace="~{fragments/modal_window :: error_modal}"></div>
 
 </body>
 </html>

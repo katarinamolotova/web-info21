@@ -43,12 +43,6 @@ public class TimeTrackingServices implements EduService<TimeTrackingEntity> {
     }
 
     @Override
-    public TimeTrackingEntity update(final TimeTrackingEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
     public List<TimeTrackingEntity> findAll() {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             this.dataCash = (List<TimeTrackingEntity>) repository.findAll();
@@ -85,8 +79,8 @@ public class TimeTrackingServices implements EduService<TimeTrackingEntity> {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 
