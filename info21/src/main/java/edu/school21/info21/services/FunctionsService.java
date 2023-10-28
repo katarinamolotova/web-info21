@@ -1,9 +1,11 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.annotations.FunctionInfo;
+import edu.school21.info21.exceptions.NotFoundFunction;
 import edu.school21.info21.repositories.FunctionsRepository;
 import edu.school21.info21.services.context.FunctionContext;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
@@ -13,6 +15,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class FunctionsService {
@@ -82,7 +85,7 @@ public class FunctionsService {
             try {
                 return (List) method.invoke(repository);
             } catch (final Exception e) {
-                //  do nothing || log
+                log.warn("Attempt to call a non-existent function {}", funcName);
             }
         }
         return null;
@@ -98,7 +101,11 @@ public class FunctionsService {
     }
 
     public String[] getColumnsNameByFuncName(final String funcName) {
-        return getMethodByName(funcName).getAnnotation(FunctionInfo.class).columnsName();
+        try {
+            return getMethodByName(funcName).getAnnotation(FunctionInfo.class).columnsName();
+        } catch (final Exception e) {
+            throw new NotFoundFunction();
+        }
     }
 
     public String getDescriptionForMethod(final String funcName) {

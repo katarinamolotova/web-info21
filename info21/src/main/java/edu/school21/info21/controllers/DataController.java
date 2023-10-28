@@ -12,10 +12,10 @@ import edu.school21.info21.entities.TransferredPointsEntity;
 import edu.school21.info21.entities.VerterEntity;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
-import edu.school21.info21.exceptions.NotFoundEntity;
 import edu.school21.info21.services.ApiService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.EnumSet;
 import java.util.Objects;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class DataController {
@@ -50,6 +51,7 @@ public class DataController {
         try {
             model.addAttribute("object", apiService.findByIdObject(table, id));
         } catch (final Exception e) {
+            log.warn("Not found entity {} by id = {}", table, id);
             return String.format("redirect:/data/%s", table);
         }
 
@@ -68,9 +70,11 @@ public class DataController {
 
     @GetMapping("/data/{table}/{id}/error")
     public String editError(@PathVariable final String table, @PathVariable final String id, final Model model) {
+        log.warn("Error when editing entity with id = {} from {}", id, table);
         try {
             model.addAttribute("object", apiService.findByIdObject(table, id));
         } catch (final Exception e) {
+            log.warn("Not found entity {} by id = {}", table, id);
             return String.format("redirect:/data/%s", table);
         }
 
@@ -82,6 +86,7 @@ public class DataController {
 
     @GetMapping("/data/{table}/add/error")
     public String createError(@PathVariable final String table, final Model model) {
+        log.warn("Error when adding to {} table", table);
         model.addAttribute("object", apiService.getEmptyEntity(table));
         model.addAttribute("error", true);
         addAttributeForCreate(model);
@@ -176,7 +181,7 @@ public class DataController {
             final BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors() ||
-            (table.equals("peers") || table.equals("tasks") && apiService.existsById(table, id))) {
+            ((table.equals("peers") || table.equals("tasks")) && apiService.existsById(table, id))) {
             return redirectToAddOrEditWithError(id, table);
         }
 

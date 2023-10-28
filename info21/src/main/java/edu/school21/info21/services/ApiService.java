@@ -1,59 +1,47 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.EntityInfo;
-import edu.school21.info21.exceptions.ApiWrongParameter;
-import edu.school21.info21.exceptions.NotFoundEntity;
-import edu.school21.info21.handlers.ServicesHandler;
+import edu.school21.info21.services.handlers.ServicesHandler;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
-
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ApiService {
     private final ServicesHandler servicesHandler;
 
-    public String findById(final String table, final String id) {
-        try {
-            return servicesHandler.getService(table).findById(id).toString();
-        } catch (ApiWrongParameter e) {
-            return "table not found";
-        } catch (NumberFormatException e) {
-            return "Id for this table must be Long format";
-        } catch (NotFoundEntity e) {
-            return "Entity not found";
-        }
-    }
-
     public Object findByIdObject(final String table, final String id) {
+        log.info("Get entity from {} by id = {}", table, id);
         return servicesHandler.getService(table).findById(id);
     }
 
     public List findAllAsString(final String table) {
+        log.info("Get all data from {}", table);
         return servicesHandler.getService(table).findAllAsString();
     }
 
-    public String findAll(final String table) {
-        try {
-            return servicesHandler.getService(table).findAll().toString();
-        } catch (ApiWrongParameter e) {
-            return "table not found";
-        }
-    }
-
     public List findAllObjects(final String table) {
+        log.info("Get all data from {}", table);
         return servicesHandler.getService(table).findAll();
     }
 
     public EntityInfo created(final EntityInfo entity, final String table) {
+        log.info("Create entity in {}", table);
         return (EntityInfo) servicesHandler.getService(table).created(entity);
     }
 
     public void delete(final String id, final String table) {
+        log.info("Delete entity with id = {} from {}", id, table);
         servicesHandler.getService(table).delete(id);
+    }
+
+    public boolean existsById(final String table, final String id) {
+        log.info("Checking existence of entity from {} with id = {}", table, id);
+        return servicesHandler.getService(table).existsById(id);
     }
 
     public List getHeaderForTable(final String table) {
@@ -62,11 +50,5 @@ public class ApiService {
 
     public Object getEmptyEntity(final String table) {
         return servicesHandler.getService(table).getEmptyEntity();
-    }
-
-    public boolean existsById(final String table,
-                              final String id) {
-        return servicesHandler.getService(table)
-                              .existsById(id);
     }
 }
