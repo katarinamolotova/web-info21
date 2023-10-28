@@ -21,5 +21,14 @@ public enum TableNames {
     public String getName() {
         return name;
     }
+
+    public static TableNames fromString(String text) {
+        for (TableNames b : TableNames.values()) {
+            if (b.getName().equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }
 
