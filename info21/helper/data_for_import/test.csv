@@ -1,0 +1,4 @@
+id,peer,task,check_date
+1,test,C3_s21_string,2022-06-10
+2,test,C2_SimpleBashUtils,2022-06-08
+3,test,C4_s21_math,2022-06-18
