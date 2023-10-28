@@ -15,22 +15,23 @@
 <header th:replace="~{fragments/header :: header}"></header>
 
 <br><br>
-<ul>
-    <li>Импорт и экспорт данных для каждой таблицы из файлов/в файлы с расширением .csv</li>
-</ul>
 
 <div class="button_row">
     <div class="button_block">
-<!--       что дальше?       -->
         <form method="POST" enctype="multipart/form-data" action="/upload">
             <button class="button_white"
                     type="button"
                     th:attr="onclick=|showModal('import_modal')|">Импорт</button>
             <div th:replace="~{fragments/modal_window :: import_modal}"></div>
         </form>
-        <form action="">
-            <button class="button_white">Экспорт</button>
+
+        <form method="POST" enctype="multipart/form-data" action="/export">
+            <button class="button_white"
+                    type="button"
+                    th:attr="onclick=|showModal('export_modal')|">Экспорт</button>
+            <div th:replace="~{fragments/modal_window :: export_modal}"></div>
         </form>
+
         <form th:action="@{'/data/'+${table}+'/add'}">
             <button type="submit" class="button_white">Добавить</button>
         </form>
