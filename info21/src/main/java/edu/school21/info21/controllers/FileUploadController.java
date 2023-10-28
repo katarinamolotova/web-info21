@@ -19,8 +19,8 @@ public class FileUploadController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public @ResponseBody
     String fileUpload(
-            @RequestParam("name") String name,
-            @RequestParam("file") MultipartFile file
+            @RequestParam("name") final String name,
+            @RequestParam("file") final MultipartFile file
     ) {
         return service.fileUpload(name, file);
     }

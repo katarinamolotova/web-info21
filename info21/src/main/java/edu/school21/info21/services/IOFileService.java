@@ -1,6 +1,7 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.enums.Directory;
+import edu.school21.info21.enums.ErrorMessages;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,18 +21,17 @@ public class IOFileService {
         if (!file.isEmpty()) {
             try {
                 clearImportDirectory();
-                String absolutePath = getPathForDirectory(Directory.IMPORT) + name;
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(absolutePath + ".csv"));
+                        new BufferedOutputStream(new FileOutputStream(getPathForDirectory(Directory.IMPORT) + name + ".csv"));
                 stream.write(bytes);
                 stream.close();
-                return "Вы удачно загрузили " + name;
+                return ErrorMessages.INPUT_FILE_SUCCESS.getName();
             } catch (Exception e) {
-                return "Вам не удалось загрузить " + name + " => " + e.getMessage();
+                return ErrorMessages.INPUT_FILE_ERROR.getName() + e.getMessage();
             }
         } else {
-            return "Вам не удалось загрузить " + name + " потому что файл пустой.";
+            return ErrorMessages.INPUT_FILE_EMPTY.getName();
         }
     }
 
