@@ -5,7 +5,8 @@ $$
 DECLARE
     str TEXT;
 BEGIN
-        str := 'copy ' || name || ' FROM ''/var/lib/postgresql/import/'
+        str := 'copy ' || name || ' FROM ''/app/import/'
+--         str := 'copy ' || name || ' FROM ''/var/lib/postgresql/import/'
             || name || '.csv'' delimiter ''' || sep || ''' csv header';
     EXECUTE (str);
     IF name != 'peers' AND name != 'tasks' THEN
