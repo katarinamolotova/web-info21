@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/data.css" th:href="@{/css/data.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/modal.css" th:href="@{/css/modal.css}">
     <script src="../static/js/modal.js" th:src="@{/js/modal.js}"></script>
+    <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
 
@@ -21,11 +22,11 @@
 <div class="button_row">
     <div class="button_block">
 <!--       что дальше?       -->
-        <form action="">
-            <label class="input-file">
-                <input type="file" accept=".csv" name="Импорт">
-                <span class="button_white">Импорт</span>
-            </label>
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+            <button class="button_white"
+                    type="button"
+                    th:attr="onclick=|showModal('import_modal')|">Импорт</button>
+            <div th:replace="~{fragments/modal_window :: import_modal}"></div>
         </form>
         <form action="">
             <button class="button_white">Экспорт</button>
@@ -104,5 +105,12 @@
         </form>
     </div>
 </div>
+
+<script>
+  $('.input-file input[type=file]').on('change', function(){
+    let file = this.files[0];
+    $(this).closest('.input-file').find('.input-file-text').html(file.name);
+  });
+</script>
 </body>
 </html>

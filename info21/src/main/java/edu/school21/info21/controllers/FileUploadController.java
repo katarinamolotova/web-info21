@@ -12,15 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadController {
     private final IOFileService service;
 
-    public FileUploadController(IOFileService service) {
+    public FileUploadController(final IOFileService service) {
         this.service = service;
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public @ResponseBody
-    String fileUpload(
-            @RequestParam("name") String name,
-            @RequestParam("file") MultipartFile file
+    @ResponseBody
+    public String fileUpload(
+            @RequestParam("name") final String name,
+            @RequestParam("file") final MultipartFile file
     ) {
         return service.fileUpload(name, file);
     }

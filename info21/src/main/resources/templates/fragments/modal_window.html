@@ -5,6 +5,32 @@
 </head>
 <body>
 
+<div th:fragment="import_modal" th:id="import_modal" class="modal">
+    <div class="modal_content">
+        <h3 class="modal_header_text" th:text="'Импорт данных в таблицу '+${table}"></h3>
+
+        <p th:class="p_input">file</p>
+        <label class="input-file">
+            <span class="input-file-text input_block" type="text" th:text="'имя файла'"></span>
+            <input type="file" accept=".csv" name="file">
+            <span class="button_green button_file">Выберите файл</span>
+        </label>
+
+        <p th:class="p_input">table</p>
+        <input class="input_block disabled_input" th:value="*{table}" readonly type="text" name="name">
+
+
+        <div class="modal_buttons">
+            <button class="button_green"
+                    type="button"
+                    th:attr="onclick=|closeModal('import_modal')|">
+                Отменить
+            </button>
+            <button type="submit" class="button_white">Подтвердить</button>
+        </div>
+    </div>
+</div>
+
 <div th:fragment="del_modal" th:id="'del_modal_'+${row[0]}" class="modal">
     <div class="modal_content">
         <h3 class="modal_header_text">Вы уверены, что хотите удалить данные?</h3>
@@ -49,7 +75,7 @@
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="p_input">nickname</p>
-    <input class="input_block modal_id"
+    <input class="input_block disabled_input"
            th:field="*{nickname}"
            th:readonly="${object.nickname != null}"
            placeholder="Введите текст" type="text" />
@@ -64,7 +90,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">peer</p>
@@ -87,7 +113,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">first peer</p>
@@ -107,7 +133,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">check id</p>
@@ -135,7 +161,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">Who recommends them?</p>
@@ -153,7 +179,7 @@
     <h3 class="modal_header_text" th:text="'Добавление/редактирование таблицы '+${table}"> </h3>
 
     <p th:class="p_input">title</p>
-    <input class="input_block modal_id"
+    <input class="input_block disabled_input"
            th:field="*{title}"
            th:readonly="${object.title != null}"
            placeholder="Введите текст" type="text"/>
@@ -173,7 +199,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">peer</p>
@@ -197,7 +223,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">checking peer</p>
@@ -220,7 +246,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">check id</p>
@@ -243,7 +269,7 @@
     <p th:if="${object.id != 0}" th:class="p_input">id</p>
     <input th:if="${object.id != 0}"
            th:field="*{id}"
-           class="input_block modal_id"
+           class="input_block disabled_input"
            placeholder="Введите текст" type="text" readonly/>
 
     <p th:class="p_input">check id</p>
