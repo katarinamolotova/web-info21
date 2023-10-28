@@ -1,7 +1,7 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.entities.EntityInfo;
-import edu.school21.info21.handlers.ServicesHandler;
+import edu.school21.info21.services.handlers.ServicesHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
