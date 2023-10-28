@@ -1,4 +1,4 @@
-package edu.school21.info21.entities;
+package edu.school21.info21.repositories.entities;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -11,18 +11,19 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "xp", schema = "public", catalog = "info21java")
-public class XpEntity implements EntityInfo {
+@Table(name = "friends", schema = "public", catalog = "info21java")
+public class FriendsEntity implements EntityInfo {
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
     private long id;
 
     @Basic
-    @Column(name = "check_id")
-    private int checkId;
+    @Column(name = "peer1")
+    private String peer1;
 
     @Basic
-    @Column(name = "xp_amount")
-    private int xpAmount;
+    @Column(name = "peer2")
+    private String peer2;
 }

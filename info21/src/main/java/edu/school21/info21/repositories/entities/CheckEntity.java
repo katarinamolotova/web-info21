@@ -1,4 +1,4 @@
-package edu.school21.info21.entities;
+package edu.school21.info21.repositories.entities;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -10,12 +10,11 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 import java.sql.Date;
-import java.sql.Time;
 
 @Entity
 @Data
-@Table(name = "time_tracking", schema = "public", catalog = "info21java")
-public class TimeTrackingEntity implements EntityInfo {
+@Table(name = "checks", schema = "public", catalog = "info21java")
+public class CheckEntity implements EntityInfo {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -27,14 +26,10 @@ public class TimeTrackingEntity implements EntityInfo {
     private String peer;
 
     @Basic
-    @Column(name = "visit_date")
-    private Date visitDate;
+    @Column(name = "task")
+    private String task;
 
     @Basic
-    @Column(name = "visit_time")
-    private Time visitTime;
-
-    @Basic
-    @Column(name = "state")
-    private int state;
+    @Column(name = "check_date")
+    private Date checkDate;
 }

@@ -1,4 +1,4 @@
-package edu.school21.info21.entities;
+package edu.school21.info21.repositories.entities;
 
 import edu.school21.info21.enums.CheckState;
 import jakarta.persistence.Basic;

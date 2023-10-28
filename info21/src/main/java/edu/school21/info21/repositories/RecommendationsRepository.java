@@ -1,6 +1,6 @@
 package edu.school21.info21.repositories;
 
-import edu.school21.info21.entities.RecommendationsEntity;
+import edu.school21.info21.repositories.entities.RecommendationsEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

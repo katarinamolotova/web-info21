@@ -1,4 +1,4 @@
-package edu.school21.info21.handlers;
+package edu.school21.info21.services.handlers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

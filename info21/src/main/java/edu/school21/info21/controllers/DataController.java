@@ -1,16 +1,16 @@
 package edu.school21.info21.controllers;
 
-import edu.school21.info21.entities.CheckEntity;
-import edu.school21.info21.entities.EntityInfo;
-import edu.school21.info21.entities.FriendsEntity;
-import edu.school21.info21.entities.P2pEntity;
-import edu.school21.info21.entities.PeerEntity;
-import edu.school21.info21.entities.RecommendationsEntity;
-import edu.school21.info21.entities.TaskEntity;
-import edu.school21.info21.entities.TimeTrackingEntity;
-import edu.school21.info21.entities.TransferredPointsEntity;
-import edu.school21.info21.entities.VerterEntity;
-import edu.school21.info21.entities.XpEntity;
+import edu.school21.info21.repositories.entities.CheckEntity;
+import edu.school21.info21.repositories.entities.EntityInfo;
+import edu.school21.info21.repositories.entities.FriendsEntity;
+import edu.school21.info21.repositories.entities.P2pEntity;
+import edu.school21.info21.repositories.entities.PeerEntity;
+import edu.school21.info21.repositories.entities.RecommendationsEntity;
+import edu.school21.info21.repositories.entities.TaskEntity;
+import edu.school21.info21.repositories.entities.TimeTrackingEntity;
+import edu.school21.info21.repositories.entities.TransferredPointsEntity;
+import edu.school21.info21.repositories.entities.VerterEntity;
+import edu.school21.info21.repositories.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
 import edu.school21.info21.services.ApiService;
 import jakarta.validation.Valid;
