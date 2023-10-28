@@ -9,7 +9,8 @@ services:
       - "5432:5432"
     volumes:
       - ./dist/database:/var/lib/postgresql/data/pgdata/
-      - ./helper/data_for_import:/var/lib/postgresql/import
+      - ./dist/import:/app/import
+      - ./dist/export:/app/export
     restart: unless-stopped
 
   service-flyway:
@@ -17,8 +18,8 @@ services:
     container_name: S21FlyWay
     command: -configFiles=/flyway/conf/flyway.config -locations=filesystem:/flyway/sql -connectRetries=60 migrate
     volumes:
-      - ./helper/flyway_config:/flyway/conf/
-      - ./helper/flyway_migration:/flyway/sql
+      - ./dist/flyway_config:/flyway/conf/
+      - ./dist/flyway_migration:/flyway/sql
     depends_on:
       service-db:
         condition: service_started
@@ -36,6 +37,8 @@ services:
       - "./config_backend.env"
     volumes:
       - ./dist/logs:/app/logs
+      - ./dist/import:/app/import
+      - ./dist/export:/app/export
 
   service-nginx:
     image: nginx
@@ -47,7 +50,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./helper/nginx:/etc/nginx/conf.d
+      - ./dist/nginx:/etc/nginx/conf.d
 
   service-pgadmin:
     image: dpage/pgadmin4:7
@@ -60,4 +63,4 @@ services:
       - ./dist/pgadmin:/var/lib/pgadmin
 #      - ./pgadmin_config/servers.json:/pgadmin4/servers.json
 #      - ./pgadmin_config/pgpass:/pgpass
-    restart: always
+#    restart: always

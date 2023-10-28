@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,6 +22,13 @@ public class ApiController {
     public String apiOperations(@PathVariable String base,
                                 @PathVariable String id) {
         return service.findById(base, id);
+    }
+
+    @GetMapping("/api/path")
+    public String getPath() {
+        File file = new File("");
+        String path = file.getAbsolutePath() + "/import";
+        return path;
     }
 
     @GetMapping("/api/{base}")
