@@ -1,17 +1,16 @@
 package edu.school21.info21.services;
 
-import com.google.common.base.Enums;
 import edu.school21.info21.enums.Directory;
 import edu.school21.info21.enums.ErrorMessages;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.repositories.IORepository;
+import edu.school21.info21.services.handlers.CashHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
-import java.io.DataInput;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,6 +23,7 @@ import java.util.Objects;
 public class IOFileService {
 
     private final IORepository repository;
+    private final CashHandler handler;
 
     public String fileUpload(final String name,
                              final MultipartFile file
@@ -37,6 +37,7 @@ public class IOFileService {
                 stream.write(bytes);
                 stream.close();
                 repository.importFromTable(name);
+                handler.globalChanges();
                 return ErrorMessages.INPUT_FILE_SUCCESS.getName();
             } catch (Exception e) {
                 return ErrorMessages.INPUT_FILE_ERROR.getName() + e.getMessage();
@@ -49,16 +50,16 @@ public class IOFileService {
 
     private void clearDirectory(final String directory_name) {
         Directory enums = Directory.fromString(directory_name);
-
-        assert enums != null;
-        File file = new File(getPathForDirectory(enums));
-        try {
-            for (String i : Objects.requireNonNull(file.list())) {
-                file = new File(getPathForDirectory(enums) + i);
-                file.delete();
+        if(Objects.nonNull(enums)) {
+            File file = new File(getPathForDirectory(enums));
+            try {
+                for (String i : Objects.requireNonNull(file.list())) {
+                    file = new File(getPathForDirectory(enums) + i);
+                    file.delete();
+                }
+            } catch (NullPointerException e) {
+                // DO NOTHING
             }
-        } catch (NullPointerException e) {
-            // DO NOTHING
         }
     }
 
@@ -66,38 +67,37 @@ public class IOFileService {
         return new File("").getAbsolutePath() + directory.getName();
     }
 
-    public void getFile(final HttpServletResponse response,
-                          final String table,
-                          final String fileName
+    public void fileDownload(final HttpServletResponse response,
+                             final String table,
+                             final String fileName
     ) {
         clearDirectory(Directory.EXPORT.getName());
-        repository.exportFromTable(table);
-        Path file = preparedExportFile(table);
-        if (Files.exists(file)) {
-            response.setHeader("Content-disposition", attachmentParameters(fileName));
-            response.setContentType("text/csv");
+        TableNames enums = TableNames.fromString(table);
+        if(Objects.nonNull(enums)) {
+            repository.exportFromTable(enums);
+            Path file = preparedExportFile(enums);
+            if (Files.exists(file)) {
+                response.setHeader("Content-disposition", attachmentParameters(fileName));
+                response.setContentType("text/csv");
 
-            try {
-                Files.copy(file, response.getOutputStream());
-                response.getOutputStream().flush();
-            } catch (IOException e) {
-                throw new RuntimeException(ErrorMessages.OUTPUT_FILE_ERROR.getName());
+                try {
+                    Files.copy(file, response.getOutputStream());
+                    response.getOutputStream().flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(ErrorMessages.OUTPUT_FILE_ERROR.getName());
+                }
             }
+            // TODO  предусмотреть редирект на изначальную страницу
         }
-        // TODO  предусмотреть редирект на изначальную страницу
     }
 
     private String attachmentParameters (final String fileName ) {
         return "attachment;filename=" + fileName + ".csv";
     }
 
-    private Path preparedExportFile (final String table) {
-        TableNames enums = TableNames.fromString(table);
-        if(Objects.nonNull(enums)) {
-            return new File(getPathForDirectory(Directory.EXPORT) + enums.getName() + ".csv").toPath();
-        } else {
-            return new File(getPathForDirectory(Directory.EXPORT) + "export.csv").toPath();
-        }
+    private Path preparedExportFile (final TableNames table) {
+        return new File(getPathForDirectory(Directory.EXPORT)
+                        + table.getName()
+                        + ".csv").toPath();
     }
-
 }

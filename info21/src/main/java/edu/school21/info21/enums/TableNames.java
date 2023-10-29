@@ -14,7 +14,8 @@ public enum TableNames {
     FRIENDS_TABLE("friends"),
     RECOMMENDATIONS_TABLE("recommendations"),
     XP_TABLE("xp"),
-    TIME_TRACKING_TABLE("time_tracking");
+    TIME_TRACKING_TABLE("time_tracking"),
+    CUSTOM("custom");
 
     private final String name;
 

@@ -32,6 +32,6 @@ public class FileIOController {
                  @RequestParam("table_name") final String table,
                  @RequestParam("file_name") final String fileName
     ) {
-        service.getFile(response, table, fileName);
+        service.fileDownload(response, table, fileName);
     }
 }
