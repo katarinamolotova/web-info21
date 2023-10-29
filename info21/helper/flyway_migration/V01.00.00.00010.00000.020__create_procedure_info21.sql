@@ -21,7 +21,7 @@ $$
 DECLARE
     str TEXT;
 BEGIN
-    str := 'copy ' || name || ' to ''/var/lib/postgresql/export/' || name || '.csv'' with csv delimiter ''' || sep ||
+    str := 'copy ' || name || ' to ''/app/export/' || name || '.csv'' with csv delimiter ''' || sep ||
         ''' header';
     EXECUTE (str);
 END;

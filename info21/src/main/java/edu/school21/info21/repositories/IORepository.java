@@ -2,6 +2,7 @@ package edu.school21.info21.repositories;
 
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import org.hibernate.JDBCException;
 import org.springframework.stereotype.Repository;
 
 @AllArgsConstructor
@@ -14,11 +15,14 @@ public class IORepository {
     private EntityManager entityManager;
 
     private void doNativeQueryByString(final String query) {
-        entityManager.createNativeQuery(query);
-//                     .getResultList();
+        try {
+            entityManager.createNativeQuery(query).getResultList();
+        } catch (JDBCException e) {
+            // DO NOTHING
+        }
     }
 
-    public void importFromTable(String table) {
+    public void importFromTable(final String table) {
         doNativeQueryByString(preparedQuery(IMPORT, table));
     }
 
