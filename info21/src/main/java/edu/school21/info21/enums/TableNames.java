@@ -1,5 +1,9 @@
 package edu.school21.info21.enums;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum TableNames {
     CHECK_TABLE("checks"),
     PEERS_TABLE("peers"),
@@ -20,6 +24,13 @@ public enum TableNames {
 
     public String getName() {
         return name;
+    }
+
+    public static List<String> getAllNames() {
+        return EnumSet.allOf(TableNames.class)
+                .stream()
+                .map(it -> it.name)
+                .collect(Collectors.toList());
     }
 
     public static TableNames fromString(String text) {

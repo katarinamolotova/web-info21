@@ -12,6 +12,7 @@ import edu.school21.info21.entities.TransferredPointsEntity;
 import edu.school21.info21.entities.VerterEntity;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
+import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.services.ApiService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -205,6 +206,7 @@ public class DataController {
         model.addAttribute("rows", apiService.findAllAsString(table));
         model.addAttribute("cols", apiService.getHeaderForTable(table));
         model.addAttribute("table", table);
+        model.addAttribute("tables", TableNames.getAllNames());
     }
 
     private void addAttributeForCreate(final Model model) {

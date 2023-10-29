@@ -8,28 +8,30 @@
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/data.css" th:href="@{/css/data.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/modal.css" th:href="@{/css/modal.css}">
     <script src="../static/js/modal.js" th:src="@{/js/modal.js}"></script>
+    <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<br><br>
-<ul>
-    <li>Импорт и экспорт данных для каждой таблицы из файлов/в файлы с расширением .csv</li>
-</ul>
+<br>
 
 <div class="button_row">
     <div class="button_block">
-<!--       что дальше?       -->
-        <form action="">
-            <label class="input-file">
-                <input type="file" accept=".csv" name="Импорт">
-                <span class="button_white">Импорт</span>
-            </label>
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+            <button class="button_white"
+                    type="button"
+                    th:attr="onclick=|showModal('import_modal')|">Импорт</button>
+            <div th:replace="~{fragments/modal_window :: import_modal}"></div>
         </form>
-        <form action="">
-            <button class="button_white">Экспорт</button>
+
+        <form method="POST" enctype="multipart/form-data" action="/download">
+            <button class="button_white"
+                    type="button"
+                    th:attr="onclick=|showModal('export_modal')|">Экспорт</button>
+            <div th:replace="~{fragments/modal_window :: export_modal}"></div>
         </form>
+
         <form th:action="@{'/data/'+${table}+'/add'}">
             <button type="submit" class="button_white">Добавить</button>
         </form>
@@ -104,5 +106,12 @@
         </form>
     </div>
 </div>
+
+<script>
+  $('.input-file input[type=file]').on('change', function(){
+    let file = this.files[0];
+    $(this).closest('.input-file').find('.input-file-text').html(file.name);
+  });
+</script>
 </body>
 </html>

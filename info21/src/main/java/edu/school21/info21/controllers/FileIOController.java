@@ -3,6 +3,7 @@ package edu.school21.info21.controllers;
 import edu.school21.info21.services.IOFileService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,14 +16,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileIOController {
     private final IOFileService service;
 
-    public FileIOController(IOFileService service) {
+    public FileIOController(final IOFileService service) {
         this.service = service;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public @ResponseBody
-    String fileUpload(@RequestParam("name") final String name,
-                      @RequestParam("file") final MultipartFile file
+    @PostMapping(value = "/upload")
+    @ResponseBody
+    public String fileUpload(
+            @RequestParam("name") final String name,
+            @RequestParam("file") final MultipartFile file
     ) {
         return service.fileUpload(name, file);
     }
