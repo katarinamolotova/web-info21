@@ -13,4 +13,13 @@ public enum Directory {
     public String getName() {
         return name;
     }
+
+    public static Directory fromString(String text) {
+        for (Directory b : Directory.values()) {
+            if (b.getName().equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }

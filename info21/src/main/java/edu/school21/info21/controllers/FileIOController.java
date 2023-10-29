@@ -12,10 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
-public class FileUploadController {
+public class FileIOController {
     private final IOFileService service;
 
-    public FileUploadController(IOFileService service) {
+    public FileIOController(IOFileService service) {
         this.service = service;
     }
 
@@ -28,11 +28,12 @@ public class FileUploadController {
         return service.fileUpload(name, file);
     }
 
-    @RequestMapping(value = "/download/{table}/{file_name}", method = RequestMethod.GET)
-    public void getFile(final HttpServletResponse response,
-                          @PathVariable final String table,
-                          @PathVariable final String file_name
+    @RequestMapping(value = "/download", method = RequestMethod.POST)
+    public @ResponseBody
+    void getFile(final HttpServletResponse response,
+                 @RequestParam("table_name") final String table,
+                 @RequestParam("file_name") final String fileName
     ) {
-        service.getFile(response, table, file_name);
+        service.getFile(response, table, fileName);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
+import java.io.DataInput;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class IOFileService {
     ) {
         if (!file.isEmpty()) {
             try {
-                clearImportDirectory();
+                clearDirectory(Directory.IMPORT.getName());
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream =
                         new BufferedOutputStream(new FileOutputStream(getPathForDirectory(Directory.IMPORT) + name + ".csv"));
@@ -43,13 +44,17 @@ public class IOFileService {
         } else {
             return ErrorMessages.INPUT_FILE_EMPTY.getName();
         }
+        // TODO  предусмотреть редирект на изначальную страницу
     }
 
-    private void clearImportDirectory() {
-        File file = new File(getPathForDirectory(Directory.IMPORT));
+    private void clearDirectory(final String directory_name) {
+        Directory enums = Directory.fromString(directory_name);
+
+        assert enums != null;
+        File file = new File(getPathForDirectory(enums));
         try {
             for (String i : Objects.requireNonNull(file.list())) {
-                file = new File(getPathForDirectory(Directory.IMPORT) + i);
+                file = new File(getPathForDirectory(enums) + i);
                 file.delete();
             }
         } catch (NullPointerException e) {
@@ -63,22 +68,27 @@ public class IOFileService {
 
     public void getFile(final HttpServletResponse response,
                           final String table,
-                          final String file_name
+                          final String fileName
     ) {
-
+        clearDirectory(Directory.EXPORT.getName());
         repository.exportFromTable(table);
         Path file = preparedExportFile(table);
         if (Files.exists(file)) {
-            response.setHeader("Content-disposition", "attachment;filename=export.csv");
+            response.setHeader("Content-disposition", attachmentParameters(fileName));
             response.setContentType("text/csv");
 
             try {
                 Files.copy(file, response.getOutputStream());
                 response.getOutputStream().flush();
             } catch (IOException e) {
-                throw new RuntimeException("IOError writing file to output stream");
+                throw new RuntimeException(ErrorMessages.OUTPUT_FILE_ERROR.getName());
             }
         }
+        // TODO  предусмотреть редирект на изначальную страницу
+    }
+
+    private String attachmentParameters (final String fileName ) {
+        return "attachment;filename=" + fileName + ".csv";
     }
 
     private Path preparedExportFile (final String table) {
