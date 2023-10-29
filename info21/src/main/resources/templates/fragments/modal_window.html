@@ -38,10 +38,10 @@
         <h3 class="modal_header_text" th:text="'Экпорт данных из таблицы'"></h3>
 
         <p th:class="p_input">file name</p>
-        <input class="input_block" placeholder="Введите имя для файла" type="text" name="file"/>
+        <input class="input_block" placeholder="Введите имя для файла" type="text" name="file_name"/>
 
         <p th:class="p_input">table</p>
-        <select th:class="input_block" name="name">
+        <select th:class="input_block" name="table_name">
             <option th:each="item : ${tables}" th:text="${item}" th:value="${item}"></option>
         </select>
 

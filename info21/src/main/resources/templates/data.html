@@ -25,7 +25,7 @@
             <div th:replace="~{fragments/modal_window :: import_modal}"></div>
         </form>
 
-        <form method="POST" enctype="multipart/form-data" action="/export">
+        <form method="POST" enctype="multipart/form-data" action="/download">
             <button class="button_white"
                     type="button"
                     th:attr="onclick=|showModal('export_modal')|">Экспорт</button>
