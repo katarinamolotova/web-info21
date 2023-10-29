@@ -21,9 +21,8 @@ public class FileIOController {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public @ResponseBody
-    String fileUpload(
-            @RequestParam("name") final String name,
-            @RequestParam("file") final MultipartFile file
+    String fileUpload(@RequestParam("name") final String name,
+                      @RequestParam("file") final MultipartFile file
     ) {
         return service.fileUpload(name, file);
     }
