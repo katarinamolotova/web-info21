@@ -1,17 +1,16 @@
--- Постгресу нужен абсолютный путь до файла
-
-CREATE OR REPLACE PROCEDURE import_db(name VARCHAR, sep VARCHAR = ',') AS
+CREATE OR REPLACE FUNCTION import_db(name VARCHAR, sep VARCHAR = ',') RETURNS BOOLEAN AS
 $$
 DECLARE
     str TEXT;
 BEGIN
         str := 'copy ' || name || ' FROM ''/app/import/'
             || name || '.csv'' delimiter ''' || sep || ''' csv header';
-    EXECUTE (str);
+    EXECUTE(str);
     IF name != 'peers' AND name != 'tasks' THEN
         str :=  'SELECT setval(''' || name || '_id_seq'', max(id)) FROM ' || name;
         EXECUTE (str);
     END IF;
+    RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
 

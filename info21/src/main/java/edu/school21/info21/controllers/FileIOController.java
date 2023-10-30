@@ -27,11 +27,11 @@ public class FileIOController {
     }
 
     @PostMapping(value = "/download")
-    public @ResponseBody
-    void getFile(final HttpServletResponse response,
+    @ResponseBody
+    public String getFile(final HttpServletResponse response,
                  @RequestParam("table_name") final String table,
                  @RequestParam("file_name") final String fileName
     ) {
-        service.fileDownload(response, table, fileName);
+        return service.fileDownload(response, table, fileName);
     }
 }

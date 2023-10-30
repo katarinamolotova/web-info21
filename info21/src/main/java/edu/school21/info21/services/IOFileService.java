@@ -40,12 +40,25 @@ public class IOFileService {
                 handler.globalChanges();
                 return ErrorMessages.INPUT_FILE_SUCCESS.getName();
             } catch (Exception e) {
-                return ErrorMessages.INPUT_FILE_ERROR.getName() + e.getMessage();
+                return prepareImportErrorMessage(e);
             }
         } else {
-            return ErrorMessages.INPUT_FILE_EMPTY.getName();
+            return ErrorMessages.INPUT_FILE_ERROR_EMPTY.getName();
         }
-        // TODO  предусмотреть редирект на изначальную страницу
+    }
+
+    private String prepareImportErrorMessage(final Exception e) {
+        if(e.getMessage()
+            .contains("duplicate key value violates")) {
+
+            return ErrorMessages.INPUT_FILE_ERROR_DUPLICATE.getName();
+        } else if (e.getMessage()
+                    .equalsIgnoreCase("ERROR: invalid input syntax")) {
+
+            return ErrorMessages.INPUT_FILE_ERROR_INVALID_DATA.getName();
+        } else {
+            return ErrorMessages.INPUT_FILE_ERROR_SOMETHING_WRONG.getName();
+        }
     }
 
     private void clearDirectory(final String directory_name) {
@@ -67,7 +80,7 @@ public class IOFileService {
         return new File("").getAbsolutePath() + directory.getName();
     }
 
-    public void fileDownload(final HttpServletResponse response,
+    public String fileDownload(final HttpServletResponse response,
                              final String table,
                              final String fileName
     ) {
@@ -87,8 +100,8 @@ public class IOFileService {
                     throw new RuntimeException(ErrorMessages.OUTPUT_FILE_ERROR.getName());
                 }
             }
-            // TODO  предусмотреть редирект на изначальную страницу
         }
+        return ErrorMessages.OUTPUT_FILE_SUCCESS.getName();
     }
 
     private String attachmentParameters (final String fileName ) {
