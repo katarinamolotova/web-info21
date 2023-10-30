@@ -4,6 +4,7 @@ import edu.school21.info21.annotations.FunctionInfo;
 import edu.school21.info21.exceptions.NotFoundFunction;
 import edu.school21.info21.repositories.FunctionsRepository;
 import edu.school21.info21.services.context.FunctionContext;
+import edu.school21.info21.services.handlers.CashHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class FunctionsService {
     private final Map<String, String> methodsNameToDescription = new TreeMap<>();
     private final Map<String, String> methodsEnNameToRuName = new TreeMap<>();
     private FunctionsRepository repository;
+    private CashHandler cashHandler;
 
     public List executeFunction(final String funcName, final FunctionContext context) {
         return switch (funcName) {
@@ -38,7 +40,9 @@ public class FunctionsService {
     }
 
     private List doNativeQuery(final FunctionContext context) {
-        return repository.doNativeQueryByString(context.getStringParameters().get(0));
+        List result = repository.doNativeQueryByString(context.getStringParameters().get(0));
+        cashHandler.globalChanges();
+        return result;
     }
 
     private List peersAreNotLeavingSchoolOnDate(final FunctionContext context) {
