@@ -1,6 +1,6 @@
 package edu.school21.info21.enums;
 
-public enum ErrorMessages {
+public enum InfoMessages {
     INPUT_FILE_ERROR_EMPTY("Загрузка не удалась, пустой файл"),
     INPUT_FILE_ERROR_DUPLICATE("Загрузка не удалась, дубликаты первичного ключа"),
     INPUT_FILE_ERROR_INVALID_DATA("Загрузка не удалась, неподходящие данные для таблицы"),
@@ -11,7 +11,7 @@ public enum ErrorMessages {
 
     private final String name;
 
-    ErrorMessages(final String name) {
+    InfoMessages(final String name) {
         this.name = name;
     }
 

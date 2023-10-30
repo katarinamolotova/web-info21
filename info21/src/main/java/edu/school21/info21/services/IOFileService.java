@@ -1,7 +1,7 @@
 package edu.school21.info21.services;
 
 import edu.school21.info21.enums.Directory;
-import edu.school21.info21.enums.ErrorMessages;
+import edu.school21.info21.enums.InfoMessages;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.repositories.IORepository;
 import edu.school21.info21.services.handlers.CashHandler;
@@ -25,12 +25,12 @@ public class IOFileService {
     private final IORepository repository;
     private final CashHandler handler;
 
-    public String fileUpload(final String name,
+    public InfoMessages fileUpload(final String name,
                              final MultipartFile file
     ) {
         if (!file.isEmpty()) {
             try {
-                clearDirectory(Directory.IMPORT.getName());
+                clearDirectory(Directory.IMPORT);
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream =
                         new BufferedOutputStream(new FileOutputStream(getPathForDirectory(Directory.IMPORT) + name + ".csv"));
@@ -38,53 +38,51 @@ public class IOFileService {
                 stream.close();
                 repository.importFromTable(name);
                 handler.globalChanges();
-                return ErrorMessages.INPUT_FILE_SUCCESS.getName();
+                return InfoMessages.INPUT_FILE_SUCCESS;
             } catch (Exception e) {
                 return prepareImportErrorMessage(e);
             }
         } else {
-            return ErrorMessages.INPUT_FILE_ERROR_EMPTY.getName();
+            return InfoMessages.INPUT_FILE_ERROR_EMPTY;
         }
     }
 
-    private String prepareImportErrorMessage(final Exception e) {
+    private InfoMessages prepareImportErrorMessage(final Exception e) {
         if(e.getMessage()
             .contains("duplicate key value violates")) {
 
-            return ErrorMessages.INPUT_FILE_ERROR_DUPLICATE.getName();
+            return InfoMessages.INPUT_FILE_ERROR_DUPLICATE;
         } else if (e.getMessage()
                     .equalsIgnoreCase("ERROR: invalid input syntax")) {
 
-            return ErrorMessages.INPUT_FILE_ERROR_INVALID_DATA.getName();
+            return InfoMessages.INPUT_FILE_ERROR_INVALID_DATA;
         } else {
-            return ErrorMessages.INPUT_FILE_ERROR_SOMETHING_WRONG.getName();
+            return InfoMessages.INPUT_FILE_ERROR_SOMETHING_WRONG;
         }
     }
 
-    private void clearDirectory(final String directory_name) {
-        Directory enums = Directory.fromString(directory_name);
-        if(Objects.nonNull(enums)) {
-            File file = new File(getPathForDirectory(enums));
-            try {
-                for (String i : Objects.requireNonNull(file.list())) {
-                    file = new File(getPathForDirectory(enums) + i);
-                    file.delete();
-                }
-            } catch (NullPointerException e) {
-                // DO NOTHING
+    private void clearDirectory(final Directory directory) {
+        File file = new File(getPathForDirectory(directory));
+        try {
+            for (String i : Objects.requireNonNull(file.list())) {
+                file = new File(getPathForDirectory(directory) + i);
+                file.delete();
             }
+        } catch (NullPointerException e) {
+            // DO NOTHING
         }
     }
+
 
     private String getPathForDirectory(final Directory directory) {
         return new File("").getAbsolutePath() + directory.getName();
     }
 
-    public String fileDownload(final HttpServletResponse response,
-                             final String table,
-                             final String fileName
+    public InfoMessages fileDownload(final HttpServletResponse response,
+                               final String table,
+                               final String fileName
     ) {
-        clearDirectory(Directory.EXPORT.getName());
+        clearDirectory(Directory.EXPORT);
         TableNames enums = TableNames.fromString(table);
         if(Objects.nonNull(enums)) {
             repository.exportFromTable(enums);
@@ -97,11 +95,11 @@ public class IOFileService {
                     Files.copy(file, response.getOutputStream());
                     response.getOutputStream().flush();
                 } catch (IOException e) {
-                    throw new RuntimeException(ErrorMessages.OUTPUT_FILE_ERROR.getName());
+                    throw new RuntimeException(InfoMessages.OUTPUT_FILE_ERROR.getName());
                 }
             }
         }
-        return ErrorMessages.OUTPUT_FILE_SUCCESS.getName();
+        return InfoMessages.OUTPUT_FILE_SUCCESS;
     }
 
     private String attachmentParameters (final String fileName ) {

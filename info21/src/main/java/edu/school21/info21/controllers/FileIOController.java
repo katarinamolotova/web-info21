@@ -1,5 +1,6 @@
 package edu.school21.info21.controllers;
 
+import edu.school21.info21.enums.InfoMessages;
 import edu.school21.info21.services.IOFileService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ public class FileIOController {
 
     @PostMapping(value = "/upload")
     @ResponseBody
-    public String fileUpload(
+    public InfoMessages fileUpload(
             @RequestParam("name") final String name,
             @RequestParam("file") final MultipartFile file
     ) {
@@ -28,7 +29,7 @@ public class FileIOController {
 
     @PostMapping(value = "/download")
     @ResponseBody
-    public String getFile(final HttpServletResponse response,
+    public InfoMessages getFile(final HttpServletResponse response,
                  @RequestParam("table_name") final String table,
                  @RequestParam("file_name") final String fileName
     ) {
