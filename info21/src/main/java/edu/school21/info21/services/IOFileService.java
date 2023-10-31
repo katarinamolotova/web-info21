@@ -18,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -113,7 +114,11 @@ public class IOFileService {
             repository.exportFromTable(tableNames);
         } else {
             try (FileOutputStream stream = new FileOutputStream(preparedExportFile(tableNames).toString())) {
-                stream.write(mapper.convert(service.getLastResult()));
+                List lastResult = service.getLastResult();
+                if(lastResult.isEmpty()) {
+                    return InfoMessages.OUTPUT_FILE_EMPTY;
+                }
+                stream.write(mapper.convert(lastResult, ','));
             } catch (IOException e) {
                 return InfoMessages.OUTPUT_FILE_ERROR;
             }

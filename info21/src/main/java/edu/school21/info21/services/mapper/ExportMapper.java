@@ -10,11 +10,14 @@ import java.util.List;
 @AllArgsConstructor
 public class ExportMapper {
 
-    public byte[] convert (final List<Object[]> rawData) {
+    public byte[] convert (final List<Object[]> rawData,
+                           final char separator
+    ) {
         String temp = "";
         for (Object[] i : rawData) {
             for (Object j : i) {
                 temp += String.valueOf(j);
+                temp += separator;
             }
             temp += '\n';
         }
