@@ -23,7 +23,7 @@ public class IORepository {
     }
 
     public void exportFromTable(TableNames table) {
-        if(!table.getName().equals(TableNames.CUSTOM)) {
+        if(!table.getName().equals(TableNames.CUSTOM.getName())) {
             doNativeQueryByString(preparedQuery(EXPORT, table.getName()));
         }
     }

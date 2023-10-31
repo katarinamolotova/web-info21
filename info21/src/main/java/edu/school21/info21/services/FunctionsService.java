@@ -22,11 +22,12 @@ import java.util.TreeMap;
 public class FunctionsService {
     private final Map<String, String> methodsNameToDescription = new TreeMap<>();
     private final Map<String, String> methodsEnNameToRuName = new TreeMap<>();
+    private final CashHandler cashHandler;
     private FunctionsRepository repository;
-    private CashHandler cashHandler;
+    private List lastResult;
 
     public List executeFunction(final String funcName, final FunctionContext context) {
-        return switch (funcName) {
+        this.lastResult = switch (funcName) {
             case "00_native_query" -> doNativeQuery(context);
             case "03_peers_did_not_come_out" -> peersAreNotLeavingSchoolOnDate(context);
             case "07_peers_and_completed_blocks" -> peersAreCompletingBlocks(context);
@@ -37,12 +38,12 @@ public class FunctionsService {
             case "16_peers_who_came_out_more" -> peersWhoCameOutMore(context);
             default -> executeFunctionWithoutParameters(funcName);
         };
+        cashHandler.globalChanges();
+        return this.lastResult;
     }
 
     private List doNativeQuery(final FunctionContext context) {
-        List result = repository.doNativeQueryByString(context.getStringParameters().get(0));
-        cashHandler.globalChanges();
-        return result;
+        return repository.doNativeQueryByString(context.getStringParameters().get(0));
     }
 
     private List peersAreNotLeavingSchoolOnDate(final FunctionContext context) {
@@ -142,5 +143,9 @@ public class FunctionsService {
                 methodsNameToDescription.put(functionInfo.nameEn(), functionInfo.description());
             }
         }
+    }
+
+    protected List getLastResult() {
+        return this.lastResult;
     }
 }

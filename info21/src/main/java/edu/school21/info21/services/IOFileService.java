@@ -5,6 +5,8 @@ import edu.school21.info21.enums.InfoMessages;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.repositories.IORepository;
 import edu.school21.info21.services.handlers.CashHandler;
+import edu.school21.info21.services.mapper.ExportMapper;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class IOFileService {
 
     private final IORepository repository;
     private final CashHandler handler;
+    private final FunctionsService service;
+    private final ExportMapper mapper;
 
     public InfoMessages fileUpload(final String name,
                              final MultipartFile file
@@ -73,7 +77,6 @@ public class IOFileService {
         }
     }
 
-
     private String getPathForDirectory(final Directory directory) {
         return new File("").getAbsolutePath() + directory.getName();
     }
@@ -85,18 +88,34 @@ public class IOFileService {
         clearDirectory(Directory.EXPORT);
         TableNames enums = TableNames.fromString(table);
         if(Objects.nonNull(enums)) {
-            repository.exportFromTable(enums);
+            if(dataExportToFile(enums).getName()
+                                      .equals(InfoMessages.OUTPUT_FILE_ERROR.getName())) {
+                return InfoMessages.OUTPUT_FILE_ERROR;
+            }
             Path file = preparedExportFile(enums);
             if (Files.exists(file)) {
                 response.setHeader("Content-disposition", attachmentParameters(fileName));
                 response.setContentType("text/csv");
-
                 try {
                     Files.copy(file, response.getOutputStream());
                     response.getOutputStream().flush();
                 } catch (IOException e) {
                     throw new RuntimeException(InfoMessages.OUTPUT_FILE_ERROR.getName());
                 }
+            }
+            return InfoMessages.OUTPUT_FILE_SUCCESS;
+        }
+        return InfoMessages.OUTPUT_FILE_ERROR_INVALID_TABLE;
+    }
+
+    private InfoMessages dataExportToFile(TableNames tableNames) {
+        if(!tableNames.getName().equals(TableNames.CUSTOM.getName())) {
+            repository.exportFromTable(tableNames);
+        } else {
+            try (FileOutputStream stream = new FileOutputStream(preparedExportFile(tableNames).toString())) {
+                stream.write(mapper.convert(service.getLastResult()));
+            } catch (IOException e) {
+                return InfoMessages.OUTPUT_FILE_ERROR;
             }
         }
         return InfoMessages.OUTPUT_FILE_SUCCESS;
