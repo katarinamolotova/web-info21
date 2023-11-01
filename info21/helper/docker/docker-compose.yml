@@ -35,6 +35,8 @@ services:
         condition: service_completed_successfully
     env_file:
       - "./config_backend.env"
+    ports:
+      - "8000:8000"
     volumes:
       - ./dist/logs:/app/logs
       - ./dist/import:/app/import

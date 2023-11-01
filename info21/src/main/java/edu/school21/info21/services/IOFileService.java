@@ -6,7 +6,6 @@ import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.repositories.IORepository;
 import edu.school21.info21.services.handlers.CashHandler;
 import edu.school21.info21.services.mapper.ExportMapper;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class IOFileService {
 
+    private static final String UTF = "utf-8";
     private final IORepository repository;
     private final CashHandler handler;
     private final FunctionsService service;
@@ -127,7 +130,9 @@ public class IOFileService {
     }
 
     private String attachmentParameters (final String fileName ) {
-        return "attachment;filename=" + fileName + ".csv";
+        return "attachment;filename=" +
+               URLEncoder.encode(fileName, StandardCharsets.UTF_8) +
+               ".csv";
     }
 
     private Path preparedExportFile (final TableNames table) {
