@@ -32,8 +32,8 @@ if [ $# = 0 ]; then
   echo "Copy file for launch"
 
   docker-compose down;
-  docker-compose up --build
-  #docker-compose up;
+#  docker-compose up --build
+  docker-compose up;
   #docker-compose up -d;
 fi
 
