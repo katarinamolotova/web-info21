@@ -6,7 +6,7 @@ function showModal(a) {
 function closeModalAndRedirect(a, b) {
   const modal = document.getElementById(arguments[0]);
   modal.style.display = "none";
-  window.location.replace("/data/" + arguments[1]);
+  window.location.replace(arguments[1]);
 }
 
 function closeModal(a) {

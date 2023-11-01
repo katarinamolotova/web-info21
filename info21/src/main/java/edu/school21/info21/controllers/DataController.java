@@ -12,6 +12,7 @@ import edu.school21.info21.entities.TransferredPointsEntity;
 import edu.school21.info21.entities.VerterEntity;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
+import edu.school21.info21.enums.InfoMessages;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.services.ApiService;
 import jakarta.validation.Valid;
@@ -36,6 +37,20 @@ public class DataController {
 
     @GetMapping("/data/{table}")
     public String getAll(@PathVariable final String table, final Model model) {
+        apiService.findAllAsString(table);
+        addAttributeForFindAll(model, table);
+        return "data";
+    }
+
+    @GetMapping("/data/{table}/error/{message}")
+    public String error(@PathVariable final String table, @PathVariable final String message, final Model model) {
+        try {
+            model.addAttribute("error", InfoMessages.valueOf(message).getName());
+            model.addAttribute("active", table);
+        } catch (final IllegalArgumentException e) {
+            return "redirect:/data/peers";
+        }
+
         apiService.findAllAsString(table);
         addAttributeForFindAll(model, table);
         return "data";
@@ -79,7 +94,7 @@ public class DataController {
             return String.format("redirect:/data/%s", table);
         }
 
-        model.addAttribute("error", true);
+        model.addAttribute("error", "Ошибка в данных. Проверьте заполненные поля.");
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
         return "data";
@@ -89,7 +104,7 @@ public class DataController {
     public String createError(@PathVariable final String table, final Model model) {
         log.warn("Error when adding to {} table", table);
         model.addAttribute("object", apiService.getEmptyEntity(table));
-        model.addAttribute("error", true);
+        model.addAttribute("error", "Ошибка в данных. Проверьте заполненные поля.");
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
         return "data";

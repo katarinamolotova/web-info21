@@ -5,11 +5,12 @@ import edu.school21.info21.exceptions.NotFoundFunction;
 import edu.school21.info21.repositories.FunctionsRepository;
 import edu.school21.info21.services.context.FunctionContext;
 import edu.school21.info21.services.handlers.CashHandler;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -18,16 +19,21 @@ import java.util.TreeMap;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class FunctionsService {
     private final Map<String, String> methodsNameToDescription = new TreeMap<>();
     private final Map<String, String> methodsEnNameToRuName = new TreeMap<>();
+    private List<Object[]> lastResult = new ArrayList<>();
     private final CashHandler cashHandler;
-    private FunctionsRepository repository;
-    private List lastResult;
+    private final FunctionsRepository repository;
+
+    @Autowired
+    public FunctionsService(final CashHandler cashHandler, final FunctionsRepository repository) {
+        this.cashHandler = cashHandler;
+        this.repository = repository;
+    }
 
     public List executeFunction(final String funcName, final FunctionContext context) {
-        this.lastResult = switch (funcName) {
+        lastResult = switch (funcName) {
             case "00_native_query" -> doNativeQuery(context);
             case "03_peers_did_not_come_out" -> peersAreNotLeavingSchoolOnDate(context);
             case "07_peers_and_completed_blocks" -> peersAreCompletingBlocks(context);
@@ -39,7 +45,7 @@ public class FunctionsService {
             default -> executeFunctionWithoutParameters(funcName);
         };
         cashHandler.globalChanges();
-        return this.lastResult;
+        return lastResult;
     }
 
     private List doNativeQuery(final FunctionContext context) {
