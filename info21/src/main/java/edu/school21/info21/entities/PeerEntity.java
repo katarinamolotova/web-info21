@@ -20,6 +20,5 @@ public class PeerEntity implements EntityInfo {
 
     @Basic
     @Column(name = "birthday")
-    @Past
     private Date birthday;
 }
