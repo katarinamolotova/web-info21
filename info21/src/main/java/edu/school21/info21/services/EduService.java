@@ -4,9 +4,7 @@ import java.util.List;
 
 public interface EduService<T> {
 
-    T created(T entity);
-
-    T update(T entity);
+    T created(final T entity);
 
     List<T> findAll();
 
@@ -14,12 +12,14 @@ public interface EduService<T> {
 
     String getTableName();
 
-    T findById(String id);
+    T findById(final String id);
 
-    void delete(String id);
+    void delete(final String id);
 
     List<String> getHeaderForTable();
 
     T getEmptyEntity();
+
+    boolean existsById(final String id);
 
 }

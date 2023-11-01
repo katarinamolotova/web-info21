@@ -3,8 +3,8 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.FriendsEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
-import edu.school21.info21.handlers.CashHandler;
-import edu.school21.info21.handlers.EntityHandler;
+import edu.school21.info21.services.handlers.CashHandler;
+import edu.school21.info21.services.handlers.EntityHandler;
 import edu.school21.info21.repositories.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +37,10 @@ public class FriendsServices implements EduService<FriendsEntity> {
     }
 
     @Override
-    public FriendsEntity created(FriendsEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
-    public FriendsEntity update(FriendsEntity entity) {
+    public FriendsEntity created(final FriendsEntity entity) {
+        if (!existsById(String.valueOf(entity.getId()))) {
+            throw new NotFoundEntity();
+        }
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -68,7 +65,7 @@ public class FriendsServices implements EduService<FriendsEntity> {
     }
 
     @Override
-    public FriendsEntity findById(String id) {
+    public FriendsEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
@@ -81,12 +78,12 @@ public class FriendsServices implements EduService<FriendsEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 
@@ -101,5 +98,10 @@ public class FriendsServices implements EduService<FriendsEntity> {
     @Override
     public FriendsEntity getEmptyEntity() {
         return new FriendsEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }

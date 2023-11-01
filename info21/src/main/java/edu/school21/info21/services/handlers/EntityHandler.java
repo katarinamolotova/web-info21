@@ -1,4 +1,4 @@
-package edu.school21.info21.handlers;
+package edu.school21.info21.services.handlers;
 
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  *
  * @param <T> класс сущности
  */
-
 @Component
 public class EntityHandler<T> {
 

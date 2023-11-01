@@ -3,8 +3,8 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
-import edu.school21.info21.handlers.CashHandler;
-import edu.school21.info21.handlers.EntityHandler;
+import edu.school21.info21.services.handlers.CashHandler;
+import edu.school21.info21.services.handlers.EntityHandler;
 import edu.school21.info21.repositories.XpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +37,7 @@ public class XpServices implements EduService<XpEntity> {
     }
 
     @Override
-    public XpEntity created(XpEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
-    public XpEntity update(XpEntity entity) {
+    public XpEntity created(final XpEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -67,7 +61,7 @@ public class XpServices implements EduService<XpEntity> {
     }
 
     @Override
-    public XpEntity findById(String id) {
+    public XpEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
@@ -80,12 +74,12 @@ public class XpServices implements EduService<XpEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 
@@ -99,5 +93,10 @@ public class XpServices implements EduService<XpEntity> {
     @Override
     public XpEntity getEmptyEntity() {
         return new XpEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }

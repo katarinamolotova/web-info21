@@ -42,23 +42,6 @@
     background-color: #ffffff;
 }
 
-.empty_text_block {
-    width: 100%;
-    display: inline-flex;
-    min-width: max-content;
-    justify-content: center;
-}
-
-.empty_text {
-    color: #516077;
-    height: 56px;
-    padding: 8px 16px;
-    font-style: normal;
-    font-family: "SB Sans Text", Helvetica, sans-serif;
-    font-weight: 800;
-    vertical-align: middle;
-}
-
 .button_row {
     margin: 40px 0;
     width: 100%;
@@ -77,7 +60,7 @@
 }
 
 .input-file {
-    display: inline-block;
+    display: flex;
 }
 
 .input-file input[type=file] {
@@ -89,11 +72,29 @@
     height: 0;
 }
 
-.input-file span {
-    position: relative;
-    text-align: center;
+.input-file-text {
+    padding: 0 10px;
+    line-height: 40px;
+    text-align: left;
+    height: 40px;
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    width: 100%;
+    border-radius: 7px 0 0 7px;
+    pointer-events: none;
+}
+
+.button_file {
+    font-size: 14px;
+    min-width: max-content;
+    cursor: pointer;
     vertical-align: middle;
-    display: inline-block;
-    height: 17.5px;
-    width: 98px;
+    text-align: center;
+    border-radius: 0 7px 7px 0;
+    line-height: 22px;
+    height: 40px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    margin: 0;
 }

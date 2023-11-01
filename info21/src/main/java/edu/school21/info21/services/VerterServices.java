@@ -3,8 +3,8 @@ package edu.school21.info21.services;
 import edu.school21.info21.entities.VerterEntity;
 import edu.school21.info21.enums.TableNames;
 import edu.school21.info21.exceptions.NotFoundEntity;
-import edu.school21.info21.handlers.CashHandler;
-import edu.school21.info21.handlers.EntityHandler;
+import edu.school21.info21.services.handlers.CashHandler;
+import edu.school21.info21.services.handlers.EntityHandler;
 import edu.school21.info21.repositories.VerterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +37,7 @@ public class VerterServices implements EduService<VerterEntity> {
     }
 
     @Override
-    public VerterEntity created(VerterEntity entity) {
-        cashHandler.localChanges(uuid, true);
-        return repository.save(entity);
-    }
-
-    @Override
-    public VerterEntity update(VerterEntity entity) {
+    public VerterEntity created(final VerterEntity entity) {
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }
@@ -68,7 +62,7 @@ public class VerterServices implements EduService<VerterEntity> {
     }
 
     @Override
-    public VerterEntity findById(String id) {
+    public VerterEntity findById(final String id) {
         if(cashHandler.changesById(uuid) || dataCash.isEmpty()) {
             return repository.findById(Long.parseLong(id))
                              .orElseThrow(NotFoundEntity::new);
@@ -81,12 +75,12 @@ public class VerterServices implements EduService<VerterEntity> {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(final String id) {
         try {
             repository.deleteById(Long.parseLong(id));
             cashHandler.globalChanges();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            throw new NotFoundEntity();
         }
     }
 
@@ -100,5 +94,10 @@ public class VerterServices implements EduService<VerterEntity> {
     @Override
     public VerterEntity getEmptyEntity() {
         return new VerterEntity();
+    }
+
+    @Override
+    public boolean existsById(final String id) {
+        return repository.existsById(Long.parseLong(id));
     }
 }
