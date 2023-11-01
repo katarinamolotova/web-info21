@@ -4,11 +4,13 @@ import edu.school21.info21.annotations.FunctionInfo;
 import edu.school21.info21.exceptions.NotFoundFunction;
 import edu.school21.info21.repositories.FunctionsRepository;
 import edu.school21.info21.services.context.FunctionContext;
-import lombok.AllArgsConstructor;
+import edu.school21.info21.services.handlers.CashHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +19,21 @@ import java.util.TreeMap;
 
 @Slf4j
 @Service
-@AllArgsConstructor
 public class FunctionsService {
     private final Map<String, String> methodsNameToDescription = new TreeMap<>();
     private final Map<String, String> methodsEnNameToRuName = new TreeMap<>();
-    private FunctionsRepository repository;
+    private List<Object[]> lastResult = new ArrayList<>();
+    private final CashHandler cashHandler;
+    private final FunctionsRepository repository;
+
+    @Autowired
+    public FunctionsService(final CashHandler cashHandler, final FunctionsRepository repository) {
+        this.cashHandler = cashHandler;
+        this.repository = repository;
+    }
 
     public List executeFunction(final String funcName, final FunctionContext context) {
-        return switch (funcName) {
+        lastResult = switch (funcName) {
             case "00_native_query" -> doNativeQuery(context);
             case "03_peers_did_not_come_out" -> peersAreNotLeavingSchoolOnDate(context);
             case "07_peers_and_completed_blocks" -> peersAreCompletingBlocks(context);
@@ -35,6 +44,8 @@ public class FunctionsService {
             case "16_peers_who_came_out_more" -> peersWhoCameOutMore(context);
             default -> executeFunctionWithoutParameters(funcName);
         };
+        cashHandler.globalChanges();
+        return lastResult;
     }
 
     private List doNativeQuery(final FunctionContext context) {
@@ -138,5 +149,9 @@ public class FunctionsService {
                 methodsNameToDescription.put(functionInfo.nameEn(), functionInfo.description());
             }
         }
+    }
+
+    protected List getLastResult() {
+        return this.lastResult;
     }
 }

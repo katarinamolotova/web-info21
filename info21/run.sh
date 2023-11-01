@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # =============== Prepare service structure ===============
-
 echo "Prepare directory struct"
 if [ -d $(pwd)/dist ]; then
     rm -rf $(pwd)/dist;
@@ -15,16 +14,17 @@ if [ -d $(pwd)/dist ]; then
 fi
 
 if [ $# = 0 ]; then
-  mkdir $(pwd)/dist;
-  mkdir $(pwd)/dist/nginx;
-  mkdir $(pwd)/dist/flyway_config;
-  mkdir $(pwd)/dist/flyway_migration;
-  mkdir $(pwd)/dist/import;
+  mkdir -p $(pwd)/dist/nginx;
+  mkdir -p $(pwd)/dist/flyway_config;
+  mkdir -p $(pwd)/dist/flyway_migration;
+  mkdir -p $(pwd)/dist/import;
+  mkdir -p $(pwd)/dist/pgadmin/storage/root_root.com/;
   echo "Created dist directory structure"
 
 
   cp -r $(pwd)/helper/data_for_import/ $(pwd)/dist/import;
   cp -r $(pwd)/helper/flyway_migration/ $(pwd)/dist/flyway_migration;
+  cp -r $(pwd)/helper/pgadmin_config/* $(pwd)/dist/pgadmin/storage/root_root.com;
   cp -r $(pwd)/helper/flyway_config/ $(pwd)/dist/flyway_config;
   cp -r $(pwd)/helper/nginx/ $(pwd)/dist/nginx;
   cp -r $(pwd)/helper/configs/ $(pwd);
@@ -33,7 +33,5 @@ if [ $# = 0 ]; then
 
   docker-compose down;
   docker-compose up --build
-  #docker-compose up;
-  #docker-compose up -d;
 fi
 

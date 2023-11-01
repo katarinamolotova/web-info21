@@ -7,6 +7,12 @@ services:
       - "./config_db.env"
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U root -d info21java" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     volumes:
       - ./dist/database:/var/lib/postgresql/data/pgdata/
       - ./dist/import:/app/import
@@ -22,7 +28,7 @@ services:
       - ./dist/flyway_migration:/flyway/sql
     depends_on:
       service-db:
-        condition: service_started
+        condition: service_healthy
 
   service-backend:
     image: backend_info
@@ -35,10 +41,13 @@ services:
         condition: service_completed_successfully
     env_file:
       - "./config_backend.env"
+    ports:
+      - "8000:8000"
     volumes:
       - ./dist/logs:/app/logs
       - ./dist/import:/app/import
       - ./dist/export:/app/export
+    restart: unless-stopped
 
   service-nginx:
     image: nginx
@@ -55,12 +64,11 @@ services:
   service-pgadmin:
     image: dpage/pgadmin4:7
     container_name: S21PGadmin
-    env_file:
-      - "./config_pgadmin.env"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com
+      PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
     volumes:
       - ./dist/pgadmin:/var/lib/pgadmin
-#      - ./pgadmin_config/servers.json:/pgadmin4/servers.json
-#      - ./pgadmin_config/pgpass:/pgpass
-#    restart: always
+    restart: always

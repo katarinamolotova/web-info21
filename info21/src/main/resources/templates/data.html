@@ -8,28 +8,30 @@
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/data.css" th:href="@{/css/data.css}">
     <link rel="stylesheet" type="text/css" media="all" href="../static/css/modal.css" th:href="@{/css/modal.css}">
     <script src="../static/js/modal.js" th:src="@{/js/modal.js}"></script>
+    <script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body>
 
 <header th:replace="~{fragments/header :: header}"></header>
 
-<br><br>
-<ul>
-    <li>Импорт и экспорт данных для каждой таблицы из файлов/в файлы с расширением .csv</li>
-</ul>
+<br>
 
 <div class="button_row">
     <div class="button_block">
-<!--       что дальше?       -->
-        <form action="">
-            <label class="input-file">
-                <input type="file" accept=".csv" name="Импорт">
-                <span class="button_white">Импорт</span>
-            </label>
+        <form method="POST" enctype="multipart/form-data" action="/upload">
+            <button class="button_white"
+                    type="button"
+                    th:attr="onclick=|showModal('import_modal')|">Импорт</button>
+            <div th:replace="~{fragments/modal_window :: import_modal}"></div>
         </form>
-        <form action="">
-            <button class="button_white">Экспорт</button>
+
+        <form method="POST" enctype="multipart/form-data" action="/download">
+            <button class="button_white"
+                    type="button"
+                    th:attr="onclick=|showModal('export_modal')|">Экспорт</button>
+            <div th:replace="~{fragments/modal_window :: export_modal}"></div>
         </form>
+
         <form th:action="@{'/data/'+${table}+'/add'}">
             <button type="submit" class="button_white">Добавить</button>
         </form>
@@ -75,21 +77,12 @@
     <div th:class="modal_content">
         <form th:action="@{'/data/'+${table}}" th:object="${object}" th:method="post">
 
-            <div th:replace="~{fragments/modal_window :: peer_add}"></div>
-            <div th:replace="~{fragments/modal_window :: check_add}"></div>
-            <div th:replace="~{fragments/modal_window :: friends_add}"></div>
-            <div th:replace="~{fragments/modal_window :: p2p_add}"></div>
-            <div th:replace="~{fragments/modal_window :: recommendations_add}"></div>
-            <div th:replace="~{fragments/modal_window :: tasks_add}"></div>
-            <div th:replace="~{fragments/modal_window :: time_tracking_add}"></div>
-            <div th:replace="~{fragments/modal_window :: transferred_points_add}"></div>
-            <div th:replace="~{fragments/modal_window :: verter_add}"></div>
-            <div th:replace="~{fragments/modal_window :: xp_add}"></div>
+            <div th:replace="~{fragments/create_input :: create}"></div>
 
             <div class="modal_buttons">
                 <button type="button"
                         class="button_green"
-                        th:attr="onclick=|closeModalAndRedirect('create_modal_${table}', '${table}')|">
+                        th:attr="onclick=|closeModalAndRedirect('create_modal_${table}', '/${tab}/${table}')|">
                     Отменить
                 </button>
                 <button type="button"
@@ -99,10 +92,19 @@
                 </button>
 
                 <div th:replace="~{fragments/modal_window :: save_modal}"></div>
-                <div th:replace="~{fragments/modal_window :: error_modal}"></div>
             </div>
         </form>
     </div>
 </div>
+
+<div th:replace="~{fragments/modal_window :: error_modal}"></div>
+
+<script>
+  $('.input-file input[type=file]').on('change', function(){
+    let file = this.files[0];
+    $(this).closest('.input-file').find('.input-file-text').html(file.name);
+  });
+</script>
+
 </body>
 </html>

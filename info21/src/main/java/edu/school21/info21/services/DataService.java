@@ -11,7 +11,7 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class ApiService {
+public class DataService {
     private final ServicesHandler servicesHandler;
 
     public Object findByIdObject(final String table, final String id) {

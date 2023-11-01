@@ -1,29 +1,28 @@
--- Постгресу нужен абсолютный путь до файла
-
-CREATE OR REPLACE PROCEDURE import_db(name VARCHAR, sep VARCHAR = ',') AS
+CREATE OR REPLACE FUNCTION import_db(name VARCHAR, sep VARCHAR = ',') RETURNS VARCHAR AS
 $$
 DECLARE
     str TEXT;
 BEGIN
         str := 'copy ' || name || ' FROM ''/app/import/'
---         str := 'copy ' || name || ' FROM ''/var/lib/postgresql/import/'
             || name || '.csv'' delimiter ''' || sep || ''' csv header';
-    EXECUTE (str);
+    EXECUTE(str);
     IF name != 'peers' AND name != 'tasks' THEN
         str :=  'SELECT setval(''' || name || '_id_seq'', max(id)) FROM ' || name;
         EXECUTE (str);
     END IF;
+    RETURN 'IMPORT SUCCESS INTO TABLE ' || name;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE PROCEDURE export_db(name VARCHAR, sep VARCHAR = ',') AS
+CREATE OR REPLACE FUNCTION export_db(name VARCHAR, sep VARCHAR = ',') RETURNS BOOLEAN AS
 $$
 DECLARE
     str TEXT;
 BEGIN
-    str := 'copy ' || name || ' to ''/var/lib/postgresql/export/' || name || '.csv'' with csv delimiter ''' || sep ||
+    str := 'copy ' || name || ' to ''/app/export/' || name || '.csv'' with csv delimiter ''' || sep ||
         ''' header';
     EXECUTE (str);
+    RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
 

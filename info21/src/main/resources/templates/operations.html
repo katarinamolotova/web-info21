@@ -14,10 +14,6 @@
 <header th:replace="~{fragments/header :: header}"></header>
 
 <br><br>
-<ul>
-    <li>Возможность экспорта результата в файл разрешения .csv</li>
-</ul>
-
 
 <div class="grid">
     <main>
@@ -57,7 +53,13 @@
     <aside>
         <div class="white_block" style="margin-bottom: 20px">
             <h4 class="title">Нажми чтобы экспортировать результат</h4>
-            <button class="button_green" style="width: 100px;">Экспорт</button>
+            <form method="POST" enctype="multipart/form-data" action="/download">
+                <button class="button_green"
+                        style="width: 100px;"
+                        type="button"
+                        th:attr="onclick=|showModal('export_function_modal')|">Экспорт</button>
+                <div th:replace="~{fragments/modal_window :: export_function_modal}"></div>
+            </form>
         </div>
 
         <div class="gray_block" style="gap: 0">
