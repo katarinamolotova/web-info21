@@ -47,6 +47,7 @@ services:
       - ./dist/logs:/app/logs
       - ./dist/import:/app/import
       - ./dist/export:/app/export
+    restart: unless-stopped
 
   service-nginx:
     image: nginx
@@ -66,12 +67,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: root@root.com
       PGADMIN_DEFAULT_PASSWORD: root
-#    env_file:
-#      - "./config_pgadmin.env"
     ports:
       - "5050:80"
     volumes:
       - ./dist/pgadmin:/var/lib/pgadmin
-#      - ./pgadmin_config/servers.json:/pgadmin4/servers.json
-#      - ./pgadmin_config/pgpass:/pgpass
-#    restart: always
+    restart: always
