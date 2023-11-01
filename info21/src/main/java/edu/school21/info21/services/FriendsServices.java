@@ -38,9 +38,6 @@ public class FriendsServices implements EduService<FriendsEntity> {
 
     @Override
     public FriendsEntity created(final FriendsEntity entity) {
-        if (!existsById(String.valueOf(entity.getId()))) {
-            throw new NotFoundEntity();
-        }
         cashHandler.localChanges(uuid, true);
         return repository.save(entity);
     }

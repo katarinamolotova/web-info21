@@ -77,7 +77,7 @@
 
     <p th:class="p_input">state</p>
     <select th:class="input_block" th:field="*{state}">
-      <option th:each="item : ${states}" th:text="${item.name}" th:value="${item.name}"></option>
+      <option th:each="item : ${states}" th:text="${item}" th:value="${item}"></option>
     </select>
 
     <p th:class="p_input">time</p>
@@ -175,7 +175,7 @@
 
     <p th:class="p_input">state</p>
     <select th:class="input_block" th:field="*{state}">
-      <option th:each="item : ${states}" th:text="${item.name}" th:value="${item.name}"></option>
+      <option th:each="item : ${states}" th:text="${item}" th:value="${item}"></option>
     </select>
 
     <p th:class="p_input">time</p>

@@ -196,8 +196,7 @@ public class DataController {
             final String table,
             final BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors() ||
-            ((table.equals("peers") || table.equals("tasks")) && dataService.existsById(table, id))) {
+        if (bindingResult.hasErrors()) {
             return redirectToAddOrEditWithError(id, table);
         }
 
@@ -211,7 +210,7 @@ public class DataController {
     }
 
     private String redirectToAddOrEditWithError(final String id, final String table) {
-        return Objects.nonNull(id) && !id.equals("0") && !id.isEmpty() ?
+        return  Objects.nonNull(id) && dataService.existsById(table, id) ?
                 String.format("redirect:/data/%s/%s/error", table, id) :
                 String.format("redirect:/data/%s/add/error", table);
     }
