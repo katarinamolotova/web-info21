@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  *
  * @param <T> класс сущности
  */
-
 @Component
 public class EntityHandler<T> {
 

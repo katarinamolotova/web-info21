@@ -77,16 +77,7 @@
     <div th:class="modal_content">
         <form th:action="@{'/data/'+${table}}" th:object="${object}" th:method="post">
 
-            <div th:replace="~{fragments/modal_window :: peer_add}"></div>
-            <div th:replace="~{fragments/modal_window :: check_add}"></div>
-            <div th:replace="~{fragments/modal_window :: friends_add}"></div>
-            <div th:replace="~{fragments/modal_window :: p2p_add}"></div>
-            <div th:replace="~{fragments/modal_window :: recommendations_add}"></div>
-            <div th:replace="~{fragments/modal_window :: tasks_add}"></div>
-            <div th:replace="~{fragments/modal_window :: time_tracking_add}"></div>
-            <div th:replace="~{fragments/modal_window :: transferred_points_add}"></div>
-            <div th:replace="~{fragments/modal_window :: verter_add}"></div>
-            <div th:replace="~{fragments/modal_window :: xp_add}"></div>
+            <div th:replace="~{fragments/create_input :: create}"></div>
 
             <div class="modal_buttons">
                 <button type="button"
@@ -114,5 +105,6 @@
     $(this).closest('.input-file').find('.input-file-text').html(file.name);
   });
 </script>
+
 </body>
 </html>
