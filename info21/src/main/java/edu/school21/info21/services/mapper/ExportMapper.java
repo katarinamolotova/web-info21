@@ -13,14 +13,17 @@ public class ExportMapper {
     public byte[] convert (final List<Object[]> rawData,
                            final char separator
     ) {
-        String temp = "";
-        for (Object[] i : rawData) {
-            for (Object j : i) {
-                temp += String.valueOf(j);
-                temp += separator;
+
+        StringBuilder temp = new StringBuilder();
+        for (Object[] rawDatum : rawData) {
+            for (int j = 0; j < rawDatum.length; j++) {
+                temp.append(rawDatum[j]);
+                if (j != rawDatum.length - 1) {
+                    temp.append(separator);
+                }
             }
-            temp += '\n';
+            temp.append('\n');
         }
-        return temp.getBytes();
+        return temp.toString().getBytes();
     }
 }

@@ -1,7 +1,7 @@
 package edu.school21.info21.controllers;
 
 import edu.school21.info21.enums.InfoMessages;
-import edu.school21.info21.services.IOFileService;
+import edu.school21.info21.services.FileIOService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.io.IOException;
 @Controller
 @AllArgsConstructor
 public class FileIOController {
-    private final IOFileService service;
+    private final FileIOService service;
 
     @PostMapping("/upload")
     @ResponseBody

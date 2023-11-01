@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION import_db(name VARCHAR, sep VARCHAR = ',') RETURNS BOOLEAN AS
+CREATE OR REPLACE FUNCTION import_db(name VARCHAR, sep VARCHAR = ',') RETURNS VARCHAR AS
 $$
 DECLARE
     str TEXT;
@@ -10,7 +10,7 @@ BEGIN
         str :=  'SELECT setval(''' || name || '_id_seq'', max(id)) FROM ' || name;
         EXECUTE (str);
     END IF;
-    RETURN TRUE;
+    RETURN 'IMPORT SUCCESS INTO TABLE ' || name;
 END;
 $$ LANGUAGE plpgsql;
 

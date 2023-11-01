@@ -14,7 +14,7 @@ import edu.school21.info21.entities.XpEntity;
 import edu.school21.info21.enums.CheckState;
 import edu.school21.info21.enums.InfoMessages;
 import edu.school21.info21.enums.TableNames;
-import edu.school21.info21.services.ApiService;
+import edu.school21.info21.services.DataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +33,11 @@ import java.util.Objects;
 @AllArgsConstructor
 public class DataController {
 
-    private final ApiService apiService;
+    private final DataService dataService;
 
     @GetMapping("/data/{table}")
     public String getAll(@PathVariable final String table, final Model model) {
-        apiService.findAllAsString(table);
+        dataService.findAllAsString(table);
         addAttributeForFindAll(model, table);
         return "data";
     }
@@ -51,21 +51,21 @@ public class DataController {
             return "redirect:/data/peers";
         }
 
-        apiService.findAllAsString(table);
+        dataService.findAllAsString(table);
         addAttributeForFindAll(model, table);
         return "data";
     }
 
     @GetMapping("/data/{table}/delete/{id}")
     public String deleteById(@PathVariable final String table, @PathVariable final String id, final Model model) {
-        apiService.delete(id, table);
+        dataService.delete(id, table);
         return String.format("redirect:/data/%s", table);
     }
 
     @GetMapping("/data/{table}/{id}")
     public String editById(@PathVariable final String table, @PathVariable final String id, final Model model) {
         try {
-            model.addAttribute("object", apiService.findByIdObject(table, id));
+            model.addAttribute("object", dataService.findByIdObject(table, id));
         } catch (final Exception e) {
             log.warn("Not found entity {} by id = {}", table, id);
             return String.format("redirect:/data/%s", table);
@@ -78,7 +78,7 @@ public class DataController {
 
     @GetMapping("/data/{table}/add")
     public String create(@PathVariable final String table, final Model model) {
-        model.addAttribute("object", apiService.getEmptyEntity(table));
+        model.addAttribute("object", dataService.getEmptyEntity(table));
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
         return "data";
@@ -88,7 +88,7 @@ public class DataController {
     public String editError(@PathVariable final String table, @PathVariable final String id, final Model model) {
         log.warn("Error when editing entity with id = {} from {}", id, table);
         try {
-            model.addAttribute("object", apiService.findByIdObject(table, id));
+            model.addAttribute("object", dataService.findByIdObject(table, id));
         } catch (final Exception e) {
             log.warn("Not found entity {} by id = {}", table, id);
             return String.format("redirect:/data/%s", table);
@@ -103,7 +103,7 @@ public class DataController {
     @GetMapping("/data/{table}/add/error")
     public String createError(@PathVariable final String table, final Model model) {
         log.warn("Error when adding to {} table", table);
-        model.addAttribute("object", apiService.getEmptyEntity(table));
+        model.addAttribute("object", dataService.getEmptyEntity(table));
         model.addAttribute("error", "Ошибка в данных. Проверьте заполненные поля.");
         addAttributeForCreate(model);
         addAttributeForFindAll(model, table);
@@ -197,12 +197,12 @@ public class DataController {
             final BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors() ||
-            ((table.equals("peers") || table.equals("tasks")) && apiService.existsById(table, id))) {
+            ((table.equals("peers") || table.equals("tasks")) && dataService.existsById(table, id))) {
             return redirectToAddOrEditWithError(id, table);
         }
 
         try {
-            apiService.created(entity, table);
+            dataService.created(entity, table);
         } catch (final Exception ex) {
             return redirectToAddOrEditWithError(id, table);
         }
@@ -218,17 +218,17 @@ public class DataController {
 
     private void addAttributeForFindAll(final Model model, final String table) {
         model.addAttribute("tab", "data");
-        model.addAttribute("rows", apiService.findAllAsString(table));
-        model.addAttribute("cols", apiService.getHeaderForTable(table));
+        model.addAttribute("rows", dataService.findAllAsString(table));
+        model.addAttribute("cols", dataService.getHeaderForTable(table));
         model.addAttribute("table", table);
         model.addAttribute("tables", TableNames.getAllNames());
     }
 
     private void addAttributeForCreate(final Model model) {
         model.addAttribute("operations", "create");
-        model.addAttribute("peers", apiService.findAllObjects("peers"));
-        model.addAttribute("tasks", apiService.findAllObjects("tasks"));
-        model.addAttribute("checks", apiService.findAllObjects("checks"));
+        model.addAttribute("peers", dataService.findAllObjects("peers"));
+        model.addAttribute("tasks", dataService.findAllObjects("tasks"));
+        model.addAttribute("checks", dataService.findAllObjects("checks"));
         model.addAttribute("states", EnumSet.allOf(CheckState.class));
     }
 }

@@ -16,7 +16,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -27,7 +26,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class IOFileService {
+public class FileIOService {
 
     private static final String UTF = "utf-8";
     private final IORepository repository;
