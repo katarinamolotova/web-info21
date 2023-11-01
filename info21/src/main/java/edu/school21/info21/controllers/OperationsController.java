@@ -1,5 +1,6 @@
 package edu.school21.info21.controllers;
 
+import edu.school21.info21.enums.InfoMessages;
 import edu.school21.info21.exceptions.NotFoundFunction;
 import edu.school21.info21.services.FunctionsService;
 import edu.school21.info21.services.context.FunctionContext;
@@ -22,6 +23,21 @@ public class OperationsController {
 
     @GetMapping("/operations/{func}")
     public String get(final Model model, @PathVariable final String func) {
+        return getBasePage(model, func);
+    }
+
+    @GetMapping("/operations/{func}/{message}")
+    public String error(final Model model, @PathVariable final String func, @PathVariable final String message) {
+        try {
+            model.addAttribute("error", InfoMessages.valueOf(message).getName());
+        } catch (final IllegalArgumentException e) {
+            return "redirect:/operations/00_native_query";
+        }
+
+        return getBasePage(model, func);
+    }
+
+    private String getBasePage(final Model model, final String func) {
         final String path = setColumnsNameAndCheckExistenceFunction(model, func);
         if (path != null) {
             return path;
@@ -38,7 +54,7 @@ public class OperationsController {
             final List table = service.executeFunction(func, context);
             model.addAttribute("table", table);
         } catch (final Exception e) {
-            model.addAttribute("error", true);
+            model.addAttribute("error", "Ошибка в данных. Проверьте заполненные поля.");
             log.warn("Error when executing the function {}", func);
         }
 

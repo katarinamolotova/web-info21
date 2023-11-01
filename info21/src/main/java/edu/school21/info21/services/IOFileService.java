@@ -9,6 +9,7 @@ import edu.school21.info21.services.mapper.ExportMapper;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class IOFileService {
@@ -82,25 +84,26 @@ public class IOFileService {
         return new File("").getAbsolutePath() + directory.getName();
     }
 
-    public InfoMessages fileDownload(final HttpServletResponse response,
-                               final String table,
-                               final String fileName
+    public InfoMessages fileDownload(
+            final HttpServletResponse response,
+            final String table,
+            final String fileName
     ) {
         clearDirectory(Directory.EXPORT);
-        TableNames enums = TableNames.fromString(table);
+        final TableNames enums = TableNames.fromString(table);
         if(Objects.nonNull(enums)) {
-            if(dataExportToFile(enums).getName()
-                                      .equals(InfoMessages.OUTPUT_FILE_ERROR.getName())) {
-                return InfoMessages.OUTPUT_FILE_ERROR;
+            final InfoMessages messages = dataExportToFile(enums);
+            if(messages != InfoMessages.OUTPUT_FILE_SUCCESS) {
+                return messages;
             }
-            Path file = preparedExportFile(enums);
+            final Path file = preparedExportFile(enums);
             if (Files.exists(file)) {
                 response.setHeader("Content-disposition", attachmentParameters(fileName));
                 response.setContentType("text/csv");
                 try {
                     Files.copy(file, response.getOutputStream());
                     response.getOutputStream().flush();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     throw new RuntimeException(InfoMessages.OUTPUT_FILE_ERROR.getName());
                 }
             }
@@ -109,17 +112,17 @@ public class IOFileService {
         return InfoMessages.OUTPUT_FILE_ERROR_INVALID_TABLE;
     }
 
-    private InfoMessages dataExportToFile(TableNames tableNames) {
+    private InfoMessages dataExportToFile(final TableNames tableNames) {
         if(!tableNames.getName().equals(TableNames.CUSTOM.getName())) {
             repository.exportFromTable(tableNames);
         } else {
-            try (FileOutputStream stream = new FileOutputStream(preparedExportFile(tableNames).toString())) {
-                List lastResult = service.getLastResult();
+            try (final FileOutputStream stream = new FileOutputStream(preparedExportFile(tableNames).toString())) {
+                final List lastResult = service.getLastResult();
                 if(lastResult.isEmpty()) {
                     return InfoMessages.OUTPUT_FILE_EMPTY;
                 }
                 stream.write(mapper.convert(lastResult, ','));
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 return InfoMessages.OUTPUT_FILE_ERROR;
             }
         }
