@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class IORepository {
     private static final String IMPORT = "SELECT import_db('";
-    private static final String EXPORT = "CALL export_db('";
+    private static final String EXPORT = "SELECT export_db('";
     private static final String CLOSE_STRING = "', ',')";
 
     private EntityManager entityManager;

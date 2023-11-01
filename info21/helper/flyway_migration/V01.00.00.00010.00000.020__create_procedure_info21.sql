@@ -14,7 +14,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE PROCEDURE export_db(name VARCHAR, sep VARCHAR = ',') AS
+CREATE OR REPLACE FUNCTION export_db(name VARCHAR, sep VARCHAR = ',') RETURNS BOOLEAN AS
 $$
 DECLARE
     str TEXT;
@@ -22,6 +22,7 @@ BEGIN
     str := 'copy ' || name || ' to ''/app/export/' || name || '.csv'' with csv delimiter ''' || sep ||
         ''' header';
     EXECUTE (str);
+    RETURN TRUE;
 END;
 $$ LANGUAGE plpgsql;
 
